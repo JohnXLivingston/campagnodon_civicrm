@@ -6,6 +6,7 @@ Ces modules ont été développés pour les besoins d'[Attac France](https://fra
 Le but est d'intégrer des formulaires de dons et d'adhésions sur un site SPIP, mais en hébergeant toutes les données personnelles dans un CiviCRM.
 
 Cette extension est publiée sous licence [AGPL-3.0](LICENSE.txt).
+Elle est inspirée du travail fais sur les extensions [attac-api](https://github.com/TechToThePeople/attac-api) et [proca-civicrm](https://github.com/fixthestatusquo/proca-civicrm) (toutes deux sous licence AGP-3.0).
 
 ## Requirements
 
