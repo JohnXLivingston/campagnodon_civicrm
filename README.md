@@ -1,15 +1,16 @@
 # campagnodon_civicrm
 
-![Screenshot](/images/screenshot.png)
+Cette extension CiviCRM va de paire avec le module SPIP [Campagnodon](https://code.globenet.org/attacfr/campagnodon).
 
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
+Ces modules ont été développés pour les besoins d'[Attac France](https://france.attac.org).
+Le but est d'intégrer des formulaires de dons et d'adhésions sur un site SPIP, mais en hébergeant toutes les données personnelles dans un CiviCRM.
 
-The extension is licensed under [AGPL-3.0](LICENSE.txt).
+Cette extension est publiée sous licence [AGPL-3.0](LICENSE.txt).
 
 ## Requirements
 
 * PHP v7.2+
-* CiviCRM (*FIXME: Version number*)
+* CiviCRM 5.*
 
 ## Installation (Web UI)
 
