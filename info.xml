@@ -2,7 +2,7 @@
 <extension key="campagnodon_civicrm" type="module">
   <file>campagnodon_civicrm</file>
   <name>Campagnodon</name>
-  <description>Extension fournissant les API nécessaires au module SPIP Campagnodon</description>
+  <description>Extension fournissant les API n&#xE9;cessaires au module SPIP Campagnodon</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>John Livingston</author>
@@ -20,7 +20,7 @@
   <compatibility>
     <ver>5.0</ver>
   </compatibility>
-  <comments></comments>
+  <comments/>
   <classloader>
     <psr4 prefix="Civi\" path="Civi"/>
   </classloader>
