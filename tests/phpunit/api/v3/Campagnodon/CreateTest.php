@@ -47,15 +47,49 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
     return [
       'john' => [array(
         'email' => 'john.doe@example.com',
-        'donation_amount' => 12
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            'amount' => 12
+          ]
+        ]
       )],
       'bill' => [array(
         'email' => 'bill.smith@example.com',
         'first_name' => 'Bill',
         'last_name' => 'Smith',
-        'donation_amount' => 45
-      )]
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            'amount' => 45
+          ]
+        ]
+      )],
+      'must fail because of invalid contribution amount' => [
+        array(
+          'email' => 'michel.martin@example.com',
+          'first_name' => 'Michel',
+          'last_name' => 'Martin',
+          'contributions' => [
+            'don' => [
+              'financial_type' => 'Donation',
+              'amount' => 'nonono'
+            ]
+          ]
+        ),
+        true
+      ]
     ];
+  }
+
+  /**
+   * Test campagnodon create API. Must fail if no contribution.
+   */
+  public function testApiCreateWithoutContribution() {
+    $this->expectException(CiviCRM_API3_Exception::class);
+    $result = civicrm_api3('Campagnodon', 'create', array(
+      'email' => 'bill.smith@example.com'
+    ));
   }
 
   /**
@@ -63,14 +97,29 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
    */
   public function testApiCreateWithoutEmail() {
     $this->expectException(CiviCRM_API3_Exception::class);
-    $result = civicrm_api3('Campagnodon', 'create', array());
+    $result = civicrm_api3('Campagnodon', 'create', array(
+      'contributions' => [
+        'don' => [
+          'financial_type' => 'Donation',
+          'amount' => 45
+        ]
+      ]
+    ));
   }
 
   /**
    * @dataProvider dataTestProviders
    */
-  public function testApiCreate($params) {
+  public function testApiCreate($params, $must_fail = false) {
+    if ($must_fail) {
+      $this->expectException(CiviCRM_API3_Exception::class);
+    }
     $result = civicrm_api3('Campagnodon', 'create', $params);
+
+    if ($must_fail) {
+      // should not be there...
+      $this->assertTrue(false);
+    }
 
     $this->assertEquals(1, $result['count']);
     $this->assertArrayHasKey('contact', $result['values']);
@@ -88,7 +137,12 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
   public function testApiCreateDedup() {
     $result = civicrm_api3('Campagnodon', 'create', array(
       'email' => 'john.doe@example.com',
-      'donation_amount' => 12
+      'contributions' => [
+        'don' => [
+          'financial_type' => 'Donation',
+          'amount' => 12
+        ]
+      ]
     ));
 
     $this->assertEquals(1, $result['count']);
@@ -102,7 +156,12 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
       'email' => 'bill.smith@example.com',
       'first_name' => 'Bill',
       'last_name' => 'Smith',
-      'donation_amount' => 34
+      'contributions' => [
+        'don' => [
+          'financial_type' => 'Donation',
+          'amount' => 34
+        ]
+      ]
     ));
     $this->assertEquals(1, $result['count']);
     $this->assertArrayHasKey('contact', $result['values']);
@@ -112,7 +171,12 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
       'email' => 'john.doe@example.com',
       'first_name' => 'John',
       'last_name' => 'Doe',
-      'donation_amount' => 15
+      'contributions' => [
+        'don' => [
+          'financial_type' => 'Donation',
+          'amount' => 15
+        ]
+      ]
     ));
     $this->assertEquals(1, $result['count']);
     $this->assertArrayHasKey('contact', $result['values']);

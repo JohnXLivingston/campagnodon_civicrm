@@ -72,9 +72,8 @@ function _civicrm_api3_campagnodon_Create_spec(&$spec) {
       "type" => CRM_Utils_Type::T_INT,
       "api.default" => "",
   ];
-  $spec["donation_amount"] = [
-      "title" => "Donation amount",
-      "type" => CRM_Utils_Type::T_INT,
+  $spec["contributions"] = [
+      "title" => "Contributions",
       "api.required" => 1,
   ];
 }
@@ -98,17 +97,26 @@ function civicrm_api3_campagnodon_Create($params) {
   $tx = new CRM_Core_Transaction();
   try {
     // checking if there is at least one type of donation, membership, ...
-    $donation_amount = intval($params['donation_amount'] ?? 0);
-    if ($donation_amount <= 0) {
-      throw new API_Exception('No donation');
+    $contributions = $params['contributions'];
+    if (!is_array($contributions)) {
+      throw new API_Exception('Missing contributions');
     }
-    // TODO: implement other type of subscriptions
+    foreach ($contributions as $key => $contribution) {
+      if (!is_array($contribution)) {
+        throw new API_Exception('Invalid contributions '.$key);
+      }
+      $amount = intval($contribution['amount'] ?? 0);
+      if ($amount <= 0) {
+        throw new API_Exception('Invalid amount for contribution '.$key);
+      }
+    }
 
     // We need to found or create the contact.
     $contacts = civicrm_api3('Contact', 'get', array(
-      'email' => $params['email'],
+      'email' => $params['email'], // FIXME: use Email.get instead of Contact.get?
       'sequential' => true
     ));
+    // TODO: use getDuplicateContacts method?
 
     $contact = null;
     // TODO: avoid update existing contact (in case paiment is not valid, to avoid database corruption attacks)
@@ -140,13 +148,16 @@ function civicrm_api3_campagnodon_Create($params) {
       throw new API_Exception('Failed to get or create the contact.');
     }
 
-    // Now that we have a contact, we can make a donation.
-    if ($donation_amount > 0) {
-      // $contribution = civicrm_api3("contribution", "create", [
-      //   "financial_type_id" => 2,
-      //   "contact_id" => $params["contact_id"],
-      //   "total_amount" => $params["amount"] - 12,
-      // ]);
+    // Now that we have a contact, we can make contributions.
+    foreach ($contributions as $key => $contribution) {
+      $contribution = civicrm_api3('Contribution', 'create', array(
+        'financial_type_id' => $contribution['financial_type'],
+        'contact_id' => $contact['id'],
+        'contribution_status_id' => 'Pending',
+        'total_amount' => $contribution['amount'],
+        // FIXME: following fields?
+        // 'receive_date'
+      ));
     }
 
     $result = [
