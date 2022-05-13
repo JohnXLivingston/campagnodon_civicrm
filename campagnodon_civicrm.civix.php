@@ -306,5 +306,11 @@ function _campagnodon_civicrm_civix_fixNavigationMenuItems(&$nodes, &$maxNavID, 
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
  */
 function _campagnodon_civicrm_civix_civicrm_entityTypes(&$entityTypes) {
-  $entityTypes = array_merge($entityTypes, []);
+  $entityTypes = array_merge($entityTypes, [
+    'CRM_CampagnodonCivicrm_DAO_CampagnodonTransaction' => [
+      'name' => 'CampagnodonTransaction',
+      'class' => 'CRM_CampagnodonCivicrm_DAO_CampagnodonTransaction',
+      'table' => 'civicrm_campagnodon_transaction',
+    ],
+  ]);
 }

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<table>
+  <base>CRM/CampagnodonCivicrm</base>
+  <class>CampagnodonTransaction</class>
+  <name>civicrm_campagnodon_transaction</name>
+  <comment>Campagnodon transaction. Groups contact/contributions/payments/... related to a donation or adhesion coming from SPIP Campagnodon plugin.</comment>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique CampagnodonTransaction ID</comment>
+    <html>
+      <type>Number</type>
+    </html>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <field>
+    <name>contact_id</name>
+    <type>int unsigned</type>
+    <comment>FK to Contact</comment>
+  </field>
+  <foreignKey>
+    <name>contact_id</name>
+    <table>civicrm_contact</table>
+    <key>id</key>
+    <onDelete>SET NULL</onDelete>
+  </foreignKey>
+
+  <field>
+    <name>email</name>
+    <title>Email</title>
+    <type>varchar</type>
+    <length>254</length>
+    <html>
+      <type>Text</type>
+      <size>30</size>
+    </html>
+    <comment>Email address</comment>
+  </field>
+
+  <field>
+    <name>prefix_id</name>
+    <title>Individual Prefix</title>
+    <type>int unsigned</type>
+    <comment>Prefix or Title for name (Ms, Mr...). FK to prefix ID</comment>
+    <pseudoconstant>
+      <optionGroupName>individual_prefix</optionGroupName>
+    </pseudoconstant>
+    <html>
+      <type>Select</type>
+    </html>
+  </field>
+
+  <field>
+    <name>first_name</name>
+    <type>varchar</type>
+    <length>64</length>
+    <html>
+      <type>Text</type>
+      <size>30</size>
+      <label>First Name</label>
+    </html>
+    <comment>First Name.</comment>
+  </field>
+
+  <field>
+    <name>last_name</name>
+    <type>varchar</type>
+    <length>64</length>
+    <html>
+      <type>Text</type>
+      <size>30</size>
+      <label>Last Name</label>
+    </html>
+    <comment>Last Name.</comment>
+  </field>
+
+  <field>
+    <name>birth_date</name>
+    <type>date</type>
+    <comment>Date of birth</comment>
+    <html>
+      <type>Select Date</type>
+      <formatType>birth</formatType>
+      <label>Birth Date</label>
+    </html>
+  </field>
+
+  <field>
+    <name>street_address</name>
+    <title>Street Address</title>
+    <type>varchar</type>
+    <length>96</length>
+    <import>true</import>
+    <comment>Concatenation of all routable street address components (prefix, street number, street name, suffix, unit
+      number OR P.O. Box). Apps should be able to determine physical location with this data (for mapping, mail
+      delivery, etc.).</comment>
+    <html>
+      <type>Text</type>
+    </html>
+  </field>
+
+  <field>
+    <name>postal_code</name>
+    <title>Postal Code</title>
+    <type>varchar</type>
+    <length>64</length>
+    <import>true</import>
+    <comment>Store both US (zip5) AND international postal codes. App is responsible for country/region appropriate validation.</comment>
+    <html>
+      <type>Text</type>
+      <size>6</size>
+    </html>
+  </field>
+
+  <field>
+    <name>city</name>
+    <title>City</title>
+    <type>varchar</type>
+    <length>64</length>
+    <import>true</import>
+    <comment>City, Town or Village Name.</comment>
+    <html>
+      <type>Text</type>
+    </html>
+  </field>
+
+  <field>
+    <name>country_id</name>
+    <title>Country ID</title>
+    <type>int unsigned</type>
+    <comment>Which Country does this address belong to.</comment>
+    <pseudoconstant>
+      <table>civicrm_country</table>
+      <keyColumn>id</keyColumn>
+      <labelColumn>name</labelColumn>
+      <nameColumn>iso_code</nameColumn>
+      <abbrColumn>iso_code</abbrColumn>
+    </pseudoconstant>
+    <localize_context>country</localize_context>
+    <html>
+      <type>Select</type>
+      <label>Country</label>
+    </html>
+  </field>
+  <foreignKey>
+    <name>country_id</name>
+    <table>civicrm_country</table>
+    <key>id</key>
+    <onDelete>SET NULL</onDelete>
+  </foreignKey>
+
+  <field>
+    <name>phone</name>
+    <type>varchar</type>
+    <length>32</length>
+    <import>true</import>
+    <comment>Complete phone number.</comment>
+    <html>
+      <type>Text</type>
+      <label>Phone</label>
+    </html>
+  </field>
+</table>
