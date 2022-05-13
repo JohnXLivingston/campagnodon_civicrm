@@ -148,6 +148,21 @@ function civicrm_api3_campagnodon_Create($params) {
       throw new API_Exception('Failed to get or create the contact.');
     }
 
+    $transaction_create = \Civi\Api4\CampagnodonTransaction::create();
+    $transaction_create->addValue('contact_id', $contact['id']);
+    $transaction_create->addValue('email', $params['email']);
+    foreach (
+      array(
+        'prefix', 'first_name', 'last_name', 'birth_date', 'street_address', 'postal_code', 'city', 'country', 'phone'
+      ) as $field
+    ) {
+      if (array_key_exists($field, $params) && !empty($params[$field])) {
+        $transaction_create->addValue($field, $params[$field]);
+      }
+    }
+    $transaction_result = $transaction_create->execute();
+    $transaction = $transaction_result->first();
+
     // Now that we have a contact, we can make contributions.
     foreach ($contributions as $key => $contribution) {
       $contribution = civicrm_api3('Contribution', 'create', array(
@@ -161,6 +176,7 @@ function civicrm_api3_campagnodon_Create($params) {
     }
 
     $result = [
+      'transaction' => $transaction,
       'contact' => $contact
     ];
   } catch (Exception $e) {
