@@ -152,13 +152,16 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   public function testApiStart($params) {
     $result = civicrm_api3('Campagnodon', 'start', $params);
 
-    $this->assertEquals(1, $result['count']);
-    $this->assertArrayHasKey('contact', $result['values']);
-    $contact = $result['values']['contact'];
+    $this->assertEquals(1, $result['count'], 'Must have 1 result');
+    $this->assertEquals(1, count($result['values']), 'Must have one value');
 
-    $this->assertEquals($params['email'], $contact['email']);
-    $this->assertSame($params['first_name'] ?? '', $contact['first_name']);
-    $this->assertSame($params['last_name'] ?? '', $contact['last_name']);
+    $transaction = array_pop($result['values']);
+
+    $this->assertTrue(intval($transaction['id']) > 0, 'Must have a transaction id');
+    $this->assertTrue(intval($transaction['contact_id']) > 0, 'Must have a contact id');
+    $this->assertEquals($params['email'], $transaction['email'], 'Field email must have the correct value');
+    $this->assertSame($params['first_name'] ?? '', $transaction['first_name'] ?? '', 'Field first_name must have the correct value');
+    $this->assertSame($params['last_name'] ?? '', $transaction['last_name'] ?? '', 'Field last_name must have the correct value');
   }
 
   /**
@@ -188,11 +191,11 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       ]
     ));
 
-    $this->assertEquals(1, $result['count']);
-    $this->assertArrayHasKey('contact', $result['values']);
+    $this->assertEquals(1, $result['count'], 'Must have 1 result');
+    $transaction1 = array_pop($result['values']);
 
-    $contact_id = $result['values']['contact']['id'];
-    $this->assertTrue(intval($contact_id) > 0);
+    $contact_id = $transaction1['contact_id'];
+    $this->assertTrue(intval($contact_id) > 0, 'Must have a contact_id');
 
     // Another donation, with a different contact.
     $result = civicrm_api3('Campagnodon', 'start', array(
@@ -207,9 +210,9 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ]
       ]
     ));
-    $this->assertEquals(1, $result['count']);
-    $this->assertArrayHasKey('contact', $result['values']);
-    $this->assertTrue($contact_id != $result['values']['contact']['id']);
+    $this->assertEquals(1, $result['count'], 'Second start must have 1 result');
+    $transaction2 = array_pop($result['values']);
+    $this->assertTrue($contact_id != $transaction2['contact_id'], 'Second start must have created a new contact');
 
     $result = civicrm_api3('Campagnodon', 'start', array(
       'email' => 'john.doe@example.com',
@@ -223,9 +226,9 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ]
       ]
     ));
-    $this->assertEquals(1, $result['count']);
-    $this->assertArrayHasKey('contact', $result['values']);
-    $this->assertSame($contact_id, $result['values']['contact']['id']);
+    $this->assertEquals(1, $result['count'], 'Third start must have 1 result');
+    $transaction3 = array_pop($result['values']);
+    $this->assertSame($contact_id, $transaction3['contact_id'], 'Third start must have reused the first contact');
   }
 
 }

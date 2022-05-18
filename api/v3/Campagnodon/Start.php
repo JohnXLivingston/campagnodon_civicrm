@@ -179,15 +179,11 @@ function civicrm_api3_campagnodon_Start($params) {
       ));
     }
 
-    $result = [
-      // 'transaction' => $transaction,
-      'contact' => $contact
-    ];
   } catch (Exception $e) {
     $tx->rollback();
     throw $e;
   }
   $tx->commit();
 
-  return civicrm_api3_create_success($result, $params, 'Campagnodon', 'start');
+  return civicrm_api3_create_success(array($transaction['id'] => $transaction), $params, 'Campagnodon', 'transaction');
 }
