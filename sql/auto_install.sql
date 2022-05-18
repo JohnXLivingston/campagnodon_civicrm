@@ -35,7 +35,9 @@ SET FOREIGN_KEY_CHECKS=1;
 -- *******************************************************/
 CREATE TABLE `civicrm_campagnodon_transaction` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonTransaction ID',
+  `idx` varchar(255) NULL COMMENT 'The campagnodon key as given by the origin system (SPIP, ...). A string like: spip/12345.',
   `contact_id` int unsigned COMMENT 'FK de contact',
+  `campaign_id` int unsigned COMMENT 'The campaign for which this Campagnodon transaction is attached.',
   `email` varchar(254) COMMENT 'Courriel',
   `prefix_id` int unsigned COMMENT 'Préfixe ou Titre du nom (M., Mme...). FK de l\'Id du préfixe',
   `first_name` varchar(64) COMMENT 'Prénom.',
@@ -47,7 +49,9 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   `country_id` int unsigned COMMENT 'A quel pays cette adresse appartient.',
   `phone` varchar(32) COMMENT 'Numéro de téléphone complet.',
   PRIMARY KEY (`id`),
+  UNIQUE INDEX `index_idx`(idx),
   CONSTRAINT FK_civicrm_campagnodon_transaction_contact_id FOREIGN KEY (`contact_id`) REFERENCES `civicrm_contact`(`id`) ON DELETE SET NULL,
+  CONSTRAINT FK_civicrm_campagnodon_transaction_campaign_id FOREIGN KEY (`campaign_id`) REFERENCES `civicrm_campaign`(`id`) ON DELETE SET NULL,
   CONSTRAINT FK_civicrm_campagnodon_transaction_country_id FOREIGN KEY (`country_id`) REFERENCES `civicrm_country`(`id`) ON DELETE SET NULL
 )
 ENGINE=InnoDB;
