@@ -90,8 +90,8 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
       )],
       'must fail because of unknown campaign' => [array(
         'email' => 'john.doe@example.com',
-        'transaction_idx' => 'test/3',
         'campaign_id' => '123456749',
+        'transaction_idx' => 'test/3',
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',

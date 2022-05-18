@@ -63,6 +63,7 @@ function _civicrm_api3_campagnodon_Create_spec(&$spec) {
       "title" => ts("External identifier"),
       "description" => "Unique identifier",
       "type" => CRM_Utils_Type::T_STRING,
+      "api.required" => 1,
       "api.default" => "",
   ];
   $spec["campaign_id"] = [
@@ -70,6 +71,7 @@ function _civicrm_api3_campagnodon_Create_spec(&$spec) {
       "title" => ts("Campaign ID"),
       "description" => "Unique campaign id",
       "type" => CRM_Utils_Type::T_INT,
+      "api.required" => 0,
       "api.default" => "",
   ];
   $spec["contributions"] = [
@@ -119,7 +121,7 @@ function civicrm_api3_campagnodon_Create($params) {
     // TODO: use getDuplicateContacts method?
 
     $contact = null;
-    // TODO: avoid update existing contact (in case paiment is not valid, to avoid database corruption attacks)
+    // TODO: avoid update existing contact (in case payment is not valid, to avoid database corruption attacks)
     if ($contacts['count'] == 0) {
       $contactsBis = civicrm_api3('Contact', 'create', array(
         'email' => $params['email'],
@@ -177,7 +179,7 @@ function civicrm_api3_campagnodon_Create($params) {
     }
 
     $result = [
-      'transaction' => $transaction,
+      // 'transaction' => $transaction,
       'contact' => $contact
     ];
   } catch (Exception $e) {
