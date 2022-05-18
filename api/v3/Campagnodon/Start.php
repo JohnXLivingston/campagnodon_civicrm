@@ -189,5 +189,5 @@ function civicrm_api3_campagnodon_Start($params) {
   }
   $tx->commit();
 
-  return civicrm_api3_create_success($result, $params, 'Campagnodon', 'create');
+  return civicrm_api3_create_success($result, $params, 'Campagnodon', 'start');
 }
