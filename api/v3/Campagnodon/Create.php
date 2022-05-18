@@ -60,7 +60,7 @@ function _civicrm_api3_campagnodon_Create_spec(&$spec) {
   ];
   $spec["transaction_idx"] = [
       "name" => "transaction_idx",
-      "title" => ts("Donation external identifier"),
+      "title" => ts("External identifier"),
       "description" => "Unique identifier",
       "type" => CRM_Utils_Type::T_STRING,
       "api.default" => "",
@@ -151,9 +151,10 @@ function civicrm_api3_campagnodon_Create($params) {
     $transaction_create = \Civi\Api4\CampagnodonTransaction::create();
     $transaction_create->addValue('contact_id', $contact['id']);
     $transaction_create->addValue('email', $params['email']);
+    $transaction_create->addValue('idx', $params['transaction_idx']);
     foreach (
       array(
-        'prefix', 'first_name', 'last_name', 'birth_date', 'street_address', 'postal_code', 'city', 'country', 'phone'
+        'campaign_id', 'prefix', 'first_name', 'last_name', 'birth_date', 'street_address', 'postal_code', 'city', 'country', 'phone'
       ) as $field
     ) {
       if (array_key_exists($field, $params) && !empty($params[$field])) {

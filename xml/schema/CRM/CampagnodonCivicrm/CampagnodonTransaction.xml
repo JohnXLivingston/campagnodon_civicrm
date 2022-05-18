@@ -22,13 +22,59 @@
   </primaryKey>
 
   <field>
+    <name>idx</name>
+    <type>varchar</type>
+    <length>255</length>
+    <required>false</required>
+    <comment>The campagnodon key as given by the origin system (SPIP, ...). A string like: spip/12345.</comment>
+    <html>
+      <type>Text</type>
+      <size>30</size>
+      <label>External key</label>
+    </html>
+  </field>
+  <index>
+    <name>index_idx</name>
+    <fieldName>idx</fieldName>
+    <unique>true</unique>
+  </index>
+
+  <field>
     <name>contact_id</name>
     <type>int unsigned</type>
     <comment>FK to Contact</comment>
+    <html>
+      <type>EntityRef</type>
+      <label>Contact</label>
+    </html>
   </field>
   <foreignKey>
     <name>contact_id</name>
     <table>civicrm_contact</table>
+    <key>id</key>
+    <onDelete>SET NULL</onDelete>
+  </foreignKey>
+
+  <field>
+    <name>campaign_id</name>
+    <component>CiviCampaign</component>
+    <type>int unsigned</type>
+    <title>Campaign ID</title>
+    <comment>The campaign for which this Campagnodon transaction is attached.</comment>
+    <html>
+      <type>EntityRef</type>
+      <label>Campaign</label>
+    </html>
+    <pseudoconstant>
+      <table>civicrm_campaign</table>
+      <keyColumn>id</keyColumn>
+      <labelColumn>title</labelColumn>
+      <prefetch>FALSE</prefetch>
+    </pseudoconstant>
+  </field>
+  <foreignKey>
+    <name>campaign_id</name>
+    <table>civicrm_campaign</table>
     <key>id</key>
     <onDelete>SET NULL</onDelete>
   </foreignKey>

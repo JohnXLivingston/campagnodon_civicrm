@@ -41,12 +41,14 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
   }
 
   /**
-   * Provide contacts of unit tests.
+   * Provide valid contacts for unit tests.
    */
   public function dataTestProviders() {
+    // TODO: add some tests with a campaign_id
     return [
       'john' => [array(
         'email' => 'john.doe@example.com',
+        'transaction_idx' => 'test/1',
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
@@ -56,6 +58,7 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
       )],
       'bill' => [array(
         'email' => 'bill.smith@example.com',
+        'transaction_idx' => 'test/123456789123456789',
         'first_name' => 'Bill',
         'last_name' => 'Smith',
         'contributions' => [
@@ -64,21 +67,38 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
             'amount' => 45
           ]
         ]
-      )],
-      'must fail because of invalid contribution amount' => [
-        array(
-          'email' => 'michel.martin@example.com',
-          'first_name' => 'Michel',
-          'last_name' => 'Martin',
-          'contributions' => [
-            'don' => [
-              'financial_type' => 'Donation',
-              'amount' => 'nonono'
-            ]
+      )]
+    ];
+  }
+
+  /**
+   * Provide invalid contacts for unit tests.
+   */
+  public function dataTestInvalidProviders() {
+    return [
+      'must fail because of invalid contribution amount' => [array(
+        'email' => 'michel.martin@example.com',
+        'transaction_idx' => 'test/2',
+        'first_name' => 'Michel',
+        'last_name' => 'Martin',
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            'amount' => 'nonono'
           ]
-        ),
-        true
-      ]
+        ]
+      )],
+      'must fail because of unknown campaign' => [array(
+        'email' => 'john.doe@example.com',
+        'transaction_idx' => 'test/3',
+        'campaign_id' => '123456749',
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            'amount' => 12
+          ]
+        ]
+      )]
     ];
   }
 
@@ -88,7 +108,8 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
   public function testApiCreateWithoutContribution() {
     $this->expectException(CiviCRM_API3_Exception::class);
     $result = civicrm_api3('Campagnodon', 'create', array(
-      'email' => 'bill.smith@example.com'
+      'email' => 'bill.smith@example.com',
+      'transaction_idx' => 'test/10'
     ));
   }
 
@@ -98,6 +119,7 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
   public function testApiCreateWithoutEmail() {
     $this->expectException(CiviCRM_API3_Exception::class);
     $result = civicrm_api3('Campagnodon', 'create', array(
+      'transaction_idx' => 'test/20',
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
@@ -108,18 +130,27 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
   }
 
   /**
+   * Test campagnodon create API. Must fail if no external transaction_idx.
+   */
+  public function testApiCreateWithoutTransactionIdx() {
+    $this->expectException(CiviCRM_API3_Exception::class);
+    $result = civicrm_api3('Campagnodon', 'create', array(
+      'email' => 'bill.smith@example.com',
+      'contributions' => [
+        'don' => [
+          'financial_type' => 'Donation',
+          'amount' => 45
+        ]
+      ]
+    ));
+  }
+
+
+  /**
    * @dataProvider dataTestProviders
    */
-  public function testApiCreate($params, $must_fail = false) {
-    if ($must_fail) {
-      $this->expectException(CiviCRM_API3_Exception::class);
-    }
+  public function testApiCreate($params) {
     $result = civicrm_api3('Campagnodon', 'create', $params);
-
-    if ($must_fail) {
-      // should not be there...
-      $this->assertTrue(false);
-    }
 
     $this->assertEquals(1, $result['count']);
     $this->assertArrayHasKey('contact', $result['values']);
@@ -131,12 +162,24 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
   }
 
   /**
+   * @dataProvider dataTestInvalidProviders
+   */
+  public function testApiCreateInvalid($params) {
+    $this->expectException(CiviCRM_API3_Exception::class);
+    $result = civicrm_api3('Campagnodon', 'create', $params);
+
+    // should not be there...
+    $this->assertTrue(false);
+  }
+
+  /**
    * Test campagnodon create API.
    * Tests deduplication of contacts.
    */
   public function testApiCreateDedup() {
     $result = civicrm_api3('Campagnodon', 'create', array(
       'email' => 'john.doe@example.com',
+      'transaction_idx' => 'test/30',
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
@@ -154,6 +197,7 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
     // Another donation, with a different contact.
     $result = civicrm_api3('Campagnodon', 'create', array(
       'email' => 'bill.smith@example.com',
+      'transaction_idx' => 'test/31',
       'first_name' => 'Bill',
       'last_name' => 'Smith',
       'contributions' => [
@@ -169,6 +213,7 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
 
     $result = civicrm_api3('Campagnodon', 'create', array(
       'email' => 'john.doe@example.com',
+      'transaction_idx' => 'test/32',
       'first_name' => 'John',
       'last_name' => 'Doe',
       'contributions' => [
