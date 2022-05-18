@@ -2,14 +2,14 @@
 use CRM_CampagnodonCivicrm_ExtensionUtil as E;
 
 /**
- * Campagnodon.Create API specification (optional)
+ * Campagnodon.Start API specification (optional)
  * This is used for documentation and validation.
  *
  * @param array $spec description of fields supported by this API call
  *
  * @see https://docs.civicrm.org/dev/en/latest/framework/api-architecture/
  */
-function _civicrm_api3_campagnodon_Create_spec(&$spec) {
+function _civicrm_api3_campagnodon_Start_spec(&$spec) {
   $spec["first_name"] = [
     "name" => "first_name",
     "title" => ts("First name"),
@@ -81,10 +81,11 @@ function _civicrm_api3_campagnodon_Create_spec(&$spec) {
 }
 
 /**
- * Campagnodon.Create API
+ * Campagnodon.Start API
  *
- * Used to create a new donation/subscription/[...].
- * Create the contact if not found, otherwise update it.
+ * Used to start a new donation/subscription/[...] process.
+ * Creates a CampagnodonTransaction.
+ * Creates the contact if not found.
  *
  * @param array $params
  *
@@ -95,7 +96,7 @@ function _civicrm_api3_campagnodon_Create_spec(&$spec) {
  *
  * @throws API_Exception
  */
-function civicrm_api3_campagnodon_Create($params) {
+function civicrm_api3_campagnodon_Start($params) {
   $tx = new CRM_Core_Transaction();
   try {
     // checking if there is at least one type of donation, membership, ...

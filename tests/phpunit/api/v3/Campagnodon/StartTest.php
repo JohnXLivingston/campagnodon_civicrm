@@ -5,11 +5,11 @@ use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
 
 /**
- * Campagnodon.Create API Test Case
+ * Campagnodon.Start API Test Case
  * This is a generic test class implemented with PHPUnit.
  * @group headless
  */
-class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
   use \Civi\Test\Api3TestTrait;
 
   /**
@@ -103,22 +103,22 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
   }
 
   /**
-   * Test campagnodon create API. Must fail if no contribution.
+   * Test campagnodon start API. Must fail if no contribution.
    */
-  public function testApiCreateWithoutContribution() {
+  public function testApiStartWithoutContribution() {
     $this->expectException(CiviCRM_API3_Exception::class);
-    $result = civicrm_api3('Campagnodon', 'create', array(
+    $result = civicrm_api3('Campagnodon', 'start', array(
       'email' => 'bill.smith@example.com',
       'transaction_idx' => 'test/10'
     ));
   }
 
   /**
-   * Test campagnodon create API. Must fail if no email provided.
+   * Test campagnodon Start API. Must fail if no email provided.
    */
-  public function testApiCreateWithoutEmail() {
+  public function testApiStartWithoutEmail() {
     $this->expectException(CiviCRM_API3_Exception::class);
-    $result = civicrm_api3('Campagnodon', 'create', array(
+    $result = civicrm_api3('Campagnodon', 'start', array(
       'transaction_idx' => 'test/20',
       'contributions' => [
         'don' => [
@@ -130,11 +130,11 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
   }
 
   /**
-   * Test campagnodon create API. Must fail if no external transaction_idx.
+   * Test campagnodon Start API. Must fail if no external transaction_idx.
    */
-  public function testApiCreateWithoutTransactionIdx() {
+  public function testApiStartWithoutTransactionIdx() {
     $this->expectException(CiviCRM_API3_Exception::class);
-    $result = civicrm_api3('Campagnodon', 'create', array(
+    $result = civicrm_api3('Campagnodon', 'start', array(
       'email' => 'bill.smith@example.com',
       'contributions' => [
         'don' => [
@@ -149,8 +149,8 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
   /**
    * @dataProvider dataTestProviders
    */
-  public function testApiCreate($params) {
-    $result = civicrm_api3('Campagnodon', 'create', $params);
+  public function testApiStart($params) {
+    $result = civicrm_api3('Campagnodon', 'start', $params);
 
     $this->assertEquals(1, $result['count']);
     $this->assertArrayHasKey('contact', $result['values']);
@@ -164,20 +164,20 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
   /**
    * @dataProvider dataTestInvalidProviders
    */
-  public function testApiCreateInvalid($params) {
+  public function testApiStartInvalid($params) {
     $this->expectException(CiviCRM_API3_Exception::class);
-    $result = civicrm_api3('Campagnodon', 'create', $params);
+    $result = civicrm_api3('Campagnodon', 'start', $params);
 
     // should not be there...
     $this->assertTrue(false);
   }
 
   /**
-   * Test campagnodon create API.
+   * Test campagnodon Start API.
    * Tests deduplication of contacts.
    */
-  public function testApiCreateDedup() {
-    $result = civicrm_api3('Campagnodon', 'create', array(
+  public function testApiStartDedup() {
+    $result = civicrm_api3('Campagnodon', 'start', array(
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/30',
       'contributions' => [
@@ -195,7 +195,7 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
     $this->assertTrue(intval($contact_id) > 0);
 
     // Another donation, with a different contact.
-    $result = civicrm_api3('Campagnodon', 'create', array(
+    $result = civicrm_api3('Campagnodon', 'start', array(
       'email' => 'bill.smith@example.com',
       'transaction_idx' => 'test/31',
       'first_name' => 'Bill',
@@ -211,7 +211,7 @@ class api_v3_Campagnodon_CreateTest extends \PHPUnit\Framework\TestCase implemen
     $this->assertArrayHasKey('contact', $result['values']);
     $this->assertTrue($contact_id != $result['values']['contact']['id']);
 
-    $result = civicrm_api3('Campagnodon', 'create', array(
+    $result = civicrm_api3('Campagnodon', 'start', array(
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/32',
       'first_name' => 'John',
