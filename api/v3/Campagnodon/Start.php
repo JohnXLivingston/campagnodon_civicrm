@@ -66,6 +66,14 @@ function _civicrm_api3_campagnodon_Start_spec(&$spec) {
       "api.required" => 1,
       "api.default" => "",
   ];
+  $spec["payment_url"] = [
+    "name" => "payment_url",
+    "title" => ts("Payment url"),
+    "description" => "Payment url",
+    "type" => CRM_Utils_Type::T_STRING,
+    "api.required" => 0,
+    "api.default" => "",
+  ];
   $spec["campaign_id"] = [
       "name" => "campaign_id",
       "title" => ts("Campaign ID"),
@@ -114,6 +122,13 @@ function civicrm_api3_campagnodon_Start($params) {
       }
     }
 
+    if (false === filter_var($params['email'], FILTER_VALIDATE_EMAIL)) {
+      throw new API_Exception('Invalid email');
+    }
+    if (!empty($params['payment_url']) && false === filter_var($params['payment_url'], FILTER_VALIDATE_URL)) {
+      throw new API_Exception('Invalid payment_url');
+    }
+
     // We need to found or create the contact.
     $contacts = civicrm_api3('Contact', 'get', array(
       'email' => $params['email'], // FIXME: use Email.get instead of Contact.get?
@@ -157,7 +172,9 @@ function civicrm_api3_campagnodon_Start($params) {
     $transaction_create->addValue('idx', $params['transaction_idx']);
     foreach (
       array(
-        'campaign_id', 'prefix', 'first_name', 'last_name', 'birth_date', 'street_address', 'postal_code', 'city', 'country', 'phone'
+        'campaign_id',
+        'prefix', 'first_name', 'last_name', 'birth_date', 'street_address', 'postal_code', 'city', 'country', 'phone',
+        'payment_url'
       ) as $field
     ) {
       if (array_key_exists($field, $params) && !empty($params[$field])) {

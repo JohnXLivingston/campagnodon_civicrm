@@ -22,7 +22,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   public function setUpHeadless() {
     return \Civi\Test::headless()
       ->installMe(__DIR__)
-      ->apply(false);
+      ->apply(true);
   }
 
   /**
@@ -49,6 +49,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'john' => [array(
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
+        'payment_url' => 'https://www.example.com/',
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
@@ -107,6 +108,17 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'email' => 'john.doe@example.com',
         'campaign_id' => '123456749',
         'transaction_idx' => 'test/3',
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            'amount' => 12
+          ]
+        ]
+      )],
+      'must fail because of invalid payment_url' => [array(
+        'email' => 'john.doe@example.com',
+        'transaction_idx' => 'test/4',
+        'payment_url' => 'https://www.example.com/',
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
@@ -185,6 +197,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       ->single();
     $this->assertTrue(!empty($obj), 'Can get Transaction by id');
     $this->assertEquals($obj['id'], $transaction['id'], 'Can get the good Transaction by id');
+    $this->assertEquals($obj['status'], 'init', 'The transaction status is init');
 
     if (!empty($params['transaction_idx'])) {
       $obj = \Civi\Api4\CampagnodonTransaction::get()

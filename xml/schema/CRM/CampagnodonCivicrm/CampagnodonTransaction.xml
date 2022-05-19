@@ -40,6 +40,33 @@
   </index>
 
   <field>
+    <name>status</name>
+    <type>varchar</type>
+    <length>20</length>
+    <required>true</required>
+    <default>'init'</default>
+    <comment>The status of the transaction.</comment>
+    <pseudoconstant>
+      <callback>CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::statusTables</callback>
+    </pseudoconstant>
+    <html>
+      <type>Select</type>
+    </html>
+  </field>
+
+  <field>
+    <name>payment_url</name>
+    <type>varchar</type>
+    <length>255</length>
+    <comment>The url to pay the subscriptions.</comment>
+    <html>
+      <type>Text</type>
+      <size>60</size>
+      <label>Payment url</label>
+    </html>
+  </field>
+
+  <field>
     <name>contact_id</name>
     <type>int unsigned</type>
     <comment>FK to Contact</comment>

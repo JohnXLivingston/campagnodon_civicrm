@@ -23,4 +23,17 @@ class CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction extends CRM_CampagnodonC
     return $instance;
   } */
 
+  /**
+   * Whitelist of possible values for the status field
+   *
+   * @return array
+   */
+  public static function statusTables(): array {
+    return [
+      'init' => 'Init',
+      'waiting' => 'Waiting',
+      'accepted' => 'Accepted',
+      'rejected' => 'Rejected'
+    ];
+  }
 }
