@@ -100,15 +100,15 @@ function civicrm_api3_campagnodon_Start($params) {
   $tx = new CRM_Core_Transaction();
   try {
     // checking if there is at least one type of donation, membership, ...
-    $contributions = $params['contributions'];
-    if (!is_array($contributions)) {
+    $contributions_params = $params['contributions'];
+    if (!is_array($contributions_params)) {
       throw new API_Exception('Missing contributions');
     }
-    foreach ($contributions as $key => $contribution) {
-      if (!is_array($contribution)) {
+    foreach ($contributions_params as $key => $contribution_params) {
+      if (!is_array($contribution_params)) {
         throw new API_Exception('Invalid contributions '.$key);
       }
-      $amount = intval($contribution['amount'] ?? 0);
+      $amount = intval($contribution_params['amount'] ?? 0);
       if ($amount <= 0) {
         throw new API_Exception('Invalid amount for contribution '.$key);
       }
@@ -168,12 +168,15 @@ function civicrm_api3_campagnodon_Start($params) {
     $transaction = $transaction_result->single();
 
     // Now that we have a contact, we can make contributions.
-    foreach ($contributions as $key => $contribution) {
+    foreach ($contributions_params as $key => $contribution_params) {
       $contribution = \Civi\Api4\Contribution::create()
-        ->addValue('financial_type_id', $contribution['financial_type'])
+        ->addValue(
+          'financial_type_id'.(is_numeric($contribution_params['financial_type']) ? '' : ':name'),
+          $contribution_params['financial_type']
+        )
         ->addValue('contact_id', $contact['id'])
-        ->addValue('contribution_status_id', 'Pending')
-        ->addValue('total_amount', $contribution['amount'])
+        ->addValue('contribution_status_id:name', 'Pending') // FIXME: Is this «Pending» even in french?
+        ->addValue('total_amount', $contribution_params['amount'])
         // FIXME: following fields?
         // 'receive_date'
         ->execute()
