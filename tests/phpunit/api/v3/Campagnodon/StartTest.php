@@ -52,6 +52,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
+            '_financial_type_id' => 1, // this is only there for unit tests.
             'amount' => 12
           ]
         ]
@@ -217,6 +218,10 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       }));
 
       $this->assertTrue(!empty($first_match), 'Contribution number '.$k.' found.');
+      if (array_key_exists('_financial_type_id', $c)) {
+        $this->assertEquals($first_match['financial_type_id'], $c['_financial_type_id'], 'financial_type_id is ok for contribution number '.$k);
+      }
+
       if (!empty($first_match)) {
         unset($contributions[$first_match['id']]);
       }
