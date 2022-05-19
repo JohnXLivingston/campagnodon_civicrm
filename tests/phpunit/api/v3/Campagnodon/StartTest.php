@@ -67,6 +67,20 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
             'amount' => 45
           ]
         ]
+      )],
+      'test with 2 donations' => [array(
+        'email' => 'john.doe@example.com',
+        'transaction_idx' => 'test/1',
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            'amount' => 12
+          ],
+          'don2' => [
+            'financial_type' => 'Donation',
+            'amount' => 24
+          ]
+        ]
       )]
     ];
   }
@@ -163,8 +177,51 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertSame($params['first_name'] ?? '', $transaction['first_name'] ?? '', 'Field first_name must have the correct value');
     $this->assertSame($params['last_name'] ?? '', $transaction['last_name'] ?? '', 'Field last_name must have the correct value');
 
-    // TODO: Test that contributions are created
-    // TODO: Test that transaction_links are created
+    // Trying to get the transaction by ID
+    $obj = \Civi\Api4\CampagnodonTransaction::get()
+      ->addWhere('id', '=', $transaction['id'])
+      ->execute()
+      ->single();
+    $this->assertTrue(!empty($obj), 'Can get Transaction by id');
+    $this->assertEquals($obj['id'], $transaction['id'], 'Can get the good Transaction by id');
+
+    if (!empty($params['transaction_idx'])) {
+      $obj = \Civi\Api4\CampagnodonTransaction::get()
+        ->addWhere('idx', '=', $params['transaction_idx'])
+        ->execute()
+        ->single();
+
+        $this->assertTrue(!empty($obj), 'Can get Transaction by idx');
+        $this->assertEquals($obj['id'], $transaction['id'], 'Can get the good Transaction by idx');
+    }
+
+    // Testing that transaction_links and contributions are created
+    $contribs = $params['contributions'] ?? [];
+    $contributions = \Civi\Api4\Contribution::get()
+      ->addSelect('*', 'financial_type_id:name')
+      ->addJoin(
+        'CampagnodonTransactionLink AS tlink',
+        'INNER', null,
+        ['tlink.entity_table', '=', '"civicrm_contribution"'],
+        ['tlink.entity_id', '=', 'id']
+      )
+      ->addWhere('tlink.campagnodon_tid', '=', $transaction['id'])
+      ->execute();
+
+    $this->assertEquals(count($contribs), $contributions->count(), 'Same number of linked contribution as number of given contributions');
+    $contributions->indexBy('id');
+    $contributions = (array) $contributions;
+    foreach ($contribs as $k => $c) {
+      $first_match = current(array_filter($contributions, function ($v) use ($c) {
+        return $v['total_amount'] == $c['amount'] && $v['financial_type_id:name'] === $c['financial_type'];
+      }));
+
+      $this->assertTrue(!empty($first_match), 'Contribution number '.$k.' found.');
+      if (!empty($first_match)) {
+        unset($contributions[$first_match['id']]);
+      }
+    }
+    $this->assertEquals(count($contributions), 0, 'No extra contribution created or linked.');
   }
 
   /**
@@ -232,6 +289,34 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals(1, $result['count'], 'Third start must have 1 result');
     $transaction3 = array_pop($result['values']);
     $this->assertSame($contact_id, $transaction3['contact_id'], 'Third start must have reused the first contact');
+  }
+
+  public function testApiStartUniqueTransactionIdx() {
+    $result = civicrm_api3('Campagnodon', 'start', array(
+      'email' => 'john.doe@example.com',
+      'transaction_idx' => 'test/50',
+      'contributions' => [
+        'don' => [
+          'financial_type' => 'Donation',
+          'amount' => 12
+        ]
+      ]
+    ));
+
+    $this->assertEquals(1, $result['count'], 'Must have 1 result');
+
+    $this->expectException(CiviCRM_API3_Exception::class);
+    // Another donation, with same transaction_idx.
+    $result = civicrm_api3('Campagnodon', 'start', array(
+      'email' => 'bill.smith@example.com',
+      'transaction_idx' => 'test/50',
+      'contributions' => [
+        'don' => [
+          'financial_type' => 'Donation',
+          'amount' => 34
+        ]
+      ]
+    ));
   }
 
 }
