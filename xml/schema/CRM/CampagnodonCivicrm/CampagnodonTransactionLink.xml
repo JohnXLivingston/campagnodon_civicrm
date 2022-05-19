@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<table>
+  <base>CRM/CampagnodonCivicrm</base>
+  <class>CampagnodonTransactionLink</class>
+  <name>civicrm_campagnodon_transaction_link</name>
+  <comment>Link between CampagnodonTransaction and other tables (contributions, ...)</comment>
+  <log>false</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique CampagnodonTransactionLink ID</comment>
+    <html>
+      <type>Number</type>
+    </html>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <field>
+    <name>campagnodon_tid</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>FK to CampagnodonTransaction</comment>
+  </field>
+  <foreignKey>
+    <name>campagnodon_tid</name>
+    <table>civicrm_campagnodon_transaction</table>
+    <key>id</key>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+
+  <field>
+    <name>entity_table</name>
+    <title>Entity table</title>
+    <type>varchar</type>
+    <length>64</length>
+    <required>true</required>
+    <comment>Table of the linked object</comment>
+  </field>
+  <field>
+    <name>entity_id</name>
+    <type>int unsigned</type>
+    <title>Entity ID</title>
+    <comment>ID of the linked object</comment>
+  </field>
+  <dynamicForeignKey>
+    <idColumn>entity_id</idColumn>
+    <typeColumn>entity_table</typeColumn>
+  </dynamicForeignKey>
+</table>

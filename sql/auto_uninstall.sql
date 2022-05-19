@@ -15,6 +15,7 @@
 
 SET FOREIGN_KEY_CHECKS=0;
 
+DROP TABLE IF EXISTS `civicrm_campagnodon_transaction_link`;
 DROP TABLE IF EXISTS `civicrm_campagnodon_transaction`;
 
 SET FOREIGN_KEY_CHECKS=1;

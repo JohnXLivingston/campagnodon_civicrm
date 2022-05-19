@@ -17,6 +17,7 @@
 
 SET FOREIGN_KEY_CHECKS=0;
 
+DROP TABLE IF EXISTS `civicrm_campagnodon_transaction_link`;
 DROP TABLE IF EXISTS `civicrm_campagnodon_transaction`;
 
 SET FOREIGN_KEY_CHECKS=1;
@@ -53,5 +54,22 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   CONSTRAINT FK_civicrm_campagnodon_transaction_contact_id FOREIGN KEY (`contact_id`) REFERENCES `civicrm_contact`(`id`) ON DELETE SET NULL,
   CONSTRAINT FK_civicrm_campagnodon_transaction_campaign_id FOREIGN KEY (`campaign_id`) REFERENCES `civicrm_campaign`(`id`) ON DELETE SET NULL,
   CONSTRAINT FK_civicrm_campagnodon_transaction_country_id FOREIGN KEY (`country_id`) REFERENCES `civicrm_country`(`id`) ON DELETE SET NULL
+)
+ENGINE=InnoDB;
+
+-- /*******************************************************
+-- *
+-- * civicrm_campagnodon_transaction_link
+-- *
+-- * Link between CampagnodonTransaction and other tables (contributions, ...)
+-- *
+-- *******************************************************/
+CREATE TABLE `civicrm_campagnodon_transaction_link` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonTransactionLink ID',
+  `campagnodon_tid` int unsigned NOT NULL COMMENT 'FK to CampagnodonTransaction',
+  `entity_table` varchar(64) NOT NULL COMMENT 'Table of the linked object',
+  `entity_id` int unsigned COMMENT 'ID of the linked object',
+  PRIMARY KEY (`id`),
+  CONSTRAINT FK_civicrm_campagnodon_transaction_link_campagnodon_tid FOREIGN KEY (`campagnodon_tid`) REFERENCES `civicrm_campagnodon_transaction`(`id`) ON DELETE CASCADE
 )
 ENGINE=InnoDB;

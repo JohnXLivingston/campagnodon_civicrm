@@ -312,5 +312,10 @@ function _campagnodon_civicrm_civix_civicrm_entityTypes(&$entityTypes) {
       'class' => 'CRM_CampagnodonCivicrm_DAO_CampagnodonTransaction',
       'table' => 'civicrm_campagnodon_transaction',
     ],
+    'CRM_CampagnodonCivicrm_DAO_CampagnodonTransactionLink' => [
+      'name' => 'CampagnodonTransactionLink',
+      'class' => 'CRM_CampagnodonCivicrm_DAO_CampagnodonTransactionLink',
+      'table' => 'civicrm_campagnodon_transaction_link',
+    ],
   ]);
 }

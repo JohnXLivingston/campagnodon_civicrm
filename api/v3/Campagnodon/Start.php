@@ -165,18 +165,26 @@ function civicrm_api3_campagnodon_Start($params) {
       }
     }
     $transaction_result = $transaction_create->execute();
-    $transaction = $transaction_result->first();
+    $transaction = $transaction_result->single();
 
     // Now that we have a contact, we can make contributions.
     foreach ($contributions as $key => $contribution) {
-      $contribution = civicrm_api3('Contribution', 'create', array(
-        'financial_type_id' => $contribution['financial_type'],
-        'contact_id' => $contact['id'],
-        'contribution_status_id' => 'Pending',
-        'total_amount' => $contribution['amount'],
+      $contribution = \Civi\Api4\Contribution::create()
+        ->addValue('financial_type_id', $contribution['financial_type'])
+        ->addValue('contact_id', $contact['id'])
+        ->addValue('contribution_status_id', 'Pending')
+        ->addValue('total_amount', $contribution['amount'])
         // FIXME: following fields?
         // 'receive_date'
-      ));
+        ->execute()
+        ->single();
+
+      $link = \Civi\Api4\CampagnodonTransactionLink::create()
+        ->addValue('campagnodon_tid', $transaction['id'])
+        ->addValue('entity_table', 'civicrm_contribution')
+        ->addValue('entity_id', $contribution['id'])
+        ->execute()
+        ->single();
     }
 
   } catch (Exception $e) {
