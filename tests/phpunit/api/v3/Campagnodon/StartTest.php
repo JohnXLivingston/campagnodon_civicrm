@@ -22,7 +22,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   public function setUpHeadless() {
     return \Civi\Test::headless()
       ->installMe(__DIR__)
-      ->apply();
+      ->apply(false);
   }
 
   /**
@@ -162,6 +162,9 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals($params['email'], $transaction['email'], 'Field email must have the correct value');
     $this->assertSame($params['first_name'] ?? '', $transaction['first_name'] ?? '', 'Field first_name must have the correct value');
     $this->assertSame($params['last_name'] ?? '', $transaction['last_name'] ?? '', 'Field last_name must have the correct value');
+
+    // TODO: Test that contributions are created
+    // TODO: Test that transaction_links are created
   }
 
   /**
