@@ -49,7 +49,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'john' => [array(
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
-        'payment_url' => 'https://www.example.com/',
+        'payment_url' => 'https://www.example.com?test=1&test=2', // adding some & to test that there is no url encoding.
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
@@ -198,6 +198,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertTrue(!empty($obj), 'Can get Transaction by id');
     $this->assertEquals($obj['id'], $transaction['id'], 'Can get the good Transaction by id');
     $this->assertEquals($obj['status'], 'init', 'The transaction status is init');
+    $this->assertEquals($obj['payment_url'], empty($params['payment_url']) ? null : $params['payment_url'], 'payment url should be correct');
 
     if (!empty($params['transaction_idx'])) {
       $obj = \Civi\Api4\CampagnodonTransaction::get()
@@ -208,6 +209,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         $this->assertTrue(!empty($obj), 'Can get Transaction by idx');
         $this->assertEquals($obj['id'], $transaction['id'], 'Can get the good Transaction by idx');
     }
+
 
     // Testing that transaction_links and contributions are created
     $contribs = $params['contributions'] ?? [];
