@@ -118,7 +118,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'must fail because of invalid payment_url' => [array(
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/4',
-        'payment_url' => 'https://www.example.com/',
+        'payment_url' => 'this is not url /',
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
