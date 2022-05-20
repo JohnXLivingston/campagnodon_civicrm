@@ -72,3 +72,7 @@ Ensuite, allez dans le dossier `civicrm/build/campagnodon_dev/web/sites/default/
 ```bash
 phpunit6
 ```
+
+## TODO
+
+* Restreindre les droits nécessaires ? Ce qui permettrait d'avoir une API KEY liée à un user qui ne pourrait appeler que les API Campagnodon, et celles-ci by-passeraient les droits sur les autres API.
