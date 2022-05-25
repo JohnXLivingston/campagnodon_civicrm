@@ -67,6 +67,20 @@
   </field>
 
   <field>
+    <name>payment_instrument_id</name>
+    <title>Payment Method ID</title>
+    <type>int unsigned</type>
+    <comment>FK to Payment Instrument</comment>
+    <pseudoconstant>
+      <optionGroupName>payment_instrument</optionGroupName>
+    </pseudoconstant>
+    <html>
+      <type>Select</type>
+      <label>Payment Method</label>
+    </html>
+  </field>
+
+  <field>
     <name>contact_id</name>
     <type>int unsigned</type>
     <comment>FK to Contact</comment>

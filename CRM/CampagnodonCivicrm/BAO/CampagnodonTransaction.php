@@ -31,9 +31,12 @@ class CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction extends CRM_CampagnodonC
   public static function statusTables(): array {
     return [
       'init' => 'Init',
-      'waiting' => 'Waiting',
-      'accepted' => 'Accepted',
-      'rejected' => 'Rejected'
+      'pending' => 'Pending',
+      'completed' => 'Completed',
+      'cancelled' => 'Cancelled',
+      'failed' => 'Failed',
+      'refunded' => 'Refunded'
+      // TODO: other status?
     ];
   }
 }
