@@ -50,6 +50,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
         'payment_url' => 'https://www.example.com?test=1&test=2', // adding some & to test that there is no url encoding.
+        'country' => 'FR',
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
@@ -125,7 +126,20 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
             'amount' => 12
           ]
         ]
-      )]
+      )],
+      // FIXME: seems that CiviCRM does not check values for this type of pseudoConstant.
+      // 'must fail because of invalid country code' => [array(
+      //   'email' => 'john.doe@example.com',
+      //   'transaction_idx' => 'test/5',
+      //   'country' => 'invalid country code',
+      //   'contributions' => [
+      //     'don' => [
+      //       'financial_type' => 'Donation',
+      //       '_financial_type_id' => 1, // this is only there for unit tests.
+      //       'amount' => 12
+      //     ]
+      //   ]
+      // )]
     ];
   }
 
@@ -192,6 +206,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
 
     // Trying to get the transaction by ID
     $obj = \Civi\Api4\CampagnodonTransaction::get()
+      ->addSelect('*', 'country_id:name')
       ->addWhere('id', '=', $transaction['id'])
       ->execute()
       ->single();
@@ -201,6 +216,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals($obj['payment_instrument_id'], null, 'payment_instrument_id is null');
     $this->assertEquals($obj['contribution_status_id'], null, 'contribution_status_id is null');
     $this->assertEquals($obj['payment_url'], empty($params['payment_url']) ? null : $params['payment_url'], 'payment url should be correct');
+    $this->assertEquals($obj['country_id:name'], empty($params['country']) ? null : $params['country'], 'country code must be correct');
 
     if (!empty($params['transaction_idx'])) {
       $obj = \Civi\Api4\CampagnodonTransaction::get()

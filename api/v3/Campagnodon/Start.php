@@ -173,13 +173,16 @@ function civicrm_api3_campagnodon_Start($params) {
     foreach (
       array(
         'campaign_id',
-        'prefix', 'first_name', 'last_name', 'birth_date', 'street_address', 'postal_code', 'city', 'country', 'phone',
+        'prefix', 'first_name', 'last_name', 'birth_date', 'street_address', 'postal_code', 'city', 'phone',
         'payment_url'
       ) as $field
     ) {
       if (array_key_exists($field, $params) && !empty($params[$field])) {
         $transaction_create->addValue($field, $params[$field]);
       }
+    }
+    if (array_key_exists('country', $params) && !empty($params['country'])) {
+      $transaction_create->addValue('country_id:name', $params['country']);
     }
     $transaction_result = $transaction_create->execute();
     $transaction = $transaction_result->single();
