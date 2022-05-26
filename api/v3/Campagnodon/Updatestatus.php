@@ -26,6 +26,14 @@ function _civicrm_api3_campagnodon_Updatestatus_spec(&$spec) {
     "api.required" => 1,
     "api.default" => "",
   ];
+  $spec["contribution_status"] = [
+    "name" => "contribution_status",
+    "title" => ts("Contribution status"),
+    "description" => "Contribution status",
+    "type" => CRM_Utils_Type::T_STRING,
+    "api.required" => 0,
+    "api.default" => "",
+  ];
   $spec["payment_instrument"] = [
     "name" => "payment_instrument",
     "title" => ts("Payment Method ID"),
