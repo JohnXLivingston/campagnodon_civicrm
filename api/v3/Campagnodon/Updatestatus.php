@@ -26,14 +26,6 @@ function _civicrm_api3_campagnodon_Updatestatus_spec(&$spec) {
     "api.required" => 1,
     "api.default" => "",
   ];
-  $spec["contribution_status"] = [
-    "name" => "contribution_status",
-    "title" => ts("Contribution status"),
-    "description" => "Contribution status",
-    "type" => CRM_Utils_Type::T_STRING,
-    "api.required" => 0,
-    "api.default" => "",
-  ];
   $spec["payment_instrument"] = [
     "name" => "payment_instrument",
     "title" => ts("Payment Method ID"),
@@ -77,14 +69,14 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       }
     }
 
-    $contribution_status = $params['contribution_status'];
-    $contribution_status_field = null;
-    if (!empty($contribution_status)) {
-      $contribution_status_field = 'contribution_status_id';
-      if (!is_numeric($contribution_status)) {
-        $contribution_status_field.= ':name';
-      }
+    if (!preg_match('/^\w+$/', $status)) {
+      throw new Exception('Invalid status "'.$status.'".');
     }
+    $contribution_status = Civi::settings()->get('campagnodon_contribution_status_'.($status === 'init' ? 'pending' : $status));
+    if (!$contribution_status) {
+      throw new Exception('Cant find contribution_status for "'.$status.'".');
+    }
+    $contribution_status = intval($contribution_status); // just in case...
 
     $transaction_has_update = false;
     $transaction_update = \Civi\Api4\CampagnodonTransaction::update()
@@ -116,8 +108,8 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       $contribution_has_update = false;
       $contribution_update = \Civi\Api4\Contribution::update()
         ->addWhere('id', '=', $contribution['id']);
-      if (!empty($contribution_status_field)) { // FIXME: avoid update when value does not change (difficult because of the pseudoConstant)
-        $contribution_update->addValue($contribution_status_field, $contribution_status);
+      if ($contribution['contribution_status_id'] != $contribution_status) {
+        $contribution_update->addValue('contribution_status_id', $contribution_status);
         $contribution_has_update = true;
       }
       if (!empty($payment_field)) { // FIXME: avoid update when value does not change (difficult because of the pseudoConstant)

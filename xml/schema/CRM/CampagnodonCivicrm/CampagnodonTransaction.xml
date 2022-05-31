@@ -81,19 +81,6 @@
   </field>
 
   <field>
-    <name>contribution_status_id</name>
-    <title>Contribution Status ID</title>
-    <type>int unsigned</type>
-    <pseudoconstant>
-      <optionGroupName>contribution_status</optionGroupName>
-    </pseudoconstant>
-    <html>
-      <type>Select</type>
-      <label>Contribution Status</label>
-    </html>
-  </field>
-
-  <field>
     <name>contact_id</name>
     <type>int unsigned</type>
     <comment>FK to Contact</comment>

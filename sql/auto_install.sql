@@ -40,7 +40,6 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   `status` varchar(20) NOT NULL DEFAULT 'init' COMMENT 'The status of the transaction.',
   `payment_url` varchar(255) COMMENT 'The url to pay the subscriptions.',
   `payment_instrument_id` int unsigned COMMENT 'FK vers Instrument de Paiement',
-  `contribution_status_id` int unsigned,
   `contact_id` int unsigned COMMENT 'FK de contact',
   `campaign_id` int unsigned COMMENT 'The campaign for which this Campagnodon transaction is attached.',
   `email` varchar(254) COMMENT 'Courriel',

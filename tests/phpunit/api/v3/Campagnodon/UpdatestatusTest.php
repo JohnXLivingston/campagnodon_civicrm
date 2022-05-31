@@ -64,37 +64,34 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
     // At the end of the test, everything should be as in the last state.
     return [
       'init=>pending' => [
-        [['status' => 'pending', 'contribution_status' => 'Pending', 'payment_instrument' => 'Debit Card']]
+        [['status' => 'pending', 'payment_instrument' => 'Debit Card']]
       ],
       'init=>pending with numerical payment instrument' => [
-        [['status' => 'pending', 'contribution_status' => 'Pending', 'payment_instrument' => 4]]
+        [['status' => 'pending', 'payment_instrument' => 4]]
       ],
       'init=>completed' => [
-        [['status' => 'completed', 'contribution_status' => 'Completed', 'payment_instrument' => 'Debit Card']]
-      ],
-      'init=>completed with numerical contribution_status' => [
-        [['status' => 'completed', 'contribution_status' => '1', 'payment_instrument' => 'Debit Card']]
+        [['status' => 'completed', 'payment_instrument' => 'Debit Card']]
       ],
       'init=>pending=>completed' => [
         [
-          ['status' => 'pending', 'contribution_status' => 'Pending', 'payment_instrument' => 'Debit Card'],
-          ['status' => 'completed', 'contribution_status' => 'Completed', 'payment_instrument' => 'Debit Card']
+          ['status' => 'pending', 'payment_instrument' => 'Debit Card'],
+          ['status' => 'completed', 'payment_instrument' => 'Debit Card']
         ]
       ],
       'init=>cancelled' => [
-        [['status' => 'cancelled', 'contribution_status' => 'Cancelled', 'payment_instrument' => 'Debit Card']]
+        [['status' => 'cancelled', 'payment_instrument' => 'Debit Card']]
       ],
       'init=>failed' => [
-        [['status' => 'failed', 'contribution_status' => 'Failed', 'payment_instrument' => 'Debit Card']]
+        [['status' => 'failed', 'payment_instrument' => 'Debit Card']]
       ],
       'init=>completed=>refunded' => [
         [
-          ['status' => 'completed', 'contribution_status' => 'Completed', 'payment_instrument' => 'Debit Card'],
-          ['status' => 'refunded', 'contribution_status' => 'Refunded', 'payment_instrument' => 'Debit Card']
+          ['status' => 'completed', 'payment_instrument' => 'Debit Card'],
+          ['status' => 'refunded', 'payment_instrument' => 'Debit Card']
         ]
       ],
       'init=>refunded' => [
-        [['status' => 'refunded', 'contribution_status' => 'Refunded', 'payment_instrument' => 'Debit Card']]
+        [['status' => 'refunded', 'payment_instrument' => 'Debit Card']]
       ]
     ];
   }
@@ -141,7 +138,6 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       $result = civicrm_api3('Campagnodon', 'updatestatus', array(
         'transaction_idx' => $idx,
         'status' => $step['status'],
-        'contribution_status' => $step['contribution_status'],
         'payment_instrument' => $step['payment_instrument']
       ));
       $last_step = $step;
@@ -166,11 +162,34 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       ->execute()
       ->indexBy('id');
     foreach ($contributions as $cid => $contribution) {
-      if (is_numeric($last_step['contribution_status'])) {
-        $this->assertEquals($contribution['contribution_status_id'], $last_step['contribution_status'], 'Contribution '.$cid.' is in status '.$last_step['contribution_status']);
-      } else {
-        $this->assertEquals($contribution['contribution_status_id:name'], $last_step['contribution_status'], 'Contribution '.$cid.' is in status '.$last_step['contribution_status']);
+      $wanted_contribution_status = 'not this';
+      $wanted_contribution_status_name = 'not this';
+      switch ($last_step['status']) {
+        case 'init':
+        case 'pending':
+          $wanted_contribution_status = 2;
+          $wanted_contribution_status_name = 'Pending';
+          break;
+        case 'completed':
+          $wanted_contribution_status = 1;
+          $wanted_contribution_status_name = 'Completed';
+          break;
+        case 'cancelled':
+          $wanted_contribution_status = 3;
+          $wanted_contribution_status_name = 'Cancelled';
+          break;
+        case 'failed':
+          $wanted_contribution_status = 4;
+          $wanted_contribution_status_name = 'Failed';
+          break;
+        case 'refunded':
+          $wanted_contribution_status = 7;
+          $wanted_contribution_status_name = 'Refunded';
+          break;
       }
+
+      $this->assertEquals($contribution['contribution_status_id'], $wanted_contribution_status, 'Contribution '.$cid.' is in status '.$wanted_contribution_status);
+      $this->assertEquals($contribution['contribution_status_id:name'], $wanted_contribution_status_name, 'Contribution '.$cid.' status name is '.$wanted_contribution_status_name);
 
       if (is_numeric($last_step['payment_instrument'])) {
         $this->assertEquals($contribution['payment_instrument_id'], $last_step['payment_instrument'], 'Contribution '.$cid.' financial_type is '.$last_step['payment_instrument']);

@@ -187,6 +187,12 @@ function civicrm_api3_campagnodon_Start($params) {
     $transaction_result = $transaction_create->execute();
     $transaction = $transaction_result->single();
 
+    $pending_contribution_status = Civi::settings()->get('campagnodon_contribution_status_pending');
+    if (!$pending_contribution_status) {
+      throw new Exception('Cant find contribution_status for "pending".');
+    }
+    $pending_contribution_status = intval($pending_contribution_status); // just in case...
+
     // Now that we have a contact, we can make contributions.
     foreach ($contributions_params as $key => $contribution_params) {
       $contribution = \Civi\Api4\Contribution::create()
@@ -195,7 +201,7 @@ function civicrm_api3_campagnodon_Start($params) {
           $contribution_params['financial_type']
         )
         ->addValue('contact_id', $contact['id'])
-        ->addValue('contribution_status_id:name', 'Pending') // FIXME: Is this «Pending» even in french?
+        ->addValue('contribution_status_id', $pending_contribution_status)
         ->addValue('total_amount', $contribution_params['amount'])
         // FIXME: following fields?
         // 'receive_date'

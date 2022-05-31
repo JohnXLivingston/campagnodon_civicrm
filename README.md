@@ -41,6 +41,8 @@ cv en campagnodon_civicrm
 
 (* FIXME: Where would a new user navigate to get started? What changes would they see? *)
 
+Aller sur la page de configuration (Adminitration > Campagnodon), et vérifier les paramètres.
+
 ## Known Issues
 
 (* FIXME *)

@@ -214,7 +214,6 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals($obj['id'], $transaction['id'], 'Can get the good Transaction by id');
     $this->assertEquals($obj['status'], 'init', 'The transaction status is init');
     $this->assertEquals($obj['payment_instrument_id'], null, 'payment_instrument_id is null');
-    $this->assertEquals($obj['contribution_status_id'], null, 'contribution_status_id is null');
     $this->assertEquals($obj['payment_url'], empty($params['payment_url']) ? null : $params['payment_url'], 'payment url should be correct');
     $this->assertEquals($obj['country_id:name'], empty($params['country']) ? null : $params['country'], 'country code must be correct');
 
