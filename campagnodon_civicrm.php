@@ -96,15 +96,31 @@ function campagnodon_civicrm_civicrm_entityTypes(&$entityTypes) {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu
  */
 function campagnodon_civicrm_civicrm_navigationMenu(&$menu) {
- _campagnodon_civicrm_civix_insert_navigation_menu($menu, 'Administer', [
-   'label' => E::ts('Campagnodon'),
-   'name' => 'campagnodon-settings',
-   'url' => 'civicrm/admin/setting/campagnodon',
-   'permission' => 'administer CiviCRM',
-  //  'operator' => 'OR',
-   'separator' => 0,
- ]);
- _campagnodon_civicrm_civix_navigationMenu($menu);
+  _campagnodon_civicrm_civix_insert_navigation_menu($menu, 'Administer', [
+    'label' => E::ts('Campagnodon'),
+    'name' => 'campagnodon-settings',
+    'url' => 'civicrm/admin/setting/campagnodon',
+    'permission' => 'administer CiviCRM',
+    //  'operator' => 'OR',
+    'separator' => 0,
+  ]);
+  _campagnodon_civicrm_civix_insert_navigation_menu($menu, 'Contributions', [
+    'label' => E::ts('Campagnodon'),
+    'name' => 'campagnodon',
+    'url' => 'civicrm/campagnodon',
+    'permission' => 'access CiviCRM',
+    //  'operator' => 'OR',
+    'separator' => 0,
+  ]);
+  _campagnodon_civicrm_civix_insert_navigation_menu($menu, 'Search', [
+    'label' => E::ts('Search Campagnodon'),
+    'name' => 'search_campagnodon',
+    'url' => 'civicrm/campagnodon/search',
+    'permission' => 'access CiviCRM',
+    //  'operator' => 'OR',
+    'separator' => 0,
+  ]);
+  _campagnodon_civicrm_civix_navigationMenu($menu);
 }
 
 /**
