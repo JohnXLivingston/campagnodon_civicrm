@@ -6,6 +6,9 @@
   <name>civicrm_campagnodon_transaction</name>
   <comment>Campagnodon transaction. Groups contact/contributions/payments/... related to a donation or adhesion coming from SPIP Campagnodon plugin.</comment>
   <log>true</log>
+  <paths>
+    <view>civicrm/campagnodon/view?reset=1&amp;action=view&amp;id=[id]</view>
+  </paths>
 
   <field>
     <name>id</name>
