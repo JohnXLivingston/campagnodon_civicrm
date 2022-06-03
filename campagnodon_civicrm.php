@@ -106,3 +106,29 @@ function campagnodon_civicrm_civicrm_navigationMenu(&$menu) {
  ]);
  _campagnodon_civicrm_civix_navigationMenu($menu);
 }
+
+/**
+ * Implementation of hook_civicrm_tabset
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_tabset
+ */
+function campagnodon_civicrm_civicrm_tabset($path, &$tabs, $context) {
+  if ($path === 'civicrm/contact/view') {
+    // add a tab to the contact summary screen
+    $contactId = $context['contact_id'];
+    $url = CRM_Utils_System::url('civicrm/campagnodon/contacttab', ['cid' => $contactId]);
+
+    $campagnodon_transactions = \Civi\Api4\CampagnodonTransaction::get()
+      ->selectRowCount()
+      ->addWhere('contact_id', '=', $contactId)
+      ->execute();
+
+    $tabs[] = array(
+      'id' => 'contact_campagnodon',
+      'url' => $url,
+      'count' => $campagnodon_transactions->count(),
+      'title' => E::ts('Campagnodon'),
+      'weight' => 100,
+      'icon' => 'crm-i fa-credit-card',
+    );
+  }
+}
