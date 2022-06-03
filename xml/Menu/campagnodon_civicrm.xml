@@ -18,4 +18,10 @@
     <title>ContactTab</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/campagnodon/view</path>
+    <page_callback>CRM_CampagnodonCivicrm_Page_CampagnodonView</page_callback>
+    <title>Campagnodon Transaction</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
 </menu>

@@ -1,4 +1,4 @@
-{crmScope extensionKey='campagnodon'}
+{crmScope extensionKey='campagnodon_civicrm'}
   <div class="crm-content-block">
     <div class="crm-results-block">
       {include file="CRM/common/pager.tpl" location="top"}
@@ -32,7 +32,7 @@
           </thead>
           {foreach from=$rows item=row}
             <tr>
-              <td>{$row.id}</td>
+              <td>{$row.view}</td>
               <td>{$row.contact}</td>
               <td>{$row.idx}</td>
               <td>{$row.status}</td>

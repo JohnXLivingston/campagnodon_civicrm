@@ -23,6 +23,7 @@ class CRM_CampagnodonCivicrm_Page_ContactTab extends CRM_Core_Page {
         // TODO: lien vers la campagne.
         $row['campaign_title'] = $row['campaign_id:label'];
       }
+      $row['view'] = '<a href="'.CRM_Utils_System::url('civicrm/campagnodon/view', ['reset' => 1, 'id' => $row['id']]).'">'.($row['id']).'</a>';
       $rows[] = $row;
     }
     $this->assign('contactId', $contactId);
