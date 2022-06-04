@@ -62,6 +62,13 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       ['entity' => 'Contact', 'create' => false, 'multiple' => true],
       false
     );
+    $this->add(
+      'text',
+      'idx',
+      E::ts('Campagnodon IDX'),
+      array('class' => 'huge'),
+      false
+    );
 
     $this->addButtons(array(
       array(
@@ -117,6 +124,9 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
 
     if (isset($this->formValues['status']) && !empty($this->formValues['status'])) {
       $api->addWhere('status', '=', $this->formValues['status']);
+    }
+    if (isset($this->formValues['idx']) && !empty($this->formValues['idx'])) {
+      $api->addWhere('idx', 'CONTAINS', $this->formValues['idx']);
     }
     if (isset($this->formValues['contact_id'])) {
       if (is_array($this->formValues['contact_id'])) {

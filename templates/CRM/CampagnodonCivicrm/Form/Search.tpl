@@ -15,6 +15,10 @@
               <td class="label">{$form.contact_id.label}</td>
               <td>{$form.contact_id.html}</td>
             </tr>
+            <tr>
+              <td class="label">{$form.idx.label}</td>
+              <td>{$form.idx.html}</td>
+            </tr>
             </tbody>
           </table>
           <div class="crm-submit-buttons">
@@ -37,6 +41,12 @@
               {ts}ID{/ts}
             </th>
             <th scope="col">
+              {ts}Campagnodon IDX{/ts}
+            </th>
+            <th scope="col">
+              {ts}Status{/ts}
+            </th>
+            <th scope="col">
               {ts}Contact{/ts}
             </th>
             <th>&nbsp;</th>
@@ -45,6 +55,8 @@
           {foreach from=$entities item=row}
             <tr>
               <td>{$row.id}</td>
+              <td>{$row.idx}</td>
+              <td>{$row.status}</td>
               <td>{$row.contact}</td>
               <td class="right nowrap">
                   <span>
