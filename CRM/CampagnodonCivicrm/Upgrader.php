@@ -132,4 +132,15 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
   //   return TRUE;
   // }
 
+  /**
+   * New columns.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0001(): bool {
+    $this->ctx->log->info('Planning update 0001');
+    CRM_Core_DAO::executeQuery('ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN `on_complete` tinyint DEFAULT false');
+    return TRUE;
+  }
 }

@@ -52,4 +52,12 @@
     <idColumn>entity_id</idColumn>
     <typeColumn>entity_table</typeColumn>
   </dynamicForeignKey>
+
+  <field>
+    <name>on_complete</name>
+    <title>On complete</title>
+    <type>boolean</type>
+    <default>false</default>
+    <comment>Only when entity_table='group'. If true, the contact will be added in group only when transaction is complete.</comment>
+  </field>
 </table>

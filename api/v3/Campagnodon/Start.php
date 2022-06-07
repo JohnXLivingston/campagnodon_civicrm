@@ -216,6 +216,33 @@ function civicrm_api3_campagnodon_Start($params) {
         ->single();
     }
 
+    // And now, optional_subscriptions!
+    $optional_subscriptions = $params['optional_subscriptions'] ?? array();
+    foreach ($optional_subscriptions as $optional_subscription) {
+      if ($optional_subscription['type'] !== 'group') {
+        throw new Exception('Invalid optional_subscriptions type: "'.$optional_subscription['type'].'"');
+      }
+      $group_key = $optional_subscription['key'];
+      $group_field = is_numeric($optional_subscription['key']) ? 'id' : 'name';
+      $group = \Civi\Api4\Group::get()
+        ->addWhere($group_field, '=', $group_key)
+        ->execute()
+        ->single();
+      
+      $on_complete = $optional_subscription['when'] === 'completed';
+      $link = \Civi\Api4\CampagnodonTransactionLink::create()
+        ->addValue('campagnodon_tid', $transaction['id'])
+        ->addValue('entity_table', 'civicrm_group')
+        ->addValue('entity_id', $group['id'])
+        ->addValue('on_complete', $on_complete)
+        ->execute()
+        ->single();
+
+      if (!$on_complete) {
+        CRM_CampagnodonCivicrm_Logic_Contact::addInGroup($group['id'], $contact['id']);
+      }
+    }
+
   } catch (Exception $e) {
     $tx->rollback();
     throw $e;

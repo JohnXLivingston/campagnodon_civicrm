@@ -11,6 +11,7 @@ use Civi\Test\TransactionalInterface;
  */
 class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
   use \Civi\Test\Api3TestTrait;
+  protected $newsletter_group = null;
 
   /**
    * Set up for headless tests.
@@ -29,6 +30,12 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
    * The setup() method is executed before the test is executed (optional).
    */
   public function setUp() {
+    if (!$this->newsletter_group) {
+      $this->newletter_group = \Civi\Api4\Group::create()
+        ->addValue('name', 'Newsletter Subscribers')
+        ->addValue('title', 'The Newsletter group')
+        ->execute()->single();
+    }
     parent::setUp();
   }
 
@@ -82,6 +89,21 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
           'don2' => [
             'financial_type' => 'Donation',
             'amount' => 24
+          ]
+        ]
+      )],
+      'test with optional_subscriptions on init' => [array(
+        'email' => 'john.doe@example.com',
+        'transaction_idx' => 'test/1',
+        'country' => 'FR',
+        'optional_subscriptions' => [
+          ['type' => 'group', 'key' => 'Newsletter Subscribers', 'when' => 'init']
+        ],
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            '_financial_type_id' => 1, // this is only there for unit tests.
+            'amount' => 12
           ]
         ]
       )]
@@ -259,6 +281,19 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       }
     }
     $this->assertEquals(count($contributions), 0, 'No extra contribution created or linked.');
+
+    // Testing optional_subscriptions
+    $optional_subscriptions = $params['optional_subscriptions'] ?? array();
+    $optional_subscriptions_links = \Civi\Api4\CampagnodonTransactionLink::get()
+      ->addSelect('*')
+      ->addWhere('campagnodon_tid', '=', $transaction['id'])
+      ->addWhere('entity_table', '=', 'civicrm_group')
+      ->execute();
+    $this->assertEquals(count($optional_subscriptions), $optional_subscriptions_links->count(), 'Same number of linked group as number of given optional_subscriptions');
+    $optional_subscriptions_links->indexBy('id');
+    $optional_subscriptions_links = (array) $optional_subscriptions_links;
+
+    // TODO: test that the GroupContact was created (unless when=completed)
   }
 
   /**
@@ -356,4 +391,5 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     ));
   }
 
+  // TODO: more tests on optional_subscriptions.
 }

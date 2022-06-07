@@ -53,12 +53,20 @@
             <th>{ts}Entity table{/ts}</th>
             <th>{ts}Entity ID{/ts}</th>
             <th></th>
+            <th>{ts}Link options{/ts}</th>
           </tr>
           {foreach from=$links item=link}
             <tr>
               <td>{$link.entity_table}</td>
               <td>{$link.id}</td>
               <td>{$link.view}</td>
+              <td>
+                {if $link.entity_table === 'civicrm_group'}
+                  {if $link.on_complete}
+                    {ts}On complete{/ts}
+                  {/if}
+                {/if}
+              </td>
             </tr>
           {/foreach}
         </table>

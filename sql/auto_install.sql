@@ -72,6 +72,7 @@ CREATE TABLE `civicrm_campagnodon_transaction_link` (
   `campagnodon_tid` int unsigned NOT NULL COMMENT 'FK to CampagnodonTransaction',
   `entity_table` varchar(64) NOT NULL COMMENT 'Table of the linked object',
   `entity_id` int unsigned COMMENT 'ID of the linked object',
+  `on_complete` tinyint DEFAULT false COMMENT 'Only when entity_table=\'group\'. If true, the contact will be added in group only when transaction is complete.',
   PRIMARY KEY (`id`),
   CONSTRAINT FK_civicrm_campagnodon_transaction_link_campagnodon_tid FOREIGN KEY (`campagnodon_tid`) REFERENCES `civicrm_campagnodon_transaction`(`id`) ON DELETE CASCADE
 )
