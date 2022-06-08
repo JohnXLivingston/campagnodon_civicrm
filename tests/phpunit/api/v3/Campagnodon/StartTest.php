@@ -69,7 +69,21 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'bill' => [array(
         'email' => 'bill.smith@example.com',
         'transaction_idx' => 'test/123456789123456789',
+        'prefix' => 2,
         'first_name' => 'Bill',
+        'last_name' => 'Smith',
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            'amount' => 45
+          ]
+        ]
+      )],
+      'billy' => [array(
+        'email' => 'billy.smith@example.com',
+        'transaction_idx' => 'test/123456789123456789',
+        'prefix' => 'M.',
+        'first_name' => 'Billy',
         'last_name' => 'Smith',
         'contributions' => [
           'don' => [
@@ -228,7 +242,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
 
     // Trying to get the transaction by ID
     $obj = \Civi\Api4\CampagnodonTransaction::get()
-      ->addSelect('*', 'country_id:name')
+      ->addSelect('*', 'country_id:name', 'prefix_id:name')
       ->addWhere('id', '=', $transaction['id'])
       ->execute()
       ->single();
@@ -238,6 +252,13 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals($obj['payment_instrument_id'], null, 'payment_instrument_id is null');
     $this->assertEquals($obj['payment_url'], empty($params['payment_url']) ? null : $params['payment_url'], 'payment url should be correct');
     $this->assertEquals($obj['country_id:name'], empty($params['country']) ? null : $params['country'], 'country code must be correct');
+    $this->assertEquals($obj['first_name'], empty($params['first_name']) ? null : $params['first_name'], 'first_name must be correct');
+    $this->assertEquals($obj['last_name'], empty($params['last_name']) ? null : $params['last_name'], 'last_name must be correct');
+    if (is_numeric($params['prefix'])) {
+      $this->assertEquals($obj['prefix_id'], empty($params['prefix']) ? null : $params['prefix'], 'prefix_id must be correct');
+    } else {
+      $this->assertEquals($obj['prefix_id:name'], empty($params['prefix']) ? null : $params['prefix'], 'prefix_id:name must be correct');
+    }
 
     if (!empty($params['transaction_idx'])) {
       $obj = \Civi\Api4\CampagnodonTransaction::get()
