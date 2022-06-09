@@ -10,6 +10,14 @@ use CRM_CampagnodonCivicrm_ExtensionUtil as E;
  * @see https://docs.civicrm.org/dev/en/latest/framework/api-architecture/
  */
 function _civicrm_api3_campagnodon_Start_spec(&$spec) {
+  $spec["prefix"] = [
+    "name" => "prefix",
+    "title" => ts("Individual Prefix"),
+    "description" => ts("Individual Prefix"),
+    "type" => CRM_Utils_Type::T_STRING,
+    "api.required" => 0,
+    "api.default" => "",
+  ];
   $spec["first_name"] = [
     "name" => "first_name",
     "title" => ts("First name"),
@@ -57,6 +65,14 @@ function _civicrm_api3_campagnodon_Start_spec(&$spec) {
       "type" => CRM_Utils_Type::T_STRING,
       "api.required" => 0,
       "api.default" => "",
+  ];
+  $spec["birth_date"] = [
+    "name" => "birth_date",
+    "title" => ts("Birth Date"),
+    "description" => "Date of birth",
+    "type" => CRM_Utils_Type::T_DATE,
+    "api.required" => 0,
+    "api.default" => "",
   ];
   $spec["transaction_idx"] = [
       "name" => "transaction_idx",
@@ -141,6 +157,7 @@ function civicrm_api3_campagnodon_Start($params) {
     if ($contacts['count'] == 0) {
       $contactsBis = civicrm_api3('Contact', 'create', array(
         'email' => $params['email'],
+        'prefix_id' => $params['prefix'],
         'first_name' => $params['first_name'],
         'last_name' => $params['last_name'],
         // 'postal_code' => $params['postal_code'],
@@ -173,7 +190,7 @@ function civicrm_api3_campagnodon_Start($params) {
     foreach (
       array(
         'campaign_id',
-        'prefix', 'first_name', 'last_name', 'birth_date', 'street_address', 'postal_code', 'city', 'phone',
+        'first_name', 'last_name', 'birth_date', 'street_address', 'postal_code', 'city', 'phone',
         'payment_url'
       ) as $field
     ) {
@@ -183,6 +200,13 @@ function civicrm_api3_campagnodon_Start($params) {
     }
     if (array_key_exists('country', $params) && !empty($params['country'])) {
       $transaction_create->addValue('country_id:name', $params['country']);
+    }
+    if (array_key_exists('prefix', $params) && !empty($params['prefix'])) {
+      if (is_numeric($params['prefix'])) {
+        $transaction_create->addValue('prefix_id', $params['prefix']);
+      } else {
+        $transaction_create->addValue('prefix_id:name', $params['prefix']);
+      }
     }
     $transaction_result = $transaction_create->execute();
     $transaction = $transaction_result->single();
