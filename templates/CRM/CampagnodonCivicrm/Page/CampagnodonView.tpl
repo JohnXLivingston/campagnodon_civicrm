@@ -35,6 +35,10 @@
       </td>
     </tr>
     <tr>
+      <td class="label">{ts}Tax Receipt{/ts}</td>
+      <td><input type="checkbox" disabled {if $row.tax_receipt} checked {/if}></td>
+    </tr>
+    <tr>
       <td class="label">{ts}Personnal informations{/ts}</td>
       <td>
         {$row.email}<br>

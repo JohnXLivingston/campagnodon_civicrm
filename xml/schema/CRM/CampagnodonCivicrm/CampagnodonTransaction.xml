@@ -58,6 +58,14 @@
   </field>
 
   <field>
+    <name>tax_receipt</name>
+    <type>boolean</type>
+    <required>true</required>
+    <default>false</default>
+    <comment>True if the user want a tax receipt</comment>
+  </field>
+
+  <field>
     <name>payment_url</name>
     <type>varchar</type>
     <length>255</length>

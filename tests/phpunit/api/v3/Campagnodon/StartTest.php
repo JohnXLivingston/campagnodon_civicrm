@@ -69,6 +69,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'bill' => [array(
         'email' => 'bill.smith@example.com',
         'transaction_idx' => 'test/123456789123456789',
+        'tax_receipt' => true,
         'prefix' => 2,
         'first_name' => 'Bill',
         'last_name' => 'Smith',
@@ -84,6 +85,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'billy' => [array(
         'email' => 'billy.smith@example.com',
         'transaction_idx' => 'test/123456789123456789',
+        'tax_receipt' => false,
         'prefix' => 'Mr.',
         'first_name' => 'Billy',
         'last_name' => 'Smith',
@@ -216,7 +218,21 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
             'amount' => 45
           ]
         ]
-      )]
+      )],
+      // FIXME: seems that CiviCRM does not check values for boolean
+      // 'must fail because invalid tax_receipt' => [array(
+      //   'email' => 'john.doe@example.com',
+      //   'transaction_idx' => 'test/8',
+      //   'tax_receipt' => 'not a boolean',
+      //   'first_name' => 'Bill',
+      //   'last_name' => 'Smith',
+      //   'contributions' => [
+      //     'don' => [
+      //       'financial_type' => 'Donation',
+      //       'amount' => 45
+      //     ]
+      //   ]
+      // )],
     ];
   }
 
@@ -297,6 +313,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals($obj['last_name'], empty($params['last_name']) ? null : $params['last_name'], 'last_name must be correct');
     $this->assertEquals($obj['phone'], empty($params['phone']) ? null : $params['phone'], 'phone must be correct');
     $this->assertEquals($obj['birth_date'], empty($params['birth_date']) ? null : $params['birth_date'], 'birth_date must be correct');
+
+    $this->assertEquals($obj['tax_receipt'], !empty($params['tax_receipt']) && $params['tax_receipt'] ? true : false, 'tax_receipt must be correct');
     if (empty($params['prefix'])) {
       $this->assertEquals($obj['prefix_id'], null, 'prefix_id must be null');
     } else if (is_numeric($params['prefix'])) {

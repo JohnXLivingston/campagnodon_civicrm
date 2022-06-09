@@ -143,4 +143,16 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery('ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN `on_complete` tinyint DEFAULT false');
     return TRUE;
   }
+
+  /**
+   * New columns.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0002(): bool {
+    $this->ctx->log->info('Planning update 0002');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN `tax_receipt` tinyint NOT NULL DEFAULT false COMMENT 'True if the user want a tax receipt'");
+    return TRUE;
+  }
 }

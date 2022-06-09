@@ -19,6 +19,10 @@
               <td class="label">{$form.idx.label}</td>
               <td>{$form.idx.html}</td>
             </tr>
+            <tr>
+              <td class="label">{$form.tax_receipt.label}</td>
+              <td>{$form.tax_receipt.html}</td>
+            </tr>
             </tbody>
           </table>
           <div class="crm-submit-buttons">
@@ -49,15 +53,21 @@
             <th scope="col">
               {ts}Contact{/ts}
             </th>
+            <th scope="col">
+              {ts}Tax Receipt{/ts}
+            </th>
             <th>&nbsp;</th>
           </tr>
           </thead>
           {foreach from=$entities item=row}
             <tr>
-              <td>{$row.id}</td>
+              <td>
+                <a href="{crmURL p='civicrm/campagnodon/view' q="id=`$row.id`"}">{$row.id}</a>
+              </td>
               <td>{$row.idx}</td>
               <td>{$row.status}</td>
               <td>{$row.contact}</td>
+              <td><input type="checkbox" disabled {if $row.tax_receipt} checked {/if}></td>
               <td class="right nowrap">
                   <span>
                     <a class="action-item crm-hover-button" href="{crmURL p='civicrm/campagnodon/view' q="id=`$row.id`"}">{ts}View{/ts}</a>

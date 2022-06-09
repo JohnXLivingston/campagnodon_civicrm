@@ -34,6 +34,13 @@ function _civicrm_api3_campagnodon_Start_spec(&$spec) {
       "api.required" => 0,
       "api.default" => "",
   ];
+  $spec["tax_receipt"] = [
+    "name" => "tax_receipt",
+    "title" => "Tax Receipt",
+    "description" => "Send a tax receipt",
+    "type" => CRM_Utils_Type::T_BOOLEAN,
+    "api.required" => 0
+  ];
   $spec["email"] = [
       "name" => "email",
       "title" => ts("E-mail"),
@@ -187,6 +194,7 @@ function civicrm_api3_campagnodon_Start($params) {
     $transaction_create->addValue('contact_id', $contact['id']);
     $transaction_create->addValue('email', $params['email']);
     $transaction_create->addValue('idx', $params['transaction_idx']);
+    $transaction_create->addValue('tax_receipt', !empty($params['tax_receipt']) && $params['tax_receipt']);
     foreach (
       array(
         'campaign_id',

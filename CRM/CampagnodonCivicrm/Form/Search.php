@@ -69,6 +69,13 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       array('class' => 'huge'),
       false
     );
+    $this->add(
+      'select',
+      'tax_receipt',
+      E::ts('Tax Receipt'),
+      $this->getTaxReceiptOptions(),
+      false
+    );
 
     $this->addButtons(array(
       array(
@@ -112,6 +119,15 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
     return $options;
   }
 
+  public function getTaxReceiptOptions() {
+    $options = array(
+      '' => E::ts('- select -'),
+      '1' => E::ts('With tax receipt'),
+      '0' => E::ts('Without tax receipt')
+    );
+    return $options;
+  }
+
   public function query() {
     $api = Civi\Api4\CampagnodonTransaction::get()
       ->selectRowCount()
@@ -127,6 +143,13 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
     }
     if (isset($this->formValues['idx']) && !empty($this->formValues['idx'])) {
       $api->addWhere('idx', 'CONTAINS', $this->formValues['idx']);
+    }
+    if (isset($this->formValues['tax_receipt'])) {
+      if ($this->formValues['tax_receipt'] === '1') {
+        $api->addWhere('tax_receipt', '=', true);
+      } else if ($this->formValues['tax_receipt'] === '0') {
+        $api->addWhere('tax_receipt', '=', false);
+      }
     }
     if (isset($this->formValues['contact_id'])) {
       if (is_array($this->formValues['contact_id'])) {

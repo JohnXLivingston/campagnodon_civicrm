@@ -38,6 +38,7 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonTransaction ID',
   `idx` varchar(255) NULL COMMENT 'The campagnodon key as given by the origin system (SPIP, ...). A string like: spip/12345.',
   `status` varchar(20) NOT NULL DEFAULT 'init' COMMENT 'The status of the transaction.',
+  `tax_receipt` tinyint NOT NULL DEFAULT false COMMENT 'True if the user want a tax receipt',
   `payment_url` varchar(255) COMMENT 'The url to pay the subscriptions.',
   `payment_instrument_id` int unsigned COMMENT 'FK vers Instrument de Paiement',
   `contact_id` int unsigned COMMENT 'FK de contact',
