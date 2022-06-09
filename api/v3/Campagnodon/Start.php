@@ -66,6 +66,14 @@ function _civicrm_api3_campagnodon_Start_spec(&$spec) {
       "api.required" => 0,
       "api.default" => "",
   ];
+  $spec["birth_date"] = [
+    "name" => "birth_date",
+    "title" => ts("Birth Date"),
+    "description" => "Date of birth",
+    "type" => CRM_Utils_Type::T_DATE,
+    "api.required" => 0,
+    "api.default" => "",
+  ];
   $spec["transaction_idx"] = [
       "name" => "transaction_idx",
       "title" => ts("External identifier"),
