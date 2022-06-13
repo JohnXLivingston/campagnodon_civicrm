@@ -170,6 +170,7 @@ function civicrm_api3_campagnodon_Start($params) {
         // 'postal_code' => $params['postal_code'],
         // 'country' => $params['country'],
         'contact_type' => 'Individual',
+        'do_not_trade' => true, // can be changed later, with optional subscription
         'sequential' => true,
         'options' => [
           'reload' => true
