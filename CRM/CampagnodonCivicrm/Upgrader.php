@@ -155,4 +155,41 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN `tax_receipt` tinyint NOT NULL DEFAULT false COMMENT 'True if the user want a tax receipt'");
     return TRUE;
   }
+
+  /**
+   * SQL definition changes.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0003(): bool {
+    $this->ctx->log->info('Planning update 0003');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link MODIFY COLUMN `entity_id` int unsigned NULL DEFAULT NULL COMMENT 'ID of the linked object. Can be null if the object is not created in pending state.'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN IF NOT EXISTS `total_amount` decimal(20,2) NULL DEFAULT NULL COMMENT 'Only when entity_table=contribution. Total amount of this contribution.'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN IF NOT EXISTS `currency` varchar(3) DEFAULT NULL COMMENT 'Only when entity_table=contribution. 3 character string, value from config setting or input via user.'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN IF NOT EXISTS `financial_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=contribution. FK to Financial Type.'");
+    // Seems that following lines dont work...
+    // CRM_Core_DAO::executeQuery(
+    //   "UPDATE civicrm_campagnodon_transaction_link SET "
+    //   ." total_amount = "
+    //   ." (SELECT total_amount FROM civicrm_contribution WHERE civicrm_contribution.id = civicrm_campagnodon_transaction_link.entity_id) "
+    //   ." WHERE entity_table = 'civicrm_contribution' AND total_amout IS NULL "
+    //   ." AND entity_id IS NOT NULL"
+    // );
+    // CRM_Core_DAO::executeQuery(
+    //   "UPDATE civicrm_campagnodon_transaction_link SET "
+    //   ." currency = "
+    //   ." (SELECT currency FROM civicrm_contribution WHERE civicrm_contribution.id = civicrm_campagnodon_transaction_link.entity_id) "
+    //   ." WHERE entity_table = 'civicrm_contribution' AND currency IS NULL "
+    //   ." AND entity_id IS NOT NULL"
+    // );
+    // CRM_Core_DAO::executeQuery(
+    //   "UPDATE civicrm_campagnodon_transaction_link SET "
+    //   ." financial_type_id = "
+    //   ." (SELECT financial_type_id FROM civicrm_contribution WHERE civicrm_contribution.id = civicrm_campagnodon_transaction_link.entity_id) "
+    //   ." WHERE entity_table = 'civicrm_contribution' AND financial_type_id IS NULL "
+    //   ." AND entity_id IS NOT NULL"
+    // );
+    return TRUE;
+  }
 }

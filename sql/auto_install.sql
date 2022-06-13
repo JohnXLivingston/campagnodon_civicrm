@@ -72,8 +72,11 @@ CREATE TABLE `civicrm_campagnodon_transaction_link` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonTransactionLink ID',
   `campagnodon_tid` int unsigned NOT NULL COMMENT 'FK to CampagnodonTransaction',
   `entity_table` varchar(64) NOT NULL COMMENT 'Table of the linked object',
-  `entity_id` int unsigned COMMENT 'ID of the linked object',
+  `entity_id` int unsigned NULL DEFAULT NULL COMMENT 'ID of the linked object. Can be null if the object is not created in pending state.',
   `on_complete` tinyint DEFAULT false COMMENT 'Only when entity_table=\'group\'. If true, the contact will be added in group only when transaction is complete.',
+  `total_amount` decimal(20,2) NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. Total amount of this contribution.',
+  `currency` varchar(3) DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. 3 character string, value from config setting or input via user.',
+  `financial_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. FK to Financial Type.',
   PRIMARY KEY (`id`),
   CONSTRAINT FK_civicrm_campagnodon_transaction_link_campagnodon_tid FOREIGN KEY (`campagnodon_tid`) REFERENCES `civicrm_campagnodon_transaction`(`id`) ON DELETE CASCADE
 )

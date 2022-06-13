@@ -34,7 +34,7 @@ class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
     $this->assign('row', $row);
 
     $links = \Civi\Api4\CampagnodonTransactionLink::get()
-      ->addSelect('*')
+      ->addSelect('*', 'financial_type_id:name')
       ->addWhere('campagnodon_tid', '=', $id)
       ->addOrderBy('entity_table', 'ASC')
       ->addOrderBy('entity_id', 'ASC')
@@ -42,24 +42,28 @@ class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
 
     foreach ($links as &$link) {
       if ($link['entity_table'] === 'civicrm_contribution') {
-        $contribution = \Civi\Api4\Contribution::get()
-          ->addSelect('*')
-          ->addWhere('id', '=', $link['entity_id'])
-          ->execute()->first();
-        if ($contribution) {
-          $url = CRM_Utils_System::url('civicrm/contact/view/contribution', [
-            'action' => 'view',
-            'reset' => 1,
-            'id' => $contribution['id'],
-            'cid' => $contribution['contact_id']
-          ]);
-          $link['view'] = '<a href="'
-            .htmlspecialchars($url)
-            .'">'
-            .CRM_Utils_Money::format($contribution['total_amount'], $contribution['currency']) 
-            .'</a>';
-        } else {
-          $link['view'] = '???';
+        $link['financial_type'] = $link['financial_type_id:name'];
+
+        if ($link['entity_id']) {
+          $contribution = \Civi\Api4\Contribution::get()
+            ->addSelect('*')
+            ->addWhere('id', '=', $link['entity_id'])
+            ->execute()->first();
+          if ($contribution) {
+            $url = CRM_Utils_System::url('civicrm/contact/view/contribution', [
+              'action' => 'view',
+              'reset' => 1,
+              'id' => $contribution['id'],
+              'cid' => $contribution['contact_id']
+            ]);
+            $link['view'] = '<a href="'
+              .htmlspecialchars($url)
+              .'">'
+              .CRM_Utils_Money::format($contribution['total_amount'], $contribution['currency']) 
+              .'</a>';
+          } else {
+            $link['view'] = '???';
+          }
         }
       }
     }

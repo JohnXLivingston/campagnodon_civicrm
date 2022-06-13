@@ -62,7 +62,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
           'don' => [
             'financial_type' => 'Donation',
             '_financial_type_id' => 1, // this is only there for unit tests.
-            'amount' => 12
+            'amount' => 12,
+            'currency' => 'EUR'
           ]
         ]
       )],
@@ -78,7 +79,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
-            'amount' => 45
+            'amount' => 45,
+            'currency' => 'EUR'
           ]
         ]
       )],
@@ -92,7 +94,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
-            'amount' => 45
+            'amount' => 45,
+            'currency' => 'EUR'
           ]
         ]
       )],
@@ -102,11 +105,13 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
-            'amount' => 12
+            'amount' => 12,
+            'currency' => 'EUR'
           ],
           'don2' => [
             'financial_type' => 'Donation',
-            'amount' => 24
+            'amount' => 24,
+            'currency' => 'EUR'
           ]
         ]
       )],
@@ -121,7 +126,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
           'don' => [
             'financial_type' => 'Donation',
             '_financial_type_id' => 1, // this is only there for unit tests.
-            'amount' => 12
+            'amount' => 12,
+            'currency' => 'EUR'
           ]
         ]
       )]
@@ -141,10 +147,25 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
-            'amount' => 'nonono'
+            'amount' => 'nonono',
+            'currency' => 'EUR'
           ]
         ]
       )],
+      // FIXME: seems that CiviCRM does not check values for this type of pseudoConstant.
+      // 'must fail because of invalid contribution currency' => [array(
+      //   'email' => 'michel.martin@example.com',
+      //   'transaction_idx' => 'test/2',
+      //   'first_name' => 'Michel',
+      //   'last_name' => 'Martin',
+      //   'contributions' => [
+      //     'don' => [
+      //       'financial_type' => 'Donation',
+      //       'amount' => 12,
+      //       'currency' => 'XXX'
+      //     ]
+      //   ]
+      // )],
       'must fail because of unknown campaign' => [array(
         'email' => 'john.doe@example.com',
         'campaign_id' => '123456749',
@@ -152,7 +173,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
-            'amount' => 12
+            'amount' => 12,
+            'currency' => 'EUR'
           ]
         ]
       )],
@@ -163,7 +185,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
-            'amount' => 12
+            'amount' => 12,
+            'currency' => 'EUR'
           ]
         ]
       )],
@@ -176,7 +199,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       //     'don' => [
       //       'financial_type' => 'Donation',
       //       '_financial_type_id' => 1, // this is only there for unit tests.
-      //       'amount' => 12
+      //       'amount' => 12,
+      //       'currency' => 'EUR'
       //     ]
       //   ]
       // )],
@@ -189,7 +213,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
-            'amount' => 45
+            'amount' => 45,
+            'currency' => 'EUR'
           ]
         ]
       )],
@@ -202,7 +227,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
-            'amount' => 45
+            'amount' => 45,
+            'currency' => 'EUR'
           ]
         ]
       )],
@@ -215,7 +241,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
-            'amount' => 45
+            'amount' => 45,
+            'currency' => 'EUR'
           ]
         ]
       )],
@@ -229,7 +256,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       //   'contributions' => [
       //     'don' => [
       //       'financial_type' => 'Donation',
-      //       'amount' => 45
+      //       'amount' => 45,
+      //       'currency' => 'EUR'
       //     ]
       //   ]
       // )],
@@ -257,7 +285,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
-          'amount' => 45
+          'amount' => 45,
+          'currency' => 'EUR'
         ]
       ]
     ));
@@ -273,7 +302,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
-          'amount' => 45
+          'amount' => 45,
+          'currency' => 'EUR'
         ]
       ]
     ));
@@ -346,25 +376,31 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       )
       ->addWhere('tlink.campagnodon_tid', '=', $transaction['id'])
       ->execute();
+    $this->assertEquals(count($contributions), 0, 'Contribution not yet created');
 
-    $this->assertEquals(count($contribs), $contributions->count(), 'Same number of linked contribution as number of given contributions');
-    $contributions->indexBy('id');
-    $contributions = (array) $contributions;
-    foreach ($contribs as $k => $c) {
-      $first_match = current(array_filter($contributions, function ($v) use ($c) {
-        return $v['total_amount'] == $c['amount'] && $v['financial_type_id:name'] === $c['financial_type'];
+    $contrib_links = \Civi\Api4\CampagnodonTransactionLink::get()
+        ->addSelect('*', 'financial_type_id:name')
+        ->addWhere('campagnodon_tid', '=', $transaction['id'])
+        ->addWhere('entity_table', '=', '"civicrm_contribution"')
+        ->execute();
+    $this->assertEquals(count($contrib_links), $contributions->count(), 'Same number of contribution links as number of given contributions');
+    $contrib_links->indexBy('id');
+    $contrib_links = (array) $contrib_links;
+    foreach ($contrib_links as $k => $c) {
+      $first_match = current(array_filter($contrib_links, function ($v) use ($c) {
+        return $v['total_amount'] == $c['amount'] && $v['financial_type_id:name'] === $c['financial_type'] && $v['currency'] === $c['currency'];
       }));
 
-      $this->assertTrue(!empty($first_match), 'Contribution number '.$k.' found.');
+      $this->assertTrue(!empty($first_match), 'Contribution link number '.$k.' found.');
       if (array_key_exists('_financial_type_id', $c)) {
-        $this->assertEquals($first_match['financial_type_id'], $c['_financial_type_id'], 'financial_type_id is ok for contribution number '.$k);
+        $this->assertEquals($first_match['financial_type_id'], $c['_financial_type_id'], 'financial_type_id is ok for contribution link number '.$k);
       }
 
       if (!empty($first_match)) {
         unset($contributions[$first_match['id']]);
       }
     }
-    $this->assertEquals(count($contributions), 0, 'No extra contribution created or linked.');
+    $this->assertEquals(count($contrib_links), 0, 'No extra contribution link created.');
 
     // Testing optional_subscriptions
     $optional_subscriptions = $params['optional_subscriptions'] ?? array();
@@ -402,7 +438,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
-          'amount' => 12
+          'amount' => 12,
+          'currency' => 'EUR'
         ]
       ]
     ));
@@ -422,7 +459,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
-          'amount' => 34
+          'amount' => 34,
+          'currency' => 'EUR'
         ]
       ]
     ));
@@ -438,7 +476,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
-          'amount' => 15
+          'amount' => 15,
+          'currency' => 'EUR'
         ]
       ]
     ));
@@ -454,7 +493,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
-          'amount' => 12
+          'amount' => 12,
+          'currency' => 'EUR'
         ]
       ]
     ));
@@ -469,7 +509,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
-          'amount' => 34
+          'amount' => 34,
+          'currency' => 'EUR'
         ]
       ]
     ));

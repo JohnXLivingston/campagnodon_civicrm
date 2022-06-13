@@ -93,7 +93,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       $transaction_update->execute();
     }
 
-    // Also updating contributions
+    // Updating existing contributions
     $contributions = \Civi\Api4\Contribution::get()
       ->addSelect('*', 'financial_type_id:name')
       ->addJoin(
@@ -118,6 +118,34 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       }
       if ($contribution_has_update) {
         $contribution_update->execute();
+      }
+    }
+
+    // Creating missing contributions if this is a final states and there are not yet created.
+    if ($status !== 'pending') {
+      $missing_contribution_links = \Civi\Api4\CampagnodonTransactionLink::get()
+        ->addWhere('campagnodon_tid', '=', $transaction['id'])
+        ->addWhere('entity_table', '=', 'civicrm_contribution')
+        ->addWhere('entity_id', 'IS NULL')
+        ->execute();
+      foreach ($missing_contribution_links as $missing_contribution_link) {
+        $contribution = \Civi\Api4\Contribution::create()
+          ->addValue('contact_id', $transaction['contact_id'])
+          ->addValue('contribution_status_id', $contribution_status)
+          ->addValue('total_amount', $missing_contribution_link['total_amount'])
+          ->addValue('currency', $missing_contribution_link['currency'])
+          ->addValue('financial_type_id', $missing_contribution_link['financial_type_id']);
+        if (!empty($payment_field)) {
+          $contribution->addValue($payment_field, $payment_type);
+        }
+        // FIXME: following fields?
+        // 'receive_date'
+        $contribution = $contribution->execute()->single();
+
+        \Civi\Api4\CampagnodonTransactionLink::update()
+          ->addValue('entity_id', $contribution['id'])
+          ->addWhere('id', '=', $missing_contribution_link['id'])
+          ->execute();
       }
     }
 

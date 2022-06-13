@@ -227,23 +227,16 @@ function civicrm_api3_campagnodon_Start($params) {
 
     // Now that we have a contact, we can make contributions.
     foreach ($contributions_params as $key => $contribution_params) {
-      $contribution = \Civi\Api4\Contribution::create()
-        ->addValue(
-          'financial_type_id'.(is_numeric($contribution_params['financial_type']) ? '' : ':name'),
-          $contribution_params['financial_type']
-        )
-        ->addValue('contact_id', $contact['id'])
-        ->addValue('contribution_status_id', $pending_contribution_status)
-        ->addValue('total_amount', $contribution_params['amount'])
-        // FIXME: following fields?
-        // 'receive_date'
-        ->execute()
-        ->single();
-
       $link = \Civi\Api4\CampagnodonTransactionLink::create()
         ->addValue('campagnodon_tid', $transaction['id'])
         ->addValue('entity_table', 'civicrm_contribution')
-        ->addValue('entity_id', $contribution['id'])
+        ->addValue('entity_id', null)
+        ->addValue('total_amount', $contribution_params['amount'])
+        ->addValue('currency', $contribution_params['currency'])
+        ->addValue(
+          is_numeric($contribution_params['financial_type']) ? 'financial_type_id' : 'financial_type_id:name',
+          $contribution_params['financial_type']
+        )
         ->execute()
         ->single();
     }

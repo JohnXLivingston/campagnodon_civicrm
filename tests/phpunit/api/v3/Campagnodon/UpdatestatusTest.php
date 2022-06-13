@@ -49,11 +49,15 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       'contributions' => [
         'don_1' => [
           'financial_type' => 'Donation',
-          'amount' => 45
+          '_financial_type_id' => 1, // this is only there for unit tests.
+          'amount' => 45,
+          'currency' => 'EUR'
         ],
         'don_2' => [
           'financial_type' => 'Donation',
-          'amount' => 12
+          '_financial_type_id' => 1, // this is only there for unit tests.
+          'amount' => 12,
+          'currency' => 'EUR'
         ]
       ]
     ];
@@ -76,6 +80,12 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
         [
           ['status' => 'pending', 'payment_instrument' => 'Debit Card'],
           ['status' => 'completed', 'payment_instrument' => 'Debit Card']
+        ]
+      ],
+      'init=>completed=>pending' => [
+        [
+          ['status' => 'completed', 'payment_instrument' => 'Debit Card'],
+          ['status' => 'pending', 'payment_instrument' => 'Debit Card']
         ]
       ],
       'init=>cancelled' => [
@@ -161,33 +171,47 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       ->addWhere('tlink.campagnodon_tid', '=', $transaction['id'])
       ->execute()
       ->indexBy('id');
-    foreach ($contributions as $cid => $contribution) {
-      $wanted_contribution_status = 'not this';
-      $wanted_contribution_status_name = 'not this';
-      switch ($last_step['status']) {
-        case 'init':
-        case 'pending':
-          $wanted_contribution_status = 2;
-          $wanted_contribution_status_name = 'Pending';
-          break;
-        case 'completed':
-          $wanted_contribution_status = 1;
-          $wanted_contribution_status_name = 'Completed';
-          break;
-        case 'cancelled':
-          $wanted_contribution_status = 3;
-          $wanted_contribution_status_name = 'Cancelled';
-          break;
-        case 'failed':
-          $wanted_contribution_status = 4;
-          $wanted_contribution_status_name = 'Failed';
-          break;
-        case 'refunded':
-          $wanted_contribution_status = 7;
-          $wanted_contribution_status_name = 'Refunded';
-          break;
-      }
 
+    $wanted_contribution_status = 'not this';
+    $wanted_contribution_status_name = 'not this';
+    $count_must_be_0 = false;
+    switch ($last_step['status']) {
+      case 'init':
+      case 'pending':
+        $wanted_contribution_status = 2;
+        $wanted_contribution_status_name = 'Pending';
+        // If there is at least one step with status !=init/pending, there should be contributions
+        // <=> must be 0 contribution if there are 0 non_pending_status
+        $non_pending_status = array_filter($update_params, function ($step) {
+          return $step['status'] !== 'init' && $step['status'] !== 'pending';
+        });
+        $count_must_be_0 = count($non_pending_status) === 0;
+        break;
+      case 'completed':
+        $wanted_contribution_status = 1;
+        $wanted_contribution_status_name = 'Completed';
+        break;
+      case 'cancelled':
+        $wanted_contribution_status = 3;
+        $wanted_contribution_status_name = 'Cancelled';
+        break;
+      case 'failed':
+        $wanted_contribution_status = 4;
+        $wanted_contribution_status_name = 'Failed';
+        break;
+      case 'refunded':
+        $wanted_contribution_status = 7;
+        $wanted_contribution_status_name = 'Refunded';
+        break;
+    }
+
+    if ($count_must_be_0) {
+      $this->assertTrue($contributions->count() === 0, 'There should not be any contribution for now');
+    } else {
+      $this->assertTrue($contributions->count() > 0, 'Contributions are created');
+      $this->assertEquals($contributions->count(), count($params['contributions']), 'There are the correct number for contributions created');
+    }
+    foreach ($contributions as $cid => $contribution) {
       $this->assertEquals($contribution['contribution_status_id'], $wanted_contribution_status, 'Contribution '.$cid.' is in status '.$wanted_contribution_status);
       $this->assertEquals($contribution['contribution_status_id:name'], $wanted_contribution_status_name, 'Contribution '.$cid.' status name is '.$wanted_contribution_status_name);
 
@@ -196,6 +220,16 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       } else {
         $this->assertEquals($contribution['payment_instrument_id:name'], $last_step['payment_instrument'], 'Contribution '.$cid.' financial_type is '.$last_step['payment_instrument']);
       }
+
+      // Now testing that the contribution is correct!
+      // Getting the first match in the params array
+      $first_match = current(array_filter($params['contributions'], function ($v) use ($contribution) {
+        return $v['amount'] == $contribution['total_amount']
+          && $v['_financial_type_id'] === $contribution['financial_type_id']
+          && $v['currency'] === $contribution['currency'];
+      }));
+
+      $this->assertTrue(!empty($first_match), 'Contribution '.$cid.' found in the start params.');
     }
   }
 

@@ -46,7 +46,9 @@
     <name>entity_id</name>
     <type>int unsigned</type>
     <title>Entity ID</title>
-    <comment>ID of the linked object</comment>
+    <required>false</required>
+    <default>NULL</default>
+    <comment>ID of the linked object. Can be null if the object is not created in pending state.</comment>
   </field>
   <dynamicForeignKey>
     <idColumn>entity_id</idColumn>
@@ -59,5 +61,39 @@
     <type>boolean</type>
     <default>false</default>
     <comment>Only when entity_table='group'. If true, the contact will be added in group only when transaction is complete.</comment>
+  </field>
+  <field>
+    <name>total_amount</name>
+    <type>decimal</type>
+    <required>false</required>
+    <default>NULL</default>
+    <comment>Only when entity_table='contribution'. Total amount of this contribution.</comment>
+  </field>
+  <field>
+    <name>currency</name>
+    <type>varchar</type>
+    <length>3</length>
+    <default>NULL</default>
+    <comment>Only when entity_table='contribution'. 3 character string, value from config setting or input via user.</comment>
+    <pseudoconstant>
+      <table>civicrm_currency</table>
+      <keyColumn>name</keyColumn>
+      <labelColumn>full_name</labelColumn>
+      <nameColumn>name</nameColumn>
+      <abbrColumn>symbol</abbrColumn>
+    </pseudoconstant>
+  </field>
+  <field>
+    <name>financial_type_id</name>
+    <title>Financial Type ID</title>
+    <type>int unsigned</type>
+    <default>NULL</default>
+    <required>false</required>
+    <comment>Only when entity_table='contribution'. FK to Financial Type.</comment>
+    <pseudoconstant>
+      <table>civicrm_financial_type</table>
+      <keyColumn>id</keyColumn>
+      <labelColumn>name</labelColumn>
+    </pseudoconstant>
   </field>
 </table>

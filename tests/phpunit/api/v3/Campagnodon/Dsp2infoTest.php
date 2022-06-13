@@ -44,7 +44,8 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
-          'amount' => 45
+          'amount' => 45,
+          'currency' => 'EUR'
         ]
       ]
     ));
@@ -54,7 +55,8 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
-          'amount' => 45
+          'amount' => 45,
+          'currency' => 'EUR'
         ]
       ]
     ));

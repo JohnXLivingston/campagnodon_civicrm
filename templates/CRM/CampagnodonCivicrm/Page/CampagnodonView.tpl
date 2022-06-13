@@ -62,13 +62,17 @@
           {foreach from=$links item=link}
             <tr>
               <td>{$link.entity_table}</td>
-              <td>{$link.id}</td>
+              <td>{$link.entity_id}</td>
               <td>{$link.view}</td>
               <td>
                 {if $link.entity_table === 'civicrm_group'}
                   {if $link.on_complete}
                     {ts}On complete{/ts}
                   {/if}
+                {/if}
+                {if $link.entity_table === 'civicrm_contribution'}
+                  {$link.financial_type}
+                  {$link.total_amount|crmMoney:$link.currency}
                 {/if}
               </td>
             </tr>
