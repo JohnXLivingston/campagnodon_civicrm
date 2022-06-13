@@ -65,6 +65,9 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
             'amount' => 12,
             'currency' => 'EUR'
           ]
+        ],
+        'optional_subscriptions' => [
+          ['type' => 'opt-in', 'key' => 'do_not_trade', 'when' => 'init']
         ]
       )],
       'bill' => [array(
@@ -261,6 +264,22 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       //     ]
       //   ]
       // )],
+      'must fail because of an invalid opt-in' => [array(
+        'email' => 'michel.martin@example.com',
+        'transaction_idx' => 'test/1025201',
+        'first_name' => 'Michel',
+        'last_name' => 'Martin',
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            'amount' => '12',
+            'currency' => 'EUR'
+          ]
+        ],
+        'optional_subscriptions' => [
+          ['type' => 'opt-in', 'key' => 'does_not_exist', 'when' => 'init']
+        ]
+      )],
     ];
   }
 
@@ -363,6 +382,11 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         $this->assertEquals($obj['id'], $transaction['id'], 'Can get the good Transaction by idx');
     }
 
+    // Getting the contact. Will be used later on.
+    $contact = \Civi\Api4\Contact::get()
+      ->addWhere('id', '=', $transaction['contact_id'])
+      ->execute()->single();
+
 
     // Testing that transaction_links and contributions are created
     $contribs = $params['contributions'] ?? [];
@@ -404,16 +428,39 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
 
     // Testing optional_subscriptions
     $optional_subscriptions = $params['optional_subscriptions'] ?? array();
-    $optional_subscriptions_links = \Civi\Api4\CampagnodonTransactionLink::get()
+    $optional_subscriptions_group = array_filter($optional_subscriptions, function ($os) {
+      return $os['type'] === 'group';
+    });
+    $optional_subscriptions_group_links = \Civi\Api4\CampagnodonTransactionLink::get()
       ->addSelect('*')
       ->addWhere('campagnodon_tid', '=', $transaction['id'])
       ->addWhere('entity_table', '=', 'civicrm_group')
       ->execute();
-    $this->assertEquals(count($optional_subscriptions), $optional_subscriptions_links->count(), 'Same number of linked group as number of given optional_subscriptions');
-    $optional_subscriptions_links->indexBy('id');
-    $optional_subscriptions_links = (array) $optional_subscriptions_links;
+    $this->assertEquals(count($optional_subscriptions_group), $optional_subscriptions_group_links->count(), 'Same number of linked group as number of given optional_subscriptions');
+    $optional_subscriptions_group_links->indexBy('id');
+    $optional_subscriptions_group_links = (array) $optional_subscriptions_group_links;
 
     // TODO: test that the GroupContact was created (unless when=completed)
+
+    $optional_subscriptions_opt_in = array_filter($optional_subscriptions, function ($os) {
+      return $os['type'] === 'opt-in';
+    });
+    $optional_subscriptions_contact_links = \Civi\Api4\CampagnodonTransactionLink::get()
+      ->addSelect('*')
+      ->addWhere('campagnodon_tid', '=', $transaction['id'])
+      ->addWhere('entity_table', '=', 'civicrm_contact')
+      ->execute();
+    $this->assertEquals(count($optional_subscriptions_opt_in), $optional_subscriptions_contact_links->count(), 'Same number of linked group as number of given optional_subscriptions');
+    $optional_subscriptions_contact_links->indexBy('id');
+    $optional_subscriptions_contact_links = (array) $optional_subscriptions_contact_links;
+    foreach ($optional_subscriptions_contact_links as $osid => $os) {
+      $this->assertEquals($os['entity_id'], $transaction['contact_id'], 'The opt_in link '.$osid.' has the correct contact_id');
+      if (!$os['on_complete']) {
+        $this->assertEquals($contact[$os['opt_in']], false, 'Opt-in '.$os['opt_in'].' should be false because the user accepted.');
+      } else {
+        $this->assertEquals($contact[$os['opt_in']], true, 'Opt-in '.$os['opt_in'].' should be true because the user doesnt accept yet.');
+      }
+    }
   }
 
   /**

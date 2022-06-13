@@ -75,11 +75,13 @@ CREATE TABLE `civicrm_campagnodon_transaction_link` (
   `campagnodon_tid` int unsigned NOT NULL COMMENT 'FK to CampagnodonTransaction',
   `entity_table` varchar(64) NOT NULL COMMENT 'Table of the linked object',
   `entity_id` int unsigned NULL DEFAULT NULL COMMENT 'ID of the linked object. Can be null if the object is not created in pending state.',
-  `on_complete` tinyint DEFAULT false COMMENT 'Only when entity_table=\'group\'. If true, the contact will be added in group only when transaction is complete.',
+  `on_complete` tinyint DEFAULT false COMMENT 'Only when entity_table=\'group\' or \'contact\'. If true, the contact will be added in group only when transaction is complete.',
   `total_amount` decimal(20,2) NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. Total amount of this contribution.',
   `currency` varchar(3) DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. 3 character string, value from config setting or input via user.',
   `financial_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. FK to Financial Type.',
+  `opt_in` varchar(25) DEFAULT NULL COMMENT 'An opt-in action to do on the contact.',
   PRIMARY KEY (`id`),
+  INDEX `index_entity_table_entity_id`(entity_table, entity_id),
   CONSTRAINT FK_civicrm_campagnodon_transaction_link_campagnodon_tid FOREIGN KEY (`campagnodon_tid`) REFERENCES `civicrm_campagnodon_transaction`(`id`) ON DELETE CASCADE
 )
 ENGINE=InnoDB;

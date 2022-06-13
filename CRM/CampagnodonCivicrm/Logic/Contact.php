@@ -31,6 +31,12 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     }
   }
 
+  protected static function _testOnComplete($link, $transaction_status) {
+    if ($link['on_complete'] && $transaction_status === 'completed') return true;
+    if (!$link['on_complete'] && $transaction_status === 'init') return true;
+    return false;
+  }
+
   public static function processLinks($contact_id, $transaction_id, $transaction_status) {
     $links = \Civi\Api4\CampagnodonTransactionLink::get()
       ->addSelect('*')
@@ -39,14 +45,20 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     $links->indexBy('id');
     foreach ($links as $lid => $link) {
       if ($link['entity_table'] === 'civicrm_group') {
-        if (
-          ($link['on_complete'] && $transaction_status === 'completed')
-          ||
-          (!$link['on_complete'] && $transaction_status === 'init')
-        ) {
+        if (CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {
           CRM_CampagnodonCivicrm_Logic_Contact::addInGroup($link['entity_id'], $contact_id);
+        }
+      } else if ($link['entity_table'] === 'civicrm_contact') {
+        if (!empty($link['opt_in']) && CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {
+          if (CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::isOptInValid($link['opt_in'])) {
+            $contact_update = \Civi\Api4\Contact::update()
+              ->addWhere('id', '=', $link['entity_id'])
+              ->addValue($link['opt_in'], false)
+              ->execute();
+          }
         }
       }
     }
+
   }
 }

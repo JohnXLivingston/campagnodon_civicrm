@@ -233,5 +233,7 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
     }
   }
 
-  // TODO: tests on optional_subscriptions (for when=completed)
+  // TODO: tests on group optional_subscriptions (for when=completed)
+
+  // TODO: tests on opt_in optional_subscriptions (when=completed)
 }

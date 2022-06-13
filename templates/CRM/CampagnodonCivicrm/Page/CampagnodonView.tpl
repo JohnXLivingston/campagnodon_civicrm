@@ -77,6 +77,9 @@
                   {$link.financial_type}
                   {$link.total_amount|crmMoney:$link.currency}
                 {/if}
+                {if $link.entity_table === 'civicrm_contact'}
+                  {$link.opt_in}
+                {/if}
               </td>
             </tr>
           {/foreach}

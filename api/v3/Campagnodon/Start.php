@@ -245,25 +245,40 @@ function civicrm_api3_campagnodon_Start($params) {
     // And now, optional_subscriptions!
     $optional_subscriptions = $params['optional_subscriptions'] ?? array();
     foreach ($optional_subscriptions as $optional_subscription) {
-      if ($optional_subscription['type'] !== 'group') {
+      if ($optional_subscription['type'] === 'group') {
+        $group_key = $optional_subscription['key'];
+        $group_field = is_numeric($optional_subscription['key']) ? 'id' : 'name';
+        $group = \Civi\Api4\Group::get()
+          ->addWhere($group_field, '=', $group_key)
+          ->execute()
+          ->single();
+
+        $on_complete = $optional_subscription['when'] === 'completed';
+        $link = \Civi\Api4\CampagnodonTransactionLink::create()
+          ->addValue('campagnodon_tid', $transaction['id'])
+          ->addValue('entity_table', 'civicrm_group')
+          ->addValue('entity_id', $group['id'])
+          ->addValue('on_complete', $on_complete)
+          ->execute()
+          ->single();
+      } else if ($optional_subscription['type'] === 'opt-in') {
+        if (!CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::isOptInValid($optional_subscription['key'])) {
+          throw new Exception('Invalid opt-in optional_subscriptions: "'.$optional_subscription['key'].'"');
+        }
+        $on_complete = $optional_subscription['when'] === 'completed';
+        $link = \Civi\Api4\CampagnodonTransactionLink::create()
+          ->addValue('campagnodon_tid', $transaction['id'])
+          ->addValue('entity_table', 'civicrm_contact')
+          ->addValue('entity_id', $contact['id'])
+          ->addValue('on_complete', $on_complete)
+          ->addValue('opt_in', $optional_subscription['key'])
+          ->execute()
+          ->single();
+      } else {
         throw new Exception('Invalid optional_subscriptions type: "'.$optional_subscription['type'].'"');
       }
-      $group_key = $optional_subscription['key'];
-      $group_field = is_numeric($optional_subscription['key']) ? 'id' : 'name';
-      $group = \Civi\Api4\Group::get()
-        ->addWhere($group_field, '=', $group_key)
-        ->execute()
-        ->single();
-      
-      $on_complete = $optional_subscription['when'] === 'completed';
-      $link = \Civi\Api4\CampagnodonTransactionLink::create()
-        ->addValue('campagnodon_tid', $transaction['id'])
-        ->addValue('entity_table', 'civicrm_group')
-        ->addValue('entity_id', $group['id'])
-        ->addValue('on_complete', $on_complete)
-        ->execute()
-        ->single();
     }
+
     CRM_CampagnodonCivicrm_Logic_Contact::processLinks($contact['id'], $transaction['id'], 'init');
 
   } catch (Exception $e) {

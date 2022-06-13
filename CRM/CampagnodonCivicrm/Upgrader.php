@@ -205,4 +205,17 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD INDEX IF NOT EXISTS `start_date`(start_date)");
     return TRUE;
   }
+
+  /**
+   * New column and index.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0005(): bool {
+    $this->ctx->log->info('Planning update 0005');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN IF NOT EXISTS `opt_in` varchar(25) DEFAULT NULL COMMENT 'An opt-in action to do on the contact.'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD INDEX IF NOT EXISTS `index_entity_table_entity_id` (entity_table, entity_id)");
+    return TRUE;
+  }
 }

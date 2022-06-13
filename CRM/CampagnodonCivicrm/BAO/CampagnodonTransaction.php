@@ -39,4 +39,24 @@ class CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction extends CRM_CampagnodonC
       // TODO: other status?
     ];
   }
+
+  /**
+   * Possible values for opt-in fields
+   *
+   * @return array
+   */
+  public static function optInTables(): array {
+    return [
+      'do_not_trade' => 'do_not_trade'
+    ];
+  }
+
+  /**
+   * Test if an opt-in field is valid
+   *
+   * @return Boolean
+   */
+  public static function isOptInValid($v) {
+    return array_key_exists($v, CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::optInTables());
+  }
 }

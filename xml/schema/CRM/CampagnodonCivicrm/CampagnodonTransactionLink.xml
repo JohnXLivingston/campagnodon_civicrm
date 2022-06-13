@@ -54,13 +54,18 @@
     <idColumn>entity_id</idColumn>
     <typeColumn>entity_table</typeColumn>
   </dynamicForeignKey>
+  <index>
+    <name>index_entity_table_entity_id</name>
+    <fieldName>entity_table</fieldName>
+    <fieldName>entity_id</fieldName>
+  </index>
 
   <field>
     <name>on_complete</name>
     <title>On complete</title>
     <type>boolean</type>
     <default>false</default>
-    <comment>Only when entity_table='group'. If true, the contact will be added in group only when transaction is complete.</comment>
+    <comment>Only when entity_table='group' or 'contact'. If true, the contact will be added in group only when transaction is complete.</comment>
   </field>
   <field>
     <name>total_amount</name>
@@ -94,6 +99,17 @@
       <table>civicrm_financial_type</table>
       <keyColumn>id</keyColumn>
       <labelColumn>name</labelColumn>
+    </pseudoconstant>
+  </field>
+  <field>
+    <name>opt_in</name>
+    <title>Opt-in</title>
+    <type>varchar</type>
+    <length>25</length>
+    <default>NULL</default>
+    <comment>An opt-in action to do on the contact.</comment>
+    <pseudoconstant>
+      <callback>CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::optInTables</callback>
     </pseudoconstant>
   </field>
 </table>
