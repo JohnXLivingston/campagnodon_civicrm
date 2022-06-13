@@ -263,11 +263,8 @@ function civicrm_api3_campagnodon_Start($params) {
         ->addValue('on_complete', $on_complete)
         ->execute()
         ->single();
-
-      if (!$on_complete) {
-        CRM_CampagnodonCivicrm_Logic_Contact::addInGroup($group['id'], $contact['id']);
-      }
     }
+    CRM_CampagnodonCivicrm_Logic_Contact::processLinks($contact['id'], $transaction['id'], 'init');
 
   } catch (Exception $e) {
     $tx->rollback();

@@ -30,4 +30,23 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       return;
     }
   }
+
+  public static function processLinks($contact_id, $transaction_id, $transaction_status) {
+    $links = \Civi\Api4\CampagnodonTransactionLink::get()
+      ->addSelect('*')
+      ->addWhere('campagnodon_tid', '=', $transaction_id)
+      ->execute();
+    $links->indexBy('id');
+    foreach ($links as $lid => $link) {
+      if ($link['entity_table'] === 'civicrm_group') {
+        if (
+          ($link['on_complete'] && $transaction_status === 'completed')
+          ||
+          (!$link['on_complete'] && $transaction_status === 'init')
+        ) {
+          CRM_CampagnodonCivicrm_Logic_Contact::addInGroup($link['entity_id'], $contact_id);
+        }
+      }
+    }
+  }
 }

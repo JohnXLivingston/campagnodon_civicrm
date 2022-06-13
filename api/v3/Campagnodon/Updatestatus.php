@@ -149,16 +149,8 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       }
     }
 
-    // Adding in groups (optional_subscriptions with when=completed)
-    $groups_links = \Civi\Api4\CampagnodonTransactionLink::get()
-      ->addSelect('*')
-      ->addWhere('campagnodon_tid', '=', $transaction['id'])
-      ->addWhere('entity_table', '=', 'civicrm_group')
-      ->addWhere('on_complete', '=', true)
-      ->execute();
-    foreach ($groups_links as $group_link) {
-      CRM_CampagnodonCivicrm_Logic_Contact::addInGroup($group_link['entity_id'], $transaction['contact_id']);
-    }
+    // Processing links (to deal with stuff like: optional_subscriptions with when=completed, ...)
+    CRM_CampagnodonCivicrm_Logic_Contact::processLinks($transaction['contact_id'], $transaction['id'], $status);
   } catch (Exception $e) {
     $tx->rollback();
     throw $e;
