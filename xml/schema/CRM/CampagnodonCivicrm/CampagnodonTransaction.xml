@@ -43,6 +43,18 @@
   </index>
 
   <field>
+    <name>start_date</name>
+    <type>datetime</type>
+    <required>true</required>
+    <default>NOW()</default>
+    <comment>The datetime at which this transaction started.</comment>
+  </field>
+  <index>
+    <name>start_date</name>
+    <fieldName>start_date</fieldName>
+  </index>
+
+  <field>
     <name>status</name>
     <type>varchar</type>
     <length>20</length>

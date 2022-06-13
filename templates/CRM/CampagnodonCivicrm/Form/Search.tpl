@@ -48,6 +48,9 @@
               {ts}Campagnodon IDX{/ts}
             </th>
             <th scope="col">
+              {ts}Start Date{/ts}
+            </th>
+            <th scope="col">
               {ts}Status{/ts}
             </th>
             <th scope="col">
@@ -65,6 +68,7 @@
                 <a href="{crmURL p='civicrm/campagnodon/view' q="id=`$row.id`"}">{$row.id}</a>
               </td>
               <td>{$row.idx}</td>
+              <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
               <td>{$row.status}</td>
               <td>{$row.contact}</td>
               <td><input type="checkbox" disabled {if $row.tax_receipt} checked {/if}></td>

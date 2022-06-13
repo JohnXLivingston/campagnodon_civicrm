@@ -192,4 +192,17 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     // );
     return TRUE;
   }
+
+  /**
+   * New column.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0004(): bool {
+    $this->ctx->log->info('Planning update 0004');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `start_date` datetime NOT NULL DEFAULT NOW() COMMENT 'The datetime at which this transaction started.'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD INDEX IF NOT EXISTS `start_date`(start_date)");
+    return TRUE;
+  }
 }

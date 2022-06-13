@@ -37,6 +37,7 @@ SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `civicrm_campagnodon_transaction` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonTransaction ID',
   `idx` varchar(255) NULL COMMENT 'The campagnodon key as given by the origin system (SPIP, ...). A string like: spip/12345.',
+  `start_date` datetime NOT NULL DEFAULT NOW() COMMENT 'The datetime at which this transaction started.',
   `status` varchar(20) NOT NULL DEFAULT 'init' COMMENT 'The status of the transaction.',
   `tax_receipt` tinyint NOT NULL DEFAULT false COMMENT 'True if the user want a tax receipt',
   `payment_url` varchar(255) COMMENT 'The url to pay the subscriptions.',
@@ -55,6 +56,7 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   `phone` varchar(32) COMMENT 'Numéro de téléphone complet.',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `index_idx`(idx),
+  INDEX `start_date`(start_date),
   CONSTRAINT FK_civicrm_campagnodon_transaction_contact_id FOREIGN KEY (`contact_id`) REFERENCES `civicrm_contact`(`id`) ON DELETE SET NULL,
   CONSTRAINT FK_civicrm_campagnodon_transaction_campaign_id FOREIGN KEY (`campaign_id`) REFERENCES `civicrm_campaign`(`id`) ON DELETE SET NULL,
   CONSTRAINT FK_civicrm_campagnodon_transaction_country_id FOREIGN KEY (`country_id`) REFERENCES `civicrm_country`(`id`) ON DELETE SET NULL

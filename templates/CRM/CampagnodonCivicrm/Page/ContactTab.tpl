@@ -17,6 +17,9 @@
               {ts}Campagnodon key{/ts}
             </th>
             <th scope="col">
+              {ts}Start Date{/ts}
+            </th>
+            <th scope="col">
               {ts}Status{/ts}
             </th>
             <th scope="col">
@@ -35,6 +38,7 @@
               <td>{$row.view}</td>
               <td>{$row.contact}</td>
               <td>{$row.idx}</td>
+              <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
               <td>{$row.status}</td>
               <td>
                 {if $row.payment_url}

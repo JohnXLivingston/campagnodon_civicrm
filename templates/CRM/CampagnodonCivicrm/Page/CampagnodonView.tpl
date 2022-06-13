@@ -15,6 +15,9 @@
       <td>{$row.idx}</td>
     </tr>
     <tr>
+      <td class="label">{ts}Start Date{/ts}</td>
+      <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
+    <tr>
       <td class="label">{ts}Status{/ts}</td>
       <td>{$row.status}</td>
     </tr>
