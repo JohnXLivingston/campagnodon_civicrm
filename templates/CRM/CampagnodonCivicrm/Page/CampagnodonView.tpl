@@ -79,6 +79,9 @@
                 {/if}
                 {if $link.entity_table === 'civicrm_contact'}
                   {$link.opt_in}
+                  {if $link.on_complete}
+                    {ts}On complete{/ts}
+                  {/if}
                 {/if}
               </td>
             </tr>
