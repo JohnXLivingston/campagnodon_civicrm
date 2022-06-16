@@ -61,6 +61,9 @@
               {ts}Contact{/ts}
             </th>
             <th scope="col">
+              {ts}Campaign{/ts}
+            </th>
+            <th scope="col">
               {ts}Tax Receipt{/ts}
             </th>
             <th>&nbsp;</th>
@@ -75,6 +78,7 @@
               <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
               <td>{$row.status}</td>
               <td>{$row.contact}</td>
+              <td>{$row.campaign}</td>
               <td><input type="checkbox" disabled {if $row.tax_receipt} checked {/if}></td>
               <td class="right nowrap">
                   <span>

@@ -137,7 +137,7 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
   public function query() {
     $api = Civi\Api4\CampagnodonTransaction::get()
       ->selectRowCount()
-      ->addSelect('*')
+      ->addSelect('*', 'campaign_id:label')
       ->addOrderBy('id', 'DESC');
     if ($this->limit !== false) {
       $api->setLimit($this->limit);
@@ -187,6 +187,9 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       $row = $transaction;
       if (!empty($row['contact_id'])) {
         $row['contact'] = '<a href="'.CRM_Utils_System::url('civicrm/contact/view', ['reset' => 1, 'cid' => $row['contact_id']]).'">'.CRM_Contact_BAO_Contact::displayName($row['contact_id']).'</a>';
+      }
+      if (!empty($row['campaign_id'])) {
+        $row['campaign'] = $row['campaign_id:label'];
       }
       $this->rows[] = $row;
     }
