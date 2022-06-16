@@ -134,8 +134,10 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
           ->addValue('contribution_status_id', $contribution_status)
           ->addValue('total_amount', $missing_contribution_link['total_amount'])
           ->addValue('currency', $missing_contribution_link['currency'])
-          ->addValue('financial_type_id', $missing_contribution_link['financial_type_id'])
-          ->addValue('campaign_id', $transaction['campaign_id']);
+          ->addValue('financial_type_id', $missing_contribution_link['financial_type_id']);
+        if (!empty($transaction['campaign_id'])) {
+          $contribution->addValue('campaign_id', $transaction['campaign_id']);
+        }
         if (!empty($payment_field)) {
           $contribution->addValue($payment_field, $payment_type);
         }

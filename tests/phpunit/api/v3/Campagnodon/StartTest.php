@@ -407,7 +407,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ->addWhere('campagnodon_tid', '=', $transaction['id'])
         ->addWhere('entity_table', '=', '"civicrm_contribution"')
         ->execute();
-    $this->assertEquals(count($contrib_links), $contributions->count(), 'Same number of contribution links as number of given contributions');
+    $this->assertEquals($contrib_links->count(), $contributions->count(), 'Same number of contribution links as number of given contributions');
     $contrib_links->indexBy('id');
     $contrib_links = (array) $contrib_links;
     foreach ($contrib_links as $k => $c) {
