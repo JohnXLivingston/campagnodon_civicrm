@@ -6,7 +6,7 @@
       <td class="label">{ts}From{/ts}</td>
       <td class="bold">
         {if $row.contact_id}
-          <a href="{crmURL p='civicrm/contact/view' q="cid=$row.contact_id"}">{$displayName}</a>
+          <a href="{crmURL p='civicrm/contact/view' q="cid=`$row.contact_id`"}">{$displayName}</a>
         {/if}
       </td>
     </tr>
