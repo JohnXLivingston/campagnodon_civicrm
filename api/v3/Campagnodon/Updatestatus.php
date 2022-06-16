@@ -151,7 +151,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
 
     // Processing links (to deal with stuff like: optional_subscriptions with when=completed, ...)
     CRM_CampagnodonCivicrm_Logic_Contact::processLinks($transaction['contact_id'], $transaction['id'], $status);
-  } catch (Exception $e) {
+  } catch (Throwable $e) {
     $tx->rollback();
     throw $e;
   }

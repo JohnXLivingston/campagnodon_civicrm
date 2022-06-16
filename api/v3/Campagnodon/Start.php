@@ -281,7 +281,7 @@ function civicrm_api3_campagnodon_Start($params) {
 
     CRM_CampagnodonCivicrm_Logic_Contact::processLinks($contact['id'], $transaction['id'], 'init');
 
-  } catch (Exception $e) {
+  } catch (Throwable $e) {
     $tx->rollback();
     throw $e;
   }
