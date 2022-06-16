@@ -25,4 +25,18 @@ foreach ($campagnodon_defaults as $status => $default) {
   );
 }
 
+$campagnodon_settings['campagnodon_dedupe_rule'] = array(
+  'name' => 'campagnodon_dedupe_rule',
+  'type' => 'Text',
+  'html_type' => 'select',
+  'default' => '',
+  'title' => ts('Deduplication rule'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'callback' => 'CRM_CampagnodonCivicrm_Logic_Contact::dedupeTables',
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 20]],
+);
+
 return $campagnodon_settings;

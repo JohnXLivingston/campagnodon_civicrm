@@ -405,7 +405,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $contrib_links = \Civi\Api4\CampagnodonTransactionLink::get()
         ->addSelect('*', 'financial_type_id:name')
         ->addWhere('campagnodon_tid', '=', $transaction['id'])
-        ->addWhere('entity_table', '=', '"civicrm_contribution"')
+        ->addWhere('entity_table', '=', '"civicrm_contribution"') // FIXME: should double quotes be there??
         ->execute();
     $this->assertEquals($contrib_links->count(), $contributions->count(), 'Same number of contribution links as number of given contributions');
     $contrib_links->indexBy('id');
@@ -479,6 +479,9 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
    * Tests deduplication of contacts.
    */
   public function testApiStartDedup() {
+    // TODO: add more tests.
+    Civi::settings()->set('campagnodon_dedupe_rule', 'Unsupervised/first');
+
     $result = civicrm_api3('Campagnodon', 'start', array(
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/30',
@@ -564,4 +567,5 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   }
 
   // TODO: more tests on optional_subscriptions.
+  // TODO: test deduplication
 }

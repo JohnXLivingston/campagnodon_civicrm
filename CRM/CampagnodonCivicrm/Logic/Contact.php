@@ -1,5 +1,7 @@
 <?php
 
+use CRM_CampagnodonCivicrm_ExtensionUtil as E;
+
 class CRM_CampagnodonCivicrm_Logic_Contact {
   /**
    * @param $group_id
@@ -59,6 +61,26 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
         }
       }
     }
+  }
 
+  public static function dedupeTables() {
+    $dedupeRules = \Civi\Api4\DedupeRuleGroup::get(FALSE)
+      ->addSelect('*')
+      ->addWhere('contact_type', '=', 'Individual')
+      ->addOrderBy('title', 'ASC')
+      ->execute();
+
+    $types = [];
+    $types[''] = E::ts('Always create new contacts');
+    $types['Unsupervised/first'] = E::ts('Use the unsupervised rule') . ' / ' . E::ts('First match');
+    $types['Unsupervised/onlyifsingle'] = E::ts('Use the unsupervised rule') . ' / ' . E::ts('Duplicate if multiple match');
+    $types['Supervised/first'] = E::ts('Use the supervised rule') . ' / ' . E::ts('First match');
+    $types['Supervised/onlyifsingle'] = E::ts('Use the supervised rule') . ' / ' . E::ts('Duplicate if multiple match');
+
+    foreach ($dedupeRules as $rule) {
+      $types[''.$rule['id'].'/first'] = $rule['title'] . ' / ' . E::ts('First match');
+      $types[''.$rule['id'].'/onlyifsingle'] = $rule['title'] . ' / ' . E::ts('Duplicate if multiple match');
+    }
+    return $types;
   }
 }

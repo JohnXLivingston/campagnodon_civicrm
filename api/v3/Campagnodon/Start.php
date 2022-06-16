@@ -153,38 +153,64 @@ function civicrm_api3_campagnodon_Start($params) {
     }
 
     // We need to found or create the contact.
-    $contacts = civicrm_api3('Contact', 'get', array(
-      'email' => $params['email'], // FIXME: use Email.get instead of Contact.get?
-      'sequential' => true
-    ));
-    // TODO: use getDuplicateContacts method?
-
     $contact = null;
-    // TODO: avoid update existing contact (in case payment is not valid, to avoid database corruption attacks)
-    if ($contacts['count'] == 0) {
-      $contactsBis = civicrm_api3('Contact', 'create', array(
-        'email' => $params['email'],
-        'prefix_id' => $params['prefix'],
-        'first_name' => $params['first_name'],
-        'last_name' => $params['last_name'],
-        // 'postal_code' => $params['postal_code'],
-        // 'country' => $params['country'],
-        'contact_type' => 'Individual',
-        'do_not_trade' => true, // can be changed later, with optional subscription
-        'sequential' => true,
-        'options' => [
-          'reload' => true
+
+    $contact_create_params = [
+      'email' => $params['email'],
+      'prefix_id' => $params['prefix'],
+      'first_name' => $params['first_name'],
+      'last_name' => $params['last_name'],
+      // street_address ?
+      // 'postal_code' => $params['postal_code'],
+      // 'country' => $params['country'],
+      'contact_type' => 'Individual',
+      'do_not_trade' => true, // can be changed later, with optional subscription
+    ];
+
+    $dedupe_rule = Civi::settings()->get('campagnodon_dedupe_rule');
+    if (!empty($dedupe_rule) && $dedupe_rule != '0') {
+      $contacts = null;
+      $dedupe_rule_id = null;
+      $dedupe_rule_type = null;
+      $dedupe_mode = 'first'; // 'first' or 'onlyifsingle'
+      list($a, $b) = explode('/', $dedupe_rule);
+      if (is_numeric($a)) {
+        $dedupe_rule_id = intval($a);
+      } else {
+        $dedupe_rule_type = $a;
+      }
+      if (!empty($b)) {
+        $dedupe_mode = $b;
+      }
+
+      $contacts = civicrm_api3('Contact', 'duplicatecheck', array(
+        'match' => $contact_create_params,
+        'rule_type' => 'Unsupervised', // TODO: tweak this value
+        'dedupe_rule_id' => null, // TODO: get the correct value
+        'sequential' => true
+      ));
+
+      if ($contacts['count'] === 1) {
+        $contact = $contacts['values'][0];
+      } else if ($contacts['count'] > 1 && $dedupe_mode === 'first') {
+        $contact = $contacts['values'][0];
+      }
+    }
+
+
+    if (empty($contact)) {
+      $contactsBis = civicrm_api3('Contact', 'create', array_merge(
+        $contact_create_params,
+        [
+          'sequential' => true,
+          'options' => [
+            'reload' => true
+          ]
         ]
       ));
       if ($contactsBis['count'] === 1) {
         $contact = $contactsBis['values'][0];
       }
-    } else if ($contacts['count'] === 1) {
-      $contact = $contacts['values'][0];
-    } else if ($contacts['count'] > 1) {
-      throw new API_Exception('Multiple contacts found, deduplication code not ready. FIXME');
-    } else {
-      throw new API_Exception('Unknown error');
     }
 
     if (empty($contact)) {
