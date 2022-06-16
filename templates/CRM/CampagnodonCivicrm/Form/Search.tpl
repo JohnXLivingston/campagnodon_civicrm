@@ -16,6 +16,10 @@
               <td>{$form.contact_id.html}</td>
             </tr>
             <tr>
+              <td class="label">{$form.campaign_id.label}</td>
+              <td>{$form.campaign_id.html}</td>
+            </tr>
+            <tr>
               <td class="label">{$form.idx.label}</td>
               <td>{$form.idx.html}</td>
             </tr>

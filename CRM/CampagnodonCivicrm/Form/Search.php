@@ -62,6 +62,12 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       ['entity' => 'Contact', 'create' => false, 'multiple' => true],
       false
     );
+    $this->addEntityRef(
+      'campaign_id',
+      E::ts('Campaign'),
+      ['entity' => 'Campaign', 'create' => false, 'multiple' => true],
+      false
+    );
     $this->add(
       'text',
       'idx',
@@ -151,20 +157,23 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
         $api->addWhere('tax_receipt', '=', false);
       }
     }
-    if (isset($this->formValues['contact_id'])) {
-      if (is_array($this->formValues['contact_id'])) {
-        $contact_ids = $this->formValues['contact_id'];
-      } else {
-        $contact_ids = explode(',', $this->formValues['contact_id']);
-      }
-      $contact_ids_safe = array();
-      foreach ($contact_ids as $cid) {
-        if (preg_match('/^\d+$/', $cid)) {
-          $contact_ids_safe[] = $cid;
+
+    foreach (['contact_id', 'campaign_id'] as $entity_ref_field) {
+      if (isset($this->formValues[$entity_ref_field])) {
+        if (is_array($this->formValues[$entity_ref_field])) {
+          $entity_ref_ids = $this->formValues[$entity_ref_field];
+        } else {
+          $entity_ref_ids = explode(',', $this->formValues[$entity_ref_field]);
         }
-      }
-      if (count($contact_ids_safe)) {
-        $api->addWhere('contact_id', 'IN', $contact_ids_safe);
+        $entity_ref_ids_safe = array();
+        foreach ($entity_ref_ids as $eid) {
+          if (preg_match('/^\d+$/', $eid)) {
+            $entity_ref_ids_safe[] = $eid;
+          }
+        }
+        if (count($entity_ref_ids_safe)) {
+          $api->addWhere($entity_ref_field, 'IN', $entity_ref_ids_safe);
+        }
       }
     }
 
