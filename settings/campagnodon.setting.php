@@ -38,5 +38,18 @@ $campagnodon_settings['campagnodon_dedupe_rule'] = array(
   ],
   'settings_pages' => ['campagnodon' => ['weight' => 20]],
 );
+$campagnodon_settings['campagnodon_dedupe_rule_with_tax_receipt'] = array(
+  'name' => 'campagnodon_dedupe_rule_with_tax_receipt',
+  'type' => 'Text',
+  'html_type' => 'select',
+  'default' => '',
+  'title' => ts('Deduplication rule with tax receipt'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'callback' => 'CRM_CampagnodonCivicrm_Logic_Contact::dedupeTables',
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 20]],
+);
 
 return $campagnodon_settings;

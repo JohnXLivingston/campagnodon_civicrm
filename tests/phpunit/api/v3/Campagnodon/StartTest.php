@@ -481,6 +481,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   public function testApiStartDedup() {
     // TODO: add more tests.
     Civi::settings()->set('campagnodon_dedupe_rule', 'Unsupervised/first');
+    Civi::settings()->set('campagnodon_dedupe_rule_with_tax_receipt', 'Unsupervised/first');
 
     $result = civicrm_api3('Campagnodon', 'start', array(
       'email' => 'john.doe@example.com',

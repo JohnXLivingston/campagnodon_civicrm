@@ -155,19 +155,25 @@ function civicrm_api3_campagnodon_Start($params) {
     // We need to found or create the contact.
     $contact = null;
 
+    $tax_receipt = !empty($params['tax_receipt']) && $params['tax_receipt'];
     $contact_create_params = [
       'email' => $params['email'],
       'prefix_id' => $params['prefix'],
       'first_name' => $params['first_name'],
       'last_name' => $params['last_name'],
-      // street_address ?
-      // 'postal_code' => $params['postal_code'],
-      // 'country' => $params['country'],
       'contact_type' => 'Individual',
       'do_not_trade' => true, // can be changed later, with optional subscription
     ];
+    if ($tax_receipt) {
+      // TODO
+      // street_address ?
+      // 'postal_code' => $params['postal_code'],
+      // 'country' => $params['country'],
+    }
 
-    $dedupe_rule = Civi::settings()->get('campagnodon_dedupe_rule');
+    $dedupe_rule = $tax_receipt
+      ? Civi::settings()->get('campagnodon_dedupe_rule_with_tax_receipt')
+      : Civi::settings()->get('campagnodon_dedupe_rule');
     if (!empty($dedupe_rule) && $dedupe_rule != '0') {
       $contacts = null;
       $dedupe_rule_id = null;
@@ -221,7 +227,7 @@ function civicrm_api3_campagnodon_Start($params) {
     $transaction_create->addValue('contact_id', $contact['id']);
     $transaction_create->addValue('email', $params['email']);
     $transaction_create->addValue('idx', $params['transaction_idx']);
-    $transaction_create->addValue('tax_receipt', !empty($params['tax_receipt']) && $params['tax_receipt']);
+    $transaction_create->addValue('tax_receipt', $tax_receipt);
     foreach (
       array(
         'campaign_id',
