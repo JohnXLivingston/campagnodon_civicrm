@@ -120,6 +120,17 @@
   </foreignKey>
 
   <field>
+    <name>original_contact_id</name>
+    <type>int unsigned</type>
+    <comment>The contact id when this transaction was created. So we can know if there was a deduplication afterward.</comment>
+  </field>
+  <field>
+    <name>new_contact</name>
+    <type>boolean</type>
+    <comment>True if the contact was created for this transaction.</comment>
+  </field>
+
+  <field>
     <name>campaign_id</name>
     <component>CiviCampaign</component>
     <type>int unsigned</type>

@@ -156,86 +156,12 @@ function civicrm_api3_campagnodon_Start($params) {
     $contact = null;
 
     $tax_receipt = !empty($params['tax_receipt']) && $params['tax_receipt'];
-    $contact_create_params = [
-      'contact_type' => 'Individual',
-      'do_not_trade' => true, // can be changed later, with optional subscription
-    ];
-    foreach ([
-      'email' => 'email',
-      'prefix' => 'prefix_id',
-      'first_name' => 'first_name',
-      'last_name' => 'last_name',
-      'birth_date' => 'birth_date',
-    ] as $pfield => $create_field) {
-      if (array_key_exists($pfield, $params) && !empty($params[$pfield])) {
-        $contact_create_params[$create_field] = $params[$pfield];
-      }
+    $dedupe_contact = CRM_CampagnodonCivicrm_Logic_Dedupe_Contact::init($params);
+    if ($tax_receipt) {
+      $dedupe_contact->withTaxReceipt();
     }
-    foreach ([
-      'street_address' => 'street_address',
-      'postal_code' => 'postal_code',
-      'city' => 'city',
-      'country' => 'country_id'
-    ] as $pfield => $create_field) {
-      if (array_key_exists($pfield, $params) && !empty($params[$pfield])) {
-        if (!array_key_exists('api.address.create', $contact_create_params)) {
-          $contact_create_params['api.address.create'] = [];
-        }
-        $contact_create_params['api.address.create'][$create_field] = $params[$pfield];
-      }
-    }
-    if (array_key_exists('phone', $params) && !empty($params['phone'])) {
-      $contact_create_params['api.phone.create'] = ['phone' => $params['phone']];
-    }
-
-
-    $dedupe_rule = $tax_receipt
-      ? Civi::settings()->get('campagnodon_dedupe_rule_with_tax_receipt')
-      : Civi::settings()->get('campagnodon_dedupe_rule');
-    if (!empty($dedupe_rule) && $dedupe_rule != '0') {
-      $contacts = null;
-      $dedupe_rule_id = null;
-      $dedupe_rule_type = null;
-      $dedupe_mode = 'first'; // 'first' or 'onlyifsingle'
-      list($a, $b) = explode('/', $dedupe_rule);
-      if (is_numeric($a)) {
-        $dedupe_rule_id = intval($a);
-      } else {
-        $dedupe_rule_type = $a;
-      }
-      if (!empty($b)) {
-        $dedupe_mode = $b;
-      }
-
-      $contacts = civicrm_api3('Contact', 'duplicatecheck', array(
-        'match' => $contact_create_params,
-        'rule_type' => 'Unsupervised', // TODO: tweak this value
-        'dedupe_rule_id' => null, // TODO: get the correct value
-        'sequential' => true
-      ));
-
-      if ($contacts['count'] === 1) {
-        $contact = $contacts['values'][0];
-      } else if ($contacts['count'] > 1 && $dedupe_mode === 'first') {
-        $contact = $contacts['values'][0];
-      }
-    }
-
-
-    if (empty($contact)) {
-      $contactsBis = civicrm_api3('Contact', 'create', array_merge(
-        $contact_create_params,
-        [
-          'sequential' => true,
-          'options' => [
-            'reload' => true
-          ]
-        ]
-      ));
-      if ($contactsBis['count'] === 1) {
-        $contact = $contactsBis['values'][0];
-      }
-    }
+    $contact = $dedupe_contact->getContact();
+    $is_new_contact = $dedupe_contact->isNewContact();
 
     if (empty($contact)) {
       throw new API_Exception('Failed to get or create the contact.');
@@ -246,6 +172,8 @@ function civicrm_api3_campagnodon_Start($params) {
     $transaction_create->addValue('email', $params['email']);
     $transaction_create->addValue('idx', $params['transaction_idx']);
     $transaction_create->addValue('tax_receipt', $tax_receipt);
+    $transaction_create->addValue('original_contact_id', $contact['id']); // TODO: add some unit test
+    $transaction_create->addValue('new_contact', $is_new_contact); // TODO: add some unit test
     foreach (
       array(
         'campaign_id',

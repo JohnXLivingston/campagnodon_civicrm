@@ -34,7 +34,7 @@ $campagnodon_settings['campagnodon_dedupe_rule'] = array(
   'is_domain' => 1,
   'is_contact' => 0,
   'pseudoconstant' => [
-    'callback' => 'CRM_CampagnodonCivicrm_Logic_Contact::dedupeTables',
+    'callback' => 'CRM_CampagnodonCivicrm_Logic_Dedupe_Contact::dedupeTables',
   ],
   'settings_pages' => ['campagnodon' => ['weight' => 20]],
 );
@@ -47,7 +47,7 @@ $campagnodon_settings['campagnodon_dedupe_rule_with_tax_receipt'] = array(
   'is_domain' => 1,
   'is_contact' => 0,
   'pseudoconstant' => [
-    'callback' => 'CRM_CampagnodonCivicrm_Logic_Contact::dedupeTables',
+    'callback' => 'CRM_CampagnodonCivicrm_Logic_Dedupe_Contact::dedupeTables',
   ],
   'settings_pages' => ['campagnodon' => ['weight' => 20]],
 );

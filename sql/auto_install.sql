@@ -43,6 +43,8 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   `payment_url` varchar(255) COMMENT 'The url to pay the subscriptions.',
   `payment_instrument_id` int unsigned COMMENT 'FK vers Instrument de Paiement',
   `contact_id` int unsigned COMMENT 'FK de contact',
+  `original_contact_id` int unsigned COMMENT 'The contact id when this transaction was created. So we can know if there was a deduplication afterward.',
+  `new_contact` tinyint COMMENT 'True if the contact was created for this transaction.',
   `campaign_id` int unsigned COMMENT 'The campaign for which this Campagnodon transaction is attached.',
   `email` varchar(254) COMMENT 'Courriel',
   `prefix_id` int unsigned COMMENT 'Préfixe ou Titre du nom (M., Mme...). FK de l\'Id du préfixe',
