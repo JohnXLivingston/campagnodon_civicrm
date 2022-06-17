@@ -53,6 +53,21 @@
       </td>
     </tr>
     <tr>
+      <td class="label"></td>
+      <td>
+        {if $row.new_contact}
+          {ts}This contact was created for this transaction.{/ts}
+        {else} 
+          {ts}This contact already existed when this transaction was created.{/ts}
+        {/if}
+        <br>
+        {if $row.contact_id != $row.original_contact_id}
+          {ts}The original contact was:{/ts} {$row.original_contact_id}.<br>
+          {ts}The current contact is:{/ts} {$row.contact_id}.<br>
+        {/if}
+      </td>
+    </tr>
+    <tr>
       <td class="label">{ts}Linked entities{/ts}</td>
       <td>
         <table class="selector row-highlight">
