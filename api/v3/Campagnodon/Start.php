@@ -157,19 +157,37 @@ function civicrm_api3_campagnodon_Start($params) {
 
     $tax_receipt = !empty($params['tax_receipt']) && $params['tax_receipt'];
     $contact_create_params = [
-      'email' => $params['email'],
-      'prefix_id' => $params['prefix'],
-      'first_name' => $params['first_name'],
-      'last_name' => $params['last_name'],
       'contact_type' => 'Individual',
       'do_not_trade' => true, // can be changed later, with optional subscription
     ];
-    if ($tax_receipt) {
-      // TODO
-      // street_address ?
-      // 'postal_code' => $params['postal_code'],
-      // 'country' => $params['country'],
+    foreach ([
+      'email' => 'email',
+      'prefix' => 'prefix_id',
+      'first_name' => 'first_name',
+      'last_name' => 'last_name',
+      'birth_date' => 'birth_date',
+    ] as $pfield => $create_field) {
+      if (array_key_exists($pfield, $params) && !empty($params[$pfield])) {
+        $contact_create_params[$create_field] = $params[$pfield];
+      }
     }
+    foreach ([
+      'street_address' => 'street_address',
+      'postal_code' => 'postal_code',
+      'city' => 'city',
+      'country' => 'country_id'
+    ] as $pfield => $create_field) {
+      if (array_key_exists($pfield, $params) && !empty($params[$pfield])) {
+        if (!array_key_exists('api.address.create', $contact_create_params)) {
+          $contact_create_params['api.address.create'] = [];
+        }
+        $contact_create_params['api.address.create'][$create_field] = $params[$pfield];
+      }
+    }
+    if (array_key_exists('phone', $params) && !empty($params['phone'])) {
+      $contact_create_params['api.phone.create'] = ['phone' => $params['phone']];
+    }
+
 
     $dedupe_rule = $tax_receipt
       ? Civi::settings()->get('campagnodon_dedupe_rule_with_tax_receipt')
