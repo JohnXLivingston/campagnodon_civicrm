@@ -54,6 +54,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     // TODO: add some tests with a campaign_id
     return [
       'john' => [array(
+        'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
         'payment_url' => 'https://www.example.com?test=1&test=2', // adding some & to test that there is no url encoding.
@@ -71,6 +72,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ]
       )],
       'bill' => [array(
+        'campagnodon_version' => '1',
         'email' => 'bill.smith@example.com',
         'transaction_idx' => 'test/123456789123456789',
         'tax_receipt' => true,
@@ -88,6 +90,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ]
       )],
       'billy' => [array(
+        'campagnodon_version' => '1',
         'email' => 'billy.smith@example.com',
         'transaction_idx' => 'test/123456789123456789',
         'tax_receipt' => false,
@@ -103,6 +106,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ]
       )],
       'test with 2 donations' => [array(
+        'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
         'contributions' => [
@@ -119,6 +123,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ]
       )],
       'test with optional_subscriptions on init' => [array(
+        'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
         'country' => 'FR',
@@ -142,7 +147,41 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
    */
   public function dataTestInvalidProviders() {
     return [
+      'must fail because of missing campagnodon_version' => [array(
+        'email' => 'john.doe@example.com',
+        'transaction_idx' => 'test/1',
+        'country' => 'FR',
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            '_financial_type_id' => 1, // this is only there for unit tests.
+            'amount' => 12,
+            'currency' => 'EUR'
+          ]
+        ],
+        'optional_subscriptions' => [
+          ['type' => 'opt-in', 'key' => 'do_not_trade', 'when' => 'init']
+        ]
+      )],
+      'must fail because of invalid campagnodon_version' => [array(
+        'campagnodon_version' => '2',
+        'email' => 'john.doe@example.com',
+        'transaction_idx' => 'test/1',
+        'country' => 'FR',
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            '_financial_type_id' => 1, // this is only there for unit tests.
+            'amount' => 12,
+            'currency' => 'EUR'
+          ]
+        ],
+        'optional_subscriptions' => [
+          ['type' => 'opt-in', 'key' => 'do_not_trade', 'when' => 'init']
+        ]
+      )],
       'must fail because of invalid contribution amount' => [array(
+        'campagnodon_version' => '1',
         'email' => 'michel.martin@example.com',
         'transaction_idx' => 'test/2',
         'first_name' => 'Michel',
@@ -157,6 +196,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       )],
       // FIXME: seems that CiviCRM does not check values for this type of pseudoConstant.
       // 'must fail because of invalid contribution currency' => [array(
+      //   'campagnodon_version' => '1',
       //   'email' => 'michel.martin@example.com',
       //   'transaction_idx' => 'test/2',
       //   'first_name' => 'Michel',
@@ -170,6 +210,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       //   ]
       // )],
       'must fail because of unknown campaign' => [array(
+        'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'campaign_id' => '123456749',
         'transaction_idx' => 'test/3',
@@ -182,6 +223,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ]
       )],
       'must fail because of invalid payment_url' => [array(
+        'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/4',
         'payment_url' => 'this is not url /',
@@ -195,6 +237,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       )],
       // FIXME: seems that CiviCRM does not check values for this type of pseudoConstant.
       // 'must fail because of invalid country code' => [array(
+      //   'campagnodon_version' => '1',
       //   'email' => 'john.doe@example.com',
       //   'transaction_idx' => 'test/5',
       //   'country' => 'invalid country code',
@@ -208,6 +251,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       //   ]
       // )],
       'must fail because invalid prefix (numerical)' => [array(
+        'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/6',
         'prefix' => 123456,
@@ -222,6 +266,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ]
       )],
       'must fail because invalid prefix' => [array(
+        'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/7',
         'prefix' => 'no way',
@@ -236,6 +281,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ]
       )],
       'must fail because invalid birth_date' => [array(
+        'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/8',
         'first_name' => 'Bill',
@@ -251,6 +297,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       )],
       // FIXME: seems that CiviCRM does not check values for boolean
       // 'must fail because invalid tax_receipt' => [array(
+      //   'campagnodon_version' => '1',
       //   'email' => 'john.doe@example.com',
       //   'transaction_idx' => 'test/8',
       //   'tax_receipt' => 'not a boolean',
@@ -265,6 +312,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       //   ]
       // )],
       'must fail because of an invalid opt-in' => [array(
+        'campagnodon_version' => '1',
         'email' => 'michel.martin@example.com',
         'transaction_idx' => 'test/1025201',
         'first_name' => 'Michel',
@@ -289,6 +337,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   public function testApiStartWithoutContribution() {
     $this->expectException(CiviCRM_API3_Exception::class);
     $result = civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
       'email' => 'bill.smith@example.com',
       'transaction_idx' => 'test/10'
     ));
@@ -300,6 +349,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   public function testApiStartWithoutEmail() {
     $this->expectException(CiviCRM_API3_Exception::class);
     $result = civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
       'transaction_idx' => 'test/20',
       'contributions' => [
         'don' => [
@@ -317,6 +367,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   public function testApiStartWithoutTransactionIdx() {
     $this->expectException(CiviCRM_API3_Exception::class);
     $result = civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
       'email' => 'bill.smith@example.com',
       'contributions' => [
         'don' => [
@@ -484,6 +535,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     Civi::settings()->set('campagnodon_dedupe_rule_with_tax_receipt', 'Unsupervised/first');
 
     $result = civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/30',
       'contributions' => [
@@ -503,6 +555,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
 
     // Another donation, with a different contact.
     $result = civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
       'email' => 'bill.smith@example.com',
       'transaction_idx' => 'test/31',
       'first_name' => 'Bill',
@@ -520,6 +573,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertTrue($contact_id != $transaction2['contact_id'], 'Second start must have created a new contact');
 
     $result = civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/32',
       'first_name' => 'John',
@@ -539,6 +593,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
 
   public function testApiStartUniqueTransactionIdx() {
     $result = civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/50',
       'contributions' => [
@@ -555,6 +610,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->expectException(CiviCRM_API3_Exception::class);
     // Another donation, with same transaction_idx.
     $result = civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
       'email' => 'bill.smith@example.com',
       'transaction_idx' => 'test/50',
       'contributions' => [

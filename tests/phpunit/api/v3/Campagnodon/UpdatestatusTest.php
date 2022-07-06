@@ -44,6 +44,7 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
 
   private function getSimpleStartParams($idx) {
     return [
+      'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => $idx,
       'contributions' => [

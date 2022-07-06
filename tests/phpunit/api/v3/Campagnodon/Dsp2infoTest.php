@@ -32,6 +32,7 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
     parent::setUp();
 
     civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/fulldata',
       'country' => 'FR',
@@ -50,6 +51,7 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
       ]
     ));
     civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
       'email' => 'john.doe2@example.com',
       'transaction_idx' => 'test/minimaldata',
       'contributions' => [

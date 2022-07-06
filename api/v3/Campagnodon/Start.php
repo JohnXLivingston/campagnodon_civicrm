@@ -10,6 +10,14 @@ use CRM_CampagnodonCivicrm_ExtensionUtil as E;
  * @see https://docs.civicrm.org/dev/en/latest/framework/api-architecture/
  */
 function _civicrm_api3_campagnodon_Start_spec(&$spec) {
+  $spec["campagnodon_version"] = [
+    "name" => "prefix",
+    "title" => ts("Campagnodon API version"),
+    "description" => ts("Campagnodon API version"),
+    "type" => CRM_Utils_Type::T_STRING,
+    "api.required" => 1,
+    "api.default" => "",
+  ];
   $spec["prefix"] = [
     "name" => "prefix",
     "title" => ts("Individual Prefix"),
@@ -130,6 +138,10 @@ function _civicrm_api3_campagnodon_Start_spec(&$spec) {
 function civicrm_api3_campagnodon_Start($params) {
   $tx = new CRM_Core_Transaction();
   try {
+    // checking API version
+    if ($params['campagnodon_version'] !== '1') {
+      throw new API_Exception("Unkwnown API version '".($params['campagnodon_version'] ?? '')."'");
+    }
     // checking if there is at least one type of donation, membership, ...
     $contributions_params = $params['contributions'];
     if (!is_array($contributions_params)) {
