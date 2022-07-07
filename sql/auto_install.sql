@@ -81,6 +81,8 @@ CREATE TABLE `civicrm_campagnodon_transaction_link` (
   `total_amount` decimal(20,2) NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. Total amount of this contribution.',
   `currency` varchar(3) DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. 3 character string, value from config setting or input via user.',
   `financial_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. FK to Financial Type.',
+  `membership_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. FK to Membership Type.',
+  `membership_added` tinyint DEFAULT false COMMENT 'Only when entity_table=\'contribution\' and membership_type_id not null. True when the membership was added (to prevent multiple membership in case of multiple sync).',
   `opt_in` varchar(25) DEFAULT NULL COMMENT 'An opt-in action to do on the contact.',
   PRIMARY KEY (`id`),
   INDEX `index_entity_table_entity_id`(entity_table, entity_id),

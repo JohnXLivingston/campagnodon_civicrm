@@ -218,7 +218,7 @@ function civicrm_api3_campagnodon_Start($params) {
 
     // Now that we have a contact, we can make contributions.
     foreach ($contributions_params as $key => $contribution_params) {
-      $link = \Civi\Api4\CampagnodonTransactionLink::create()
+      $link_create = \Civi\Api4\CampagnodonTransactionLink::create()
         ->addValue('campagnodon_tid', $transaction['id'])
         ->addValue('entity_table', 'civicrm_contribution')
         ->addValue('entity_id', null)
@@ -227,9 +227,14 @@ function civicrm_api3_campagnodon_Start($params) {
         ->addValue(
           is_numeric($contribution_params['financial_type']) ? 'financial_type_id' : 'financial_type_id:name',
           $contribution_params['financial_type']
-        )
-        ->execute()
-        ->single();
+        );
+      if (array_key_exists('membership', $contribution_params) && !empty($contribution_params['membership'])) {
+        $link_create->addValue(
+          is_numeric($contribution_params['membership']) ? 'membership_type_id': 'membership_type_id:name',
+          $contribution_params['membership']
+        );
+      }
+      $link = $link_create->execute()->single();
     }
 
     // And now, optional_subscriptions!

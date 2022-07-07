@@ -33,6 +33,56 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     }
   }
 
+  /**
+   * Create the membership related to a contribution.
+   * FIXME: add some unit tests.
+   * @param $transaction_link_id
+   * @param $contribution_id
+   * @param $membership_type_id
+   * @param $contact_id
+   */
+  public static function addMembership($transaction_link_id, $contribution_id, $membership_type_id, $contact_id) {
+    // TODO: handle cases when membership already exists.
+
+    $membership_type = \Civi\Api4\MembershipType::get()
+      ->addWhere('id', '=', $membership_type_id)
+      ->execute()->single();
+
+    $contribution = \Civi\Api4\Contribution::get()
+      ->addWhere('id', '=', $contribution_id)
+      ->execute()->single();
+
+    $period_type = $membership_type['period_type']; // 'rolling' or 'fixed'
+    $receive_date = $contribution['receive_date'];
+    $start_date = null; // FIXME
+    if ($period_type === 'rolling') {
+      $start_date = $receive_date;
+    }
+
+    $membership = civicrm_api3('Membership', 'create', array(
+      'membership_type_id' => $membership_type_id,
+      'contact_id' => $contact_id,
+      'campaign_id' => $contribution['campaign_id'], // FIXME: keep this?
+      'join_date' => $receive_date,
+      'start_date' => $start_date,
+      // FIXME: custom_21 field.
+      'sequential' => true
+    ));
+    $membership_id = $membership['values'][0]['id'];
+    // FIXME: for now, the membership status is «new», and that is not correct.
+
+    // Linking payment
+    civicrm_api3('MembershipPayment', 'create', array(
+      'membership_id' => $membership_id,
+      'contribution_id' => $contribution_id
+    ));
+    
+    \Civi\Api4\CampagnodonTransactionLink::update()
+      ->addValue('membership_added', true)
+      ->addWhere('id', '=', $transaction_link_id)
+      ->execute();
+  }
+
   protected static function _testOnComplete($link, $transaction_status) {
     if ($link['on_complete'] && $transaction_status === 'completed') return true;
     if (!$link['on_complete'] && $transaction_status === 'init') return true;
@@ -58,6 +108,15 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
               ->addValue($link['opt_in'], false)
               ->execute();
           }
+        }
+      } else if ($link['entity_table'] === 'civicrm_contribution') {
+        if (
+          !empty($link['membership_type_id']) // this contribution opens a membership.
+          && $transaction_status === 'completed' // transaction is completed.
+          && !empty($link['entity_id']) // contribution must exist.
+          && !$link['membership_added'] // only add the membership the first time.
+        ) {
+          CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['entity_id'], $link['membership_type_id'], $contact_id);
         }
       }
     }

@@ -231,4 +231,17 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `new_contact` tinyint COMMENT 'True if the contact was created for this transaction.'");
     return TRUE;
   }
+
+  /**
+   * New columns
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0007(): bool {
+    $this->ctx->log->info('Planning update 0007');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN IF NOT EXISTS `membership_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=contribution. FK to Membership Type.'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN IF NOT EXISTS `membership_added` tinyint DEFAULT false COMMENT 'Only when entity_table=contribution and membership_type_id not null. True when the membership was added (to prevent multiple membership in case of multiple sync).'");
+    return TRUE;
+  }
 }

@@ -102,6 +102,26 @@
     </pseudoconstant>
   </field>
   <field>
+    <name>membership_type_id</name>
+    <title>Membership Type ID</title>
+    <type>int unsigned</type>
+    <default>NULL</default>
+    <required>false</required>
+    <comment>Only when entity_table='contribution'. FK to Membership Type.</comment>
+    <pseudoconstant>
+      <table>civicrm_membership_type</table>
+      <keyColumn>id</keyColumn>
+      <labelColumn>name</labelColumn>
+    </pseudoconstant>
+  </field>
+  <field>
+    <name>membership_added</name>
+    <title>Membership added</title>
+    <type>boolean</type>
+    <default>false</default>
+    <comment>Only when entity_table='contribution' and membership_type_id not null. True when the membership was added (to prevent multiple membership in case of multiple sync).</comment>
+  </field>
+  <field>
     <name>opt_in</name>
     <title>Opt-in</title>
     <type>varchar</type>

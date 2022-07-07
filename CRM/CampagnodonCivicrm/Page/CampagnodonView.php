@@ -34,7 +34,7 @@ class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
     $this->assign('row', $row);
 
     $links = \Civi\Api4\CampagnodonTransactionLink::get()
-      ->addSelect('*', 'financial_type_id:name')
+      ->addSelect('*', 'financial_type_id:name', 'membership_type_id:name')
       ->addWhere('campagnodon_tid', '=', $id)
       ->addOrderBy('entity_table', 'ASC')
       ->addOrderBy('entity_id', 'ASC')
@@ -43,6 +43,7 @@ class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
     foreach ($links as &$link) {
       if ($link['entity_table'] === 'civicrm_contribution') {
         $link['financial_type'] = $link['financial_type_id:name'];
+        $link['membership_type'] = $link['membership_type_id:name'];
 
         if ($link['entity_id']) {
           $contribution = \Civi\Api4\Contribution::get()

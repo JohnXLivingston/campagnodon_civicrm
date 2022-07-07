@@ -91,6 +91,11 @@
                 {if $link.entity_table === 'civicrm_contribution'}
                   {$link.financial_type}
                   {$link.total_amount|crmMoney:$link.currency}
+
+                  {if $link.membership_type_id}
+                    <br>
+                    {$link.membership_type}
+                  {/if}
                 {/if}
                 {if $link.entity_table === 'civicrm_contact'}
                   {$link.opt_in}
