@@ -75,17 +75,18 @@ ENGINE=InnoDB;
 CREATE TABLE `civicrm_campagnodon_transaction_link` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonTransactionLink ID',
   `campagnodon_tid` int unsigned NOT NULL COMMENT 'FK to CampagnodonTransaction',
+  `parent_id` int unsigned DEFAULT NULL COMMENT 'Optional parent id for this CampagnodonTransactionLink. Used to find the contribution link associated to a membership subscription.',
   `entity_table` varchar(64) NOT NULL COMMENT 'Table of the linked object',
   `entity_id` int unsigned NULL DEFAULT NULL COMMENT 'ID of the linked object. Can be null if the object is not created in pending state.',
   `on_complete` tinyint DEFAULT false COMMENT 'Only when entity_table=\'group\' or \'contact\'. If true, the contact will be added in group only when transaction is complete.',
   `total_amount` decimal(20,2) NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. Total amount of this contribution.',
   `currency` varchar(3) DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. 3 character string, value from config setting or input via user.',
   `financial_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. FK to Financial Type.',
-  `membership_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. FK to Membership Type.',
-  `membership_added` tinyint DEFAULT false COMMENT 'Only when entity_table=\'contribution\' and membership_type_id not null. True when the membership was added (to prevent multiple membership in case of multiple sync).',
+  `membership_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=\'membership\'. FK to Membership Type.',
   `opt_in` varchar(25) DEFAULT NULL COMMENT 'An opt-in action to do on the contact.',
   PRIMARY KEY (`id`),
   INDEX `index_entity_table_entity_id`(entity_table, entity_id),
-  CONSTRAINT FK_civicrm_campagnodon_transaction_link_campagnodon_tid FOREIGN KEY (`campagnodon_tid`) REFERENCES `civicrm_campagnodon_transaction`(`id`) ON DELETE CASCADE
+  CONSTRAINT FK_civicrm_campagnodon_transaction_link_campagnodon_tid FOREIGN KEY (`campagnodon_tid`) REFERENCES `civicrm_campagnodon_transaction`(`id`) ON DELETE CASCADE,
+  CONSTRAINT FK_civicrm_campagnodon_transaction_link_parent_id FOREIGN KEY (`parent_id`) REFERENCES `civicrm_campagnodon_transaction_link`(`id`) ON DELETE SET NULL
 )
 ENGINE=InnoDB;

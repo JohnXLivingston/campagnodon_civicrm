@@ -41,19 +41,34 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
    * @param $membership_type_id
    * @param $contact_id
    */
-  public static function addMembership($transaction_link_id, $contribution_id, $membership_type_id, $contact_id) {
+  public static function addMembership($transaction_link_id, $transaction_link_parent_id, $membership_type_id, $contact_id) {
     // TODO: handle cases when membership already exists.
 
     $membership_type = \Civi\Api4\MembershipType::get()
       ->addWhere('id', '=', $membership_type_id)
       ->execute()->single();
 
-    $contribution = \Civi\Api4\Contribution::get()
-      ->addWhere('id', '=', $contribution_id)
-      ->execute()->single();
+    $contribution = null;
+    $contribution_id = null;
+    if (!empty($transaction_link_parent_id)) {
+      $parent = \Civi\Api4\CampagnodonTransactionLink::get()
+        ->addWhere('id', '=', $transaction_link_parent_id)
+        ->execute()->single();
+
+      if ($parent['entity_table'] !== 'civicrm_contribution') {
+        throw new Exception("CampagnodonTransactionLink parent is not a contribution, dont know what to do.");
+      }
+      $contribution_id = $parent['entity_id'];
+      if (!$contribution_id) {
+        throw new Exception("CampagnodonTransactionLink parent has no contribution_id, dont know what to do.");
+      }
+      $contribution = \Civi\Api4\Contribution::get()
+        ->addWhere('id', '=', $contribution_id)
+        ->execute()->single();
+    }
 
     $period_type = $membership_type['period_type']; // 'rolling' or 'fixed'
-    $receive_date = $contribution['receive_date'];
+    $receive_date = $contribution ? $contribution['receive_date'] : null;
     $start_date = null; // FIXME
     if ($period_type === 'rolling') {
       $start_date = $receive_date;
@@ -62,7 +77,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     $membership = civicrm_api3('Membership', 'create', array(
       'membership_type_id' => $membership_type_id,
       'contact_id' => $contact_id,
-      'campaign_id' => $contribution['campaign_id'], // FIXME: keep this?
+      'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
       'join_date' => $receive_date,
       'start_date' => $start_date,
       // FIXME: custom_21 field.
@@ -72,13 +87,15 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     // FIXME: for now, the membership status is «new», and that is not correct.
 
     // Linking payment
-    civicrm_api3('MembershipPayment', 'create', array(
-      'membership_id' => $membership_id,
-      'contribution_id' => $contribution_id
-    ));
+    if ($contribution_id) {
+      civicrm_api3('MembershipPayment', 'create', array(
+        'membership_id' => $membership_id,
+        'contribution_id' => $contribution_id
+      ));
+    }
     
     \Civi\Api4\CampagnodonTransactionLink::update()
-      ->addValue('membership_added', true)
+      ->addValue('entity_id', $membership_id)
       ->addWhere('id', '=', $transaction_link_id)
       ->execute();
   }
@@ -109,14 +126,14 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
               ->execute();
           }
         }
-      } else if ($link['entity_table'] === 'civicrm_contribution') {
+      } else if ($link['entity_table'] === 'civicrm_membership') {
         if (
           !empty($link['membership_type_id']) // this contribution opens a membership.
           && $transaction_status === 'completed' // transaction is completed.
-          && !empty($link['entity_id']) // contribution must exist.
-          && !$link['membership_added'] // only add the membership the first time.
+          && empty($link['entity_id']) // only add the membership the first time.
         ) {
-          CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['entity_id'], $link['membership_type_id'], $contact_id);
+          // FIXME: do something when payment is cancelled?
+          CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['parent_id'], $link['membership_type_id'], $contact_id);
         }
       }
     }

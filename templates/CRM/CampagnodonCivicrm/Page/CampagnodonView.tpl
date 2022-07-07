@@ -91,16 +91,17 @@
                 {if $link.entity_table === 'civicrm_contribution'}
                   {$link.financial_type}
                   {$link.total_amount|crmMoney:$link.currency}
-
-                  {if $link.membership_type_id}
-                    <br>
-                    {$link.membership_type}
-                  {/if}
                 {/if}
                 {if $link.entity_table === 'civicrm_contact'}
                   {$link.opt_in}
                   {if $link.on_complete}
                     {ts}On complete{/ts}
+                  {/if}
+                {/if}
+                {if $link.entity_table === 'civicrm_membership'}
+                  {if $link.membership_type}
+                    {$link.membership_type}
+                    {$link.total_amount|crmMoney:$link.currency}
                   {/if}
                 {/if}
               </td>

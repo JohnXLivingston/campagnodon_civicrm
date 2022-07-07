@@ -43,7 +43,6 @@ class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
     foreach ($links as &$link) {
       if ($link['entity_table'] === 'civicrm_contribution') {
         $link['financial_type'] = $link['financial_type_id:name'];
-        $link['membership_type'] = $link['membership_type_id:name'];
 
         if ($link['entity_id']) {
           $contribution = \Civi\Api4\Contribution::get()
@@ -60,7 +59,31 @@ class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
             $link['view'] = '<a href="'
               .htmlspecialchars($url)
               .'">'
-              .CRM_Utils_Money::format($contribution['total_amount'], $contribution['currency']) 
+              .CRM_Utils_Money::format($contribution['total_amount'], $contribution['currency'])
+              .'</a>';
+          } else {
+            $link['view'] = '???';
+          }
+        }
+      } else if ($link['entity_table'] === 'civicrm_membership') {
+        $link['membership_type'] = $link['membership_type_id:name'];
+
+        if ($link['entity_id']) {
+          $membership = \Civi\Api4\Membership::get()
+            ->addSelect('*', 'membership_type_id:name')
+            ->addWhere('id', '=', $link['entity_id'])
+            ->execute()->first();
+          if ($membership) {
+            $url = CRM_Utils_System::url('civicrm/contact/view/membership', [
+              'action' => 'view',
+              'reset' => 1,
+              'id' => $membership['id'],
+              'cid' => $membership['contact_id']
+            ]);
+            $link['view'] = '<a href="'
+              .htmlspecialchars($url)
+              .'">'
+              .htmlspecialchars($membership['membership_type_id:name']) 
               .'</a>';
           } else {
             $link['view'] = '???';

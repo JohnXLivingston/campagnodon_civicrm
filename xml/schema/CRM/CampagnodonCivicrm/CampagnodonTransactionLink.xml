@@ -35,6 +35,20 @@
   </foreignKey>
 
   <field>
+    <name>parent_id</name>
+    <title>Parent CampagnodonTransactionLink ID</title>
+    <type>int unsigned</type>
+    <default>NULL</default>
+    <comment>Optional parent id for this CampagnodonTransactionLink. Used to find the contribution link associated to a membership subscription.</comment>
+  </field>
+  <foreignKey>
+    <name>parent_id</name>
+    <table>civicrm_campagnodon_transaction_link</table>
+    <key>id</key>
+    <onDelete>SET NULL</onDelete>
+  </foreignKey>
+
+  <field>
     <name>entity_table</name>
     <title>Entity table</title>
     <type>varchar</type>
@@ -107,19 +121,12 @@
     <type>int unsigned</type>
     <default>NULL</default>
     <required>false</required>
-    <comment>Only when entity_table='contribution'. FK to Membership Type.</comment>
+    <comment>Only when entity_table='membership'. FK to Membership Type.</comment>
     <pseudoconstant>
       <table>civicrm_membership_type</table>
       <keyColumn>id</keyColumn>
       <labelColumn>name</labelColumn>
     </pseudoconstant>
-  </field>
-  <field>
-    <name>membership_added</name>
-    <title>Membership added</title>
-    <type>boolean</type>
-    <default>false</default>
-    <comment>Only when entity_table='contribution' and membership_type_id not null. True when the membership was added (to prevent multiple membership in case of multiple sync).</comment>
   </field>
   <field>
     <name>opt_in</name>

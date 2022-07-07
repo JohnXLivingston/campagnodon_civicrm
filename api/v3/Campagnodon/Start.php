@@ -218,7 +218,7 @@ function civicrm_api3_campagnodon_Start($params) {
 
     // Now that we have a contact, we can make contributions.
     foreach ($contributions_params as $key => $contribution_params) {
-      $link_create = \Civi\Api4\CampagnodonTransactionLink::create()
+      $link = \Civi\Api4\CampagnodonTransactionLink::create()
         ->addValue('campagnodon_tid', $transaction['id'])
         ->addValue('entity_table', 'civicrm_contribution')
         ->addValue('entity_id', null)
@@ -227,14 +227,29 @@ function civicrm_api3_campagnodon_Start($params) {
         ->addValue(
           is_numeric($contribution_params['financial_type']) ? 'financial_type_id' : 'financial_type_id:name',
           $contribution_params['financial_type']
-        );
+        )
+        ->execute()
+        ->single();
+
+      // if there is a membership, we also create the child link:
       if (array_key_exists('membership', $contribution_params) && !empty($contribution_params['membership'])) {
-        $link_create->addValue(
-          is_numeric($contribution_params['membership']) ? 'membership_type_id': 'membership_type_id:name',
-          $contribution_params['membership']
-        );
+        $membership_link = \Civi\Api4\CampagnodonTransactionLink::create()
+          ->addValue('campagnodon_tid', $transaction['id'])
+          ->addValue('entity_table', 'civicrm_membership')
+          ->addValue('entity_id', null) // will come later.
+          ->addValue('total_amount', $contribution_params['amount'])
+          ->addValue('currency', $contribution_params['currency'])
+          ->addValue(
+            is_numeric($contribution_params['financial_type']) ? 'financial_type_id' : 'financial_type_id:name',
+            $contribution_params['financial_type']
+          )
+          ->addValue(
+            is_numeric($contribution_params['membership']) ? 'membership_type_id': 'membership_type_id:name',
+            $contribution_params['membership']
+          )
+          ->execute()
+          ->single();
       }
-      $link = $link_create->execute()->single();
     }
 
     // And now, optional_subscriptions!

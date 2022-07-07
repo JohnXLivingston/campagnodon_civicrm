@@ -244,4 +244,18 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN IF NOT EXISTS `membership_added` tinyint DEFAULT false COMMENT 'Only when entity_table=contribution and membership_type_id not null. True when the membership was added (to prevent multiple membership in case of multiple sync).'");
     return TRUE;
   }
+
+  /**
+   * New column and index, deleting deprecated column.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0008(): bool {
+    $this->ctx->log->info('Planning update 0008');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link DROP COLUMN IF EXISTS `membership_added`");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN IF NOT EXISTS `parent_id` int unsigned DEFAULT NULL COMMENT 'Optional parent id for this CampagnodonTransactionLink. Used to find the contribution link associated to a membership subscription.'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD CONSTRAINT FK_civicrm_campagnodon_transaction_link_parent_id FOREIGN KEY (`parent_id`) REFERENCES `civicrm_campagnodon_transaction_link`(`id`) ON DELETE SET NULL");
+    return TRUE;
+  }
 }
