@@ -234,6 +234,7 @@ function civicrm_api3_campagnodon_Start($params) {
       // if there is a membership, we also create the child link:
       if (array_key_exists('membership', $contribution_params) && !empty($contribution_params['membership'])) {
         $membership_link = \Civi\Api4\CampagnodonTransactionLink::create()
+          ->addValue('parent_id', $link['id'])
           ->addValue('campagnodon_tid', $transaction['id'])
           ->addValue('entity_table', 'civicrm_membership')
           ->addValue('entity_id', null) // will come later.

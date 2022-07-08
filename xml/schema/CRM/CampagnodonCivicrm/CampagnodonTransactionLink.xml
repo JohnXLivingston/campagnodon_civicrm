@@ -139,4 +139,17 @@
       <callback>CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::optInTables</callback>
     </pseudoconstant>
   </field>
+
+  <field>
+    <name>cancelled</name>
+    <title>Cancelled</title>
+    <type>varchar</type>
+    <length>20</length>
+    <default>NULL</default>
+    <comment>Some links can be cancelled. This field contains a keyword to describe the reason. Example: membership already exists.</comment>
+  </field>
+  <index>
+    <name>index_cancelled</name>
+    <fieldName>cancelled</fieldName>
+  </index>
 </table>

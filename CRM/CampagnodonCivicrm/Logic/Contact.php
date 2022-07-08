@@ -74,20 +74,60 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       $start_date = $receive_date;
     }
 
-    $membership = civicrm_api3('Membership', 'create', array(
-      'membership_type_id' => $membership_type_id,
-      'contact_id' => $contact_id,
-      'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
-      'join_date' => $receive_date,
-      'start_date' => $start_date,
-      // FIXME: custom_21 field.
-      'sequential' => true
-    ));
-    $membership_id = $membership['values'][0]['id'];
+    // Searching for a current membership record.
+    // Note: ordering by end_date and taking last. In case there is multiple membership for this contact.
+    $current_membership = \Civi\Api4\Membership::get()
+      ->addSelect('*')
+      ->addWhere('contact_id', '=', $contact_id)
+      ->addWhere('membership_type_id', '=', $membership_type_id)
+      ->addOrderBy('end_date', 'ASC')
+      ->addOrderBy('id', 'ASC')
+      ->execute()
+      ->last();
+
+    $cancel = null;
+
+    // Note: following API calls are based on this code: https://code.globenet.org/attacfr/spip2CiviCRM/-/blob/master/convert.py#L1053
+    if ($current_membership) {
+      $membership_id = $current_membership['id'];
+
+      if ($period_type === 'fixed') {
+        // For fixed period membership, we don't renew if the current membership is still running
+        $end_date = $current_membership['end_date'];
+        if ($end_date >= date("Y-m-d")) {
+          $cancel = 'already_member';
+        }
+      }
+
+      if (!$cancel) {
+        civicrm_api3('Membership', 'create', array(
+          'id' => $membership_id,
+          'membership_type_id' => $membership_type_id,
+          'numb_terms' => 1,
+          'skipStatusCal' => 0,
+          'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
+          'start_date' => $start_date,
+          // FIXME: custom_21 field.
+          'sequential' => true
+        ));
+      }
+    } else {
+      $membership = civicrm_api3('Membership', 'create', array(
+        'membership_type_id' => $membership_type_id,
+        'contact_id' => $contact_id,
+        'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
+        'join_date' => $receive_date,
+        'start_date' => $start_date,
+        // FIXME: custom_21 field.
+        'sequential' => true
+      ));
+      $membership_id = $membership['values'][0]['id'];
+    }
+
     // FIXME: for now, the membership status is «new», and that is not correct.
 
     // Linking payment
-    if ($contribution_id) {
+    if (!$cancel && $contribution_id) {
       civicrm_api3('MembershipPayment', 'create', array(
         'membership_id' => $membership_id,
         'contribution_id' => $contribution_id
@@ -96,6 +136,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     
     \Civi\Api4\CampagnodonTransactionLink::update()
       ->addValue('entity_id', $membership_id)
+      ->addValue('cancelled', $cancel)
       ->addWhere('id', '=', $transaction_link_id)
       ->execute();
   }

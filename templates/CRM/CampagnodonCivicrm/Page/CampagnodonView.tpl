@@ -104,6 +104,11 @@
                     {$link.total_amount|crmMoney:$link.currency}
                   {/if}
                 {/if}
+                {if $link.cancelled}
+                  <br>
+                  {ts}Cancelled:{/ts}
+                  <span style="color:red;">{$link.cancelled}</span>
+                {/if}
               </td>
             </tr>
           {/foreach}

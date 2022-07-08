@@ -258,4 +258,17 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD CONSTRAINT FK_civicrm_campagnodon_transaction_link_parent_id FOREIGN KEY (`parent_id`) REFERENCES `civicrm_campagnodon_transaction_link`(`id`) ON DELETE SET NULL");
     return TRUE;
   }
+
+  /**
+   * New column and index
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0009(): bool {
+    $this->ctx->log->info('Planning update 0009');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN IF NOT EXISTS `cancelled` varchar(20) DEFAULT NULL COMMENT 'Some links can be cancelled. This field contains a keyword to describe the reason. Example: membership already exists.'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD INDEX IF NOT EXISTS `index_cancelled`(cancelled)");
+    return TRUE;
+  }
 }

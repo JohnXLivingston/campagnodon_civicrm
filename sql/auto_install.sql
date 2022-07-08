@@ -84,8 +84,10 @@ CREATE TABLE `civicrm_campagnodon_transaction_link` (
   `financial_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=\'contribution\'. FK to Financial Type.',
   `membership_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=\'membership\'. FK to Membership Type.',
   `opt_in` varchar(25) DEFAULT NULL COMMENT 'An opt-in action to do on the contact.',
+  `cancelled` varchar(20) DEFAULT NULL COMMENT 'Some links can be cancelled. This field contains a keyword to describe the reason. Example: membership already exists.',
   PRIMARY KEY (`id`),
   INDEX `index_entity_table_entity_id`(entity_table, entity_id),
+  INDEX `index_cancelled`(cancelled),
   CONSTRAINT FK_civicrm_campagnodon_transaction_link_campagnodon_tid FOREIGN KEY (`campagnodon_tid`) REFERENCES `civicrm_campagnodon_transaction`(`id`) ON DELETE CASCADE,
   CONSTRAINT FK_civicrm_campagnodon_transaction_link_parent_id FOREIGN KEY (`parent_id`) REFERENCES `civicrm_campagnodon_transaction_link`(`id`) ON DELETE SET NULL
 )
