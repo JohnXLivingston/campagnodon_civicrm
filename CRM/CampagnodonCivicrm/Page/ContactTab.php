@@ -11,6 +11,7 @@ class CRM_CampagnodonCivicrm_Page_ContactTab extends CRM_Core_Page {
     $campagnodon_transactions = \Civi\Api4\CampagnodonTransaction::get()
       ->addSelect('*', 'payment_instrument_id:label', 'campaign_id:label')
       ->addWhere('contact_id', '=', $contactId)
+      ->addOrderBy('id', 'DESC')
       ->execute();
     $rows = array();
     foreach($campagnodon_transactions as $campagnodon_transaction) {
