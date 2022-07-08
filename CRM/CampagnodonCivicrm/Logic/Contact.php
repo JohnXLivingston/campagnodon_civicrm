@@ -103,7 +103,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
         civicrm_api3('Membership', 'create', array(
           'id' => $membership_id,
           'membership_type_id' => $membership_type_id,
-          'numb_terms' => 1,
+          'num_terms' => 1,
           'skipStatusCal' => 0,
           'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
           'start_date' => $start_date,
