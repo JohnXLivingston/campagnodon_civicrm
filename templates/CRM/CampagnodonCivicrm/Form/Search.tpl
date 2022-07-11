@@ -8,6 +8,10 @@
           <table class="form-layout">
             <tbody>
             <tr>
+              <td class="label">{$form.issue.label}</td>
+              <td>{$form.issue.html}</td>
+            </tr>
+            <tr>
               <td class="label">{$form.status.label}</td>
               <td>{$form.status.html}</td>
             </tr>
