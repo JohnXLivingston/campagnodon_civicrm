@@ -83,8 +83,20 @@ class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
             $link['view'] = '<a href="'
               .htmlspecialchars($url)
               .'">'
-              .htmlspecialchars($membership['membership_type_id:name']) 
+              .htmlspecialchars($membership['membership_type_id:name'])
               .'</a>';
+          } else {
+            $link['view'] = '???';
+          }
+        }
+      } else if ($link['entity_table'] === 'civicrm_tag') {
+        if ($link['entity_id']) {
+          $tag = \Civi\Api4\Tag::get()
+            ->addSelect('*')
+            ->addWhere('id', '=', $link['entity_id'])
+            ->execute()->first();
+          if ($tag) {
+            $link['view'] = htmlspecialchars($tag['name']);
           } else {
             $link['view'] = '???';
           }

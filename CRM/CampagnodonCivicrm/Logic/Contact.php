@@ -151,6 +151,18 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       ->execute();
   }
 
+  /**
+   * @param $tag_id
+   * @param $contact_id
+   */
+  public static function addTag($tag_id, $contact_id) {
+    // Note: this API3 call only create EntityTag if not exists.
+    civicrm_api3('EntityTag', 'create', array(
+      'contact_id' => $contact_id,
+      'tag_id' => $tag_id
+    ));
+  }
+
   protected static function _testOnComplete($link, $transaction_status) {
     if ($link['on_complete'] && $transaction_status === 'completed') return true;
     if (!$link['on_complete'] && $transaction_status === 'init') return true;
@@ -185,6 +197,10 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
         ) {
           // FIXME: do something when payment is cancelled?
           CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['parent_id'], $link['membership_type_id'], $contact_id, $link['opt_in']);
+        }
+      } else if ($link['entity_table'] === 'civicrm_tag') {
+        if (CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {
+          CRM_CampagnodonCivicrm_Logic_Contact::addTag($link['entity_id'], $contact_id);
         }
       }
     }

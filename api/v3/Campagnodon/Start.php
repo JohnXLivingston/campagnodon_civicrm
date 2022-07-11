@@ -289,6 +289,23 @@ function civicrm_api3_campagnodon_Start($params) {
           ->addValue('opt_in', $optional_subscription['key'])
           ->execute()
           ->single();
+      } else if ($optional_subscription['type'] === 'tag') {
+        // FIXME: add some unit tests for tags.
+        $tag_key = $optional_subscription['key'];
+        $tag_field = is_numeric($optional_subscription['key']) ? 'id' : 'name';
+        $tag = \Civi\Api4\Tag::get()
+          ->addWhere($tag_field, '=', $tag_key)
+          ->execute()
+          ->single();
+
+        $on_complete = $optional_subscription['when'] === 'completed';
+        $link = \Civi\Api4\CampagnodonTransactionLink::create()
+          ->addValue('campagnodon_tid', $transaction['id'])
+          ->addValue('entity_table', 'civicrm_tag')
+          ->addValue('entity_id', $tag['id'])
+          ->addValue('on_complete', $on_complete)
+          ->execute()
+          ->single();
       } else {
         throw new Exception('Invalid optional_subscriptions type: "'.$optional_subscription['type'].'"');
       }

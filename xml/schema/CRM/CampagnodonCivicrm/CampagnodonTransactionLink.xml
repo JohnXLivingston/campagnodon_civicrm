@@ -79,7 +79,7 @@
     <title>On complete</title>
     <type>boolean</type>
     <default>false</default>
-    <comment>Only when entity_table='group' or 'contact'. If true, the contact will be added in group only when transaction is complete.</comment>
+    <comment>Only when entity_table='group' or 'contact' or 'tag'. If true, the contact will be added in group only when transaction is complete.</comment>
   </field>
   <field>
     <name>total_amount</name>
