@@ -102,6 +102,10 @@
                   {if $link.membership_type}
                     {$link.membership_type}
                     {$link.total_amount|crmMoney:$link.currency}
+                    <br>
+                  {/if}
+                  {if $link.opt_in}
+                    {$link.opt_in}<br>
                   {/if}
                 {/if}
                 {if $link.cancelled}

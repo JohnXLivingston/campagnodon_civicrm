@@ -233,7 +233,7 @@ function civicrm_api3_campagnodon_Start($params) {
 
       // if there is a membership, we also create the child link:
       if (array_key_exists('membership', $contribution_params) && !empty($contribution_params['membership'])) {
-        $membership_link = \Civi\Api4\CampagnodonTransactionLink::create()
+        $membership_link_create = \Civi\Api4\CampagnodonTransactionLink::create()
           ->addValue('parent_id', $link['id'])
           ->addValue('campagnodon_tid', $transaction['id'])
           ->addValue('entity_table', 'civicrm_membership')
@@ -247,9 +247,13 @@ function civicrm_api3_campagnodon_Start($params) {
           ->addValue(
             is_numeric($contribution_params['membership']) ? 'membership_type_id': 'membership_type_id:name',
             $contribution_params['membership']
-          )
-          ->execute()
-          ->single();
+          );
+        
+        // Special case: there can be a custom opt-in option in params... FIXME: the way this is handled is not clean.
+        if (array_key_exists('membership_option', $contribution_params) && !empty($contribution_params['membership_option'])) {
+          $membership_link_create->addValue('opt_in', $contribution_params['membership_option']);
+        }
+        $member_link = $membership_link_create->execute()->single();
       }
     }
 

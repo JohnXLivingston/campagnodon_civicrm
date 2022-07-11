@@ -134,7 +134,7 @@
     <type>varchar</type>
     <length>25</length>
     <default>NULL</default>
-    <comment>An opt-in action to do on the contact.</comment>
+    <comment>An opt-in action to do on the contact (or membership).</comment>
     <pseudoconstant>
       <callback>CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::optInTables</callback>
     </pseudoconstant>

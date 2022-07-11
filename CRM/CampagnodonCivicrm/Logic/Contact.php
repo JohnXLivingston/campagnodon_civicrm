@@ -41,7 +41,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
    * @param $membership_type_id
    * @param $contact_id
    */
-  public static function addMembership($transaction_link_id, $transaction_link_parent_id, $membership_type_id, $contact_id) {
+  public static function addMembership($transaction_link_id, $transaction_link_parent_id, $membership_type_id, $contact_id, $opt_in) {
     // TODO: handle cases when membership already exists.
 
     $membership_type = \Civi\Api4\MembershipType::get()
@@ -74,6 +74,12 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       $start_date = $receive_date;
     }
 
+    // Special case... FIXME: handle these parameters differently. It is not clean.
+    $custom_fields = array();
+    if (!empty($opt_in) && preg_match('/^(custom_\w+):(0|1)$/', $opt_in, $matches)) {
+      $custom_fields[$matches[1]] = intval($matches[2]);
+    }
+
     // Searching for a current membership record.
     // Note: ordering by end_date and taking last. In case there is multiple membership for this contact.
     $current_membership = \Civi\Api4\Membership::get()
@@ -100,26 +106,30 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       }
 
       if (!$cancel) {
-        civicrm_api3('Membership', 'create', array(
-          'id' => $membership_id,
-          'membership_type_id' => $membership_type_id,
-          'num_terms' => 1,
-          'skipStatusCal' => 0,
-          'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
-          'start_date' => $start_date,
-          // FIXME: custom_21 field.
-          'sequential' => true
+        civicrm_api3('Membership', 'create', array_merge(
+          $custom_fields,
+          array(
+            'id' => $membership_id,
+            'membership_type_id' => $membership_type_id,
+            'num_terms' => 1,
+            'skipStatusCal' => 0,
+            'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
+            'start_date' => $start_date,
+            'sequential' => true
+          )
         ));
       }
     } else {
-      $membership = civicrm_api3('Membership', 'create', array(
-        'membership_type_id' => $membership_type_id,
-        'contact_id' => $contact_id,
-        'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
-        'join_date' => $receive_date,
-        'start_date' => $start_date,
-        // FIXME: custom_21 field.
-        'sequential' => true
+      $membership = civicrm_api3('Membership', 'create', array_merge(
+        $custom_fields,
+        array(
+          'membership_type_id' => $membership_type_id,
+          'contact_id' => $contact_id,
+          'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
+          'join_date' => $receive_date,
+          'start_date' => $start_date,
+          'sequential' => true
+        )
       ));
       $membership_id = $membership['values'][0]['id'];
     }
@@ -174,7 +184,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
           && empty($link['entity_id']) // only add the membership the first time.
         ) {
           // FIXME: do something when payment is cancelled?
-          CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['parent_id'], $link['membership_type_id'], $contact_id);
+          CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['parent_id'], $link['membership_type_id'], $contact_id, $link['opt_in']);
         }
       }
     }
