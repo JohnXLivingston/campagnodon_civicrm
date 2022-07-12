@@ -9,5 +9,10 @@ namespace Civi\Api4;
  * @package Civi\Api4
  */
 class CampagnodonTransactionLink extends Generic\DAOEntity {
-
+  public static function permissions() {
+    return [
+      'meta' => ['access CiviCRM'],
+      'default' => ['access Campagnodon'] // FIXME: test if it works.
+    ];
+  }
 }

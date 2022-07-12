@@ -34,6 +34,7 @@ function _civicrm_api3_campagnodon_Dsp2info_spec(&$spec) {
  */
 function civicrm_api3_campagnodon_Dsp2info($params) {
   $transaction = \Civi\Api4\CampagnodonTransaction::get()
+    ->setCheckPermissions(false)
     ->addSelect('*', 'country_id:name')
     ->addWhere('idx', '=', $params['transaction_idx'])
     ->execute()

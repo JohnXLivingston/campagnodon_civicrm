@@ -10,24 +10,24 @@
     <path>civicrm/campagnodon</path>
     <page_callback>CRM_CampagnodonCivicrm_Page_Campagnodon</page_callback>
     <title>Campagnodon</title>
-    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>access Campagnodon</access_arguments>
   </item>
   <item>
     <path>civicrm/campagnodon/contacttab</path>
     <page_callback>CRM_CampagnodonCivicrm_Page_ContactTab</page_callback>
     <title>ContactTab</title>
-    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>access Campagnodon</access_arguments>
   </item>
   <item>
     <path>civicrm/campagnodon/view</path>
     <page_callback>CRM_CampagnodonCivicrm_Page_CampagnodonView</page_callback>
     <title>Campagnodon Transaction</title>
-    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>access Campagnodon</access_arguments>
   </item>
   <item>
     <path>civicrm/campagnodon/search</path>
     <page_callback>CRM_CampagnodonCivicrm_Form_Search</page_callback>
     <title>Search</title>
-    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>access Campagnodon</access_arguments>
   </item>
 </menu>

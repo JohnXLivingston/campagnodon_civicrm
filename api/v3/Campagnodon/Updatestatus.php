@@ -52,6 +52,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
   $tx = new CRM_Core_Transaction();
   try {
     $transaction = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
       ->addWhere('idx', '=', $params['transaction_idx'])
       ->execute()
       ->single();
@@ -80,6 +81,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
 
     $transaction_has_update = false;
     $transaction_update = \Civi\Api4\CampagnodonTransaction::update()
+      ->setCheckPermissions(false)
       ->addWhere('id', '=', $transaction['id']);
     if ($transaction['status'] !== $status) {
       $transaction_update->addValue('status', $status);
@@ -95,6 +97,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
 
     // Updating existing contributions
     $contributions = \Civi\Api4\Contribution::get()
+      ->setCheckPermissions(false)
       ->addSelect('*', 'financial_type_id:name')
       ->addJoin(
         'CampagnodonTransactionLink AS tlink',
@@ -107,6 +110,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
     foreach ($contributions as $contribution) {
       $contribution_has_update = false;
       $contribution_update = \Civi\Api4\Contribution::update()
+        ->setCheckPermissions(false)
         ->addWhere('id', '=', $contribution['id']);
       if ($contribution['contribution_status_id'] != $contribution_status) {
         $contribution_update->addValue('contribution_status_id', $contribution_status);
@@ -124,12 +128,14 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
     // Creating missing contributions if this is a final states and there are not yet created.
     if ($status !== 'pending') {
       $missing_contribution_links = \Civi\Api4\CampagnodonTransactionLink::get()
+        ->setCheckPermissions(false)
         ->addWhere('campagnodon_tid', '=', $transaction['id'])
         ->addWhere('entity_table', '=', 'civicrm_contribution')
         ->addWhere('entity_id', 'IS NULL')
         ->execute();
       foreach ($missing_contribution_links as $missing_contribution_link) {
         $contribution = \Civi\Api4\Contribution::create()
+          ->setCheckPermissions(false)
           ->addValue('contact_id', $transaction['contact_id'])
           ->addValue('contribution_status_id', $contribution_status)
           ->addValue('total_amount', $missing_contribution_link['total_amount'])
@@ -146,6 +152,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
         $contribution = $contribution->execute()->single();
 
         \Civi\Api4\CampagnodonTransactionLink::update()
+          ->setCheckPermissions(false)
           ->addValue('entity_id', $contribution['id'])
           ->addWhere('id', '=', $missing_contribution_link['id'])
           ->execute();

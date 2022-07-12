@@ -108,7 +108,7 @@ function campagnodon_civicrm_civicrm_navigationMenu(&$menu) {
     'label' => E::ts('Campagnodon'),
     'name' => 'campagnodon',
     'url' => 'civicrm/campagnodon',
-    'permission' => 'access CiviCRM',
+    'permission' => 'access Campagnodon',
     //  'operator' => 'OR',
     'separator' => 0,
   ]);
@@ -116,7 +116,7 @@ function campagnodon_civicrm_civicrm_navigationMenu(&$menu) {
     'label' => E::ts('Search Campagnodon'),
     'name' => 'search_campagnodon',
     'url' => 'civicrm/campagnodon/search',
-    'permission' => 'access CiviCRM',
+    'permission' => 'access Campagnodon',
     //  'operator' => 'OR',
     'separator' => 0,
   ]);
@@ -128,7 +128,7 @@ function campagnodon_civicrm_civicrm_navigationMenu(&$menu) {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_tabset
  */
 function campagnodon_civicrm_civicrm_tabset($path, &$tabs, $context) {
-  if ($path === 'civicrm/contact/view') {
+  if ($path === 'civicrm/contact/view' && CRM_Core_Permission::check('access Campagnodon')) {
     // add a tab to the contact summary screen
     $contactId = $context['contact_id'];
     $url = CRM_Utils_System::url('civicrm/campagnodon/contacttab', ['cid' => $contactId]);
@@ -148,3 +148,26 @@ function campagnodon_civicrm_civicrm_tabset($path, &$tabs, $context) {
     );
   }
 }
+
+/**
+ * Implementation of hook_civicrm_permission
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_permission/
+ */
+function campagnodon_civicrm_civicrm_permission(&$permissions) {
+  $permissions['access Campagnodon'] = E::ts('Access to Campagnodon');
+  $permissions['Campagnodon api'] = E::ts('Use Campagnodon API');
+}
+
+/**
+ * Implementation of hook_civicrm_alterAPIPermissions
+ * Set permissions for APIv3/
+ */
+function campagnodon_civicrm_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  $permissions['campagnodon'] = [
+    'start' => ['Campagnodon api'],
+    'dsp2info' => ['Campagnodon api'],
+    'updatestatus' => ['Campagnodon api']
+  ];
+}
+
+// TODO: add some unit test, with a user that only has «Campagnodon api» permission.

@@ -9,6 +9,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
    */
   public static function addInGroup($group_id, $contact_id) {
     $group_contact = \Civi\Api4\GroupContact::get()
+      ->setCheckPermissions(false)
       ->addWhere('group_id', '=', $group_id)
       ->addWhere('contact_id', '=', $contact_id)
       ->execute()
@@ -16,6 +17,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     
     if (!$group_contact) {
       \Civi\Api4\GroupContact::create()
+        ->setCheckPermissions(false)
         ->addValue('group_id', $group_id)
         ->addValue('contact_id', $contact_id)
         ->addValue('status', 'Added')
@@ -26,6 +28,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
 
     if ($group_contact['status'] !== 'Added') {
       \Civi\Api4\GroupContact::update()
+        ->setCheckPermissions(false)
         ->addWhere('id', '=', $group_contact['id'])
         ->addValue('status', 'Added')
         ->execute();
@@ -45,6 +48,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     // TODO: handle cases when membership already exists.
 
     $membership_type = \Civi\Api4\MembershipType::get()
+      ->setCheckPermissions(false)
       ->addWhere('id', '=', $membership_type_id)
       ->execute()->single();
 
@@ -52,6 +56,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     $contribution_id = null;
     if (!empty($transaction_link_parent_id)) {
       $parent = \Civi\Api4\CampagnodonTransactionLink::get()
+        ->setCheckPermissions(false)
         ->addWhere('id', '=', $transaction_link_parent_id)
         ->execute()->single();
 
@@ -63,6 +68,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
         throw new Exception("CampagnodonTransactionLink parent has no contribution_id, dont know what to do.");
       }
       $contribution = \Civi\Api4\Contribution::get()
+        ->setCheckPermissions(false)
         ->addWhere('id', '=', $contribution_id)
         ->execute()->single();
     }
@@ -83,6 +89,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     // Searching for a current membership record.
     // Note: ordering by end_date and taking last. In case there is multiple membership for this contact.
     $current_membership = \Civi\Api4\Membership::get()
+      ->setCheckPermissions(false)
       ->addSelect('*')
       ->addWhere('contact_id', '=', $contact_id)
       ->addWhere('membership_type_id', '=', $membership_type_id)
@@ -115,6 +122,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
             'skipStatusCal' => 0,
             'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
             'start_date' => $start_date,
+            'check_permissions' => 0,
             'sequential' => true
           )
         ));
@@ -128,6 +136,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
           'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
           'join_date' => $receive_date,
           'start_date' => $start_date,
+          'check_permissions' => 0,
           'sequential' => true
         )
       ));
@@ -140,11 +149,13 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     if (!$cancel && $contribution_id) {
       civicrm_api3('MembershipPayment', 'create', array(
         'membership_id' => $membership_id,
-        'contribution_id' => $contribution_id
+        'contribution_id' => $contribution_id,
+        'check_permissions' => 0
       ));
     }
     
     \Civi\Api4\CampagnodonTransactionLink::update()
+      ->setCheckPermissions(false)
       ->addValue('entity_id', $membership_id)
       ->addValue('cancelled', $cancel)
       ->addWhere('id', '=', $transaction_link_id)
@@ -159,7 +170,8 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     // Note: this API3 call only create EntityTag if not exists.
     civicrm_api3('EntityTag', 'create', array(
       'contact_id' => $contact_id,
-      'tag_id' => $tag_id
+      'tag_id' => $tag_id,
+      'check_permissions' => 0
     ));
   }
 
@@ -171,6 +183,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
 
   public static function processLinks($contact_id, $transaction_id, $transaction_status) {
     $links = \Civi\Api4\CampagnodonTransactionLink::get()
+      ->setCheckPermissions(false)
       ->addSelect('*')
       ->addWhere('campagnodon_tid', '=', $transaction_id)
       ->execute();
@@ -184,6 +197,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
         if (!empty($link['opt_in']) && CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {
           if (CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::isOptInValid($link['opt_in'])) {
             $contact_update = \Civi\Api4\Contact::update()
+              ->setCheckPermissions(false)
               ->addWhere('id', '=', $link['entity_id'])
               ->addValue($link['opt_in'], false)
               ->execute();

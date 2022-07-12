@@ -4,8 +4,7 @@ use CRM_CampagnodonCivicrm_ExtensionUtil as E;
 class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
 
   public function run() {
-    // FIXME: add custom permissions for Campagnodon
-    if (!CRM_Core_Permission::check('access CiviCRM')) {
+    if (!CRM_Core_Permission::check('access Campagnodon')) {
       CRM_Core_Error::statusBounce(ts('You do not have permission to access this page.'));
     }
 

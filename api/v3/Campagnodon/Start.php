@@ -180,6 +180,7 @@ function civicrm_api3_campagnodon_Start($params) {
     }
 
     $transaction_create = \Civi\Api4\CampagnodonTransaction::create();
+    $transaction_create->setCheckPermissions(false);
     $transaction_create->addValue('contact_id', $contact['id']);
     $transaction_create->addValue('email', $params['email']);
     $transaction_create->addValue('idx', $params['transaction_idx']);
@@ -219,6 +220,7 @@ function civicrm_api3_campagnodon_Start($params) {
     // Now that we have a contact, we can make contributions.
     foreach ($contributions_params as $key => $contribution_params) {
       $link = \Civi\Api4\CampagnodonTransactionLink::create()
+        ->setCheckPermissions(false)
         ->addValue('campagnodon_tid', $transaction['id'])
         ->addValue('entity_table', 'civicrm_contribution')
         ->addValue('entity_id', null)
@@ -234,6 +236,7 @@ function civicrm_api3_campagnodon_Start($params) {
       // if there is a membership, we also create the child link:
       if (array_key_exists('membership', $contribution_params) && !empty($contribution_params['membership'])) {
         $membership_link_create = \Civi\Api4\CampagnodonTransactionLink::create()
+          ->setCheckPermissions(false)
           ->addValue('parent_id', $link['id'])
           ->addValue('campagnodon_tid', $transaction['id'])
           ->addValue('entity_table', 'civicrm_membership')
@@ -264,12 +267,14 @@ function civicrm_api3_campagnodon_Start($params) {
         $group_key = $optional_subscription['key'];
         $group_field = is_numeric($optional_subscription['key']) ? 'id' : 'name';
         $group = \Civi\Api4\Group::get()
+          ->setCheckPermissions(false)
           ->addWhere($group_field, '=', $group_key)
           ->execute()
           ->single();
 
         $on_complete = $optional_subscription['when'] === 'completed';
         $link = \Civi\Api4\CampagnodonTransactionLink::create()
+          ->setCheckPermissions(false)
           ->addValue('campagnodon_tid', $transaction['id'])
           ->addValue('entity_table', 'civicrm_group')
           ->addValue('entity_id', $group['id'])
@@ -282,6 +287,7 @@ function civicrm_api3_campagnodon_Start($params) {
         }
         $on_complete = $optional_subscription['when'] === 'completed';
         $link = \Civi\Api4\CampagnodonTransactionLink::create()
+          ->setCheckPermissions(false)
           ->addValue('campagnodon_tid', $transaction['id'])
           ->addValue('entity_table', 'civicrm_contact')
           ->addValue('entity_id', $contact['id'])
@@ -294,12 +300,14 @@ function civicrm_api3_campagnodon_Start($params) {
         $tag_key = $optional_subscription['key'];
         $tag_field = is_numeric($optional_subscription['key']) ? 'id' : 'name';
         $tag = \Civi\Api4\Tag::get()
+          ->setCheckPermissions(false)
           ->addWhere($tag_field, '=', $tag_key)
           ->execute()
           ->single();
 
         $on_complete = $optional_subscription['when'] === 'completed';
         $link = \Civi\Api4\CampagnodonTransactionLink::create()
+          ->setCheckPermissions(false)
           ->addValue('campagnodon_tid', $transaction['id'])
           ->addValue('entity_table', 'civicrm_tag')
           ->addValue('entity_id', $tag['id'])
