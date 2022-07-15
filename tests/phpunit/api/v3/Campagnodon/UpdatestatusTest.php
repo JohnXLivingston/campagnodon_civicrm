@@ -32,6 +32,9 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
    */
   public function setUp() {
     parent::setUp();
+
+    // Set permissions to 'Campagnodon api' only.
+    CRM_Core_Config::singleton()->userPermissionClass->permissions = ['Campagnodon api'];
   }
 
   /**
@@ -113,12 +116,14 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
     $result = civicrm_api3('Campagnodon', 'start', $params);
 
     $transaction = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
       ->addWhere('idx', '=', $idx)
       ->execute()
       ->single();
     $this->assertEquals($transaction['status'], 'init', 'Status is init');
 
     $contributions = \Civi\Api4\Contribution::get()
+      ->setCheckPermissions(false)
       ->addSelect('*', 'contribution_status_id:name', 'payment_instrument_id:name')
       ->addJoin(
         'CampagnodonTransactionLink AS tlink',
@@ -135,6 +140,31 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       // FIXME: CiviCRM sets a default payment instrument. Should have an «unknown» type...
       // $this->assertEquals($contribution['payment_instrument_id'], null, 'Contribution '.$cid.' has no payment_instrument');
     }
+  }
+
+  /**
+   * Check that we dont have any permission other than «Campagnodon api».
+   */
+  public function testNoApi3Permissions() {
+    $result = civicrm_api3('Contact', 'get', array('check_permissions' => 1));
+    $this->assertEquals(0, count($result['values']), 'Must have no value');
+
+    $this->expectException(CiviCRM_API3_Exception::class);
+    civicrm_api3('Contact', 'create', array('check_permissions' => 1, 'email' => 'john.doe.no@example.com'));
+  }
+
+  /**
+   * Check that we dont have any permission other than «Campagnodon api».
+   */
+  public function testNoApi4Permissions() {
+    $result = \Civi\Api4\Contact::get()->setCheckPermissions(true)->execute();
+    $this->assertEquals(0, $result->count(), 'Must have no value');
+
+    $this->expectException(API_Exception::class);
+    $result = \Civi\Api4\Contact::create()
+      ->setCheckPermissions(true)
+      ->addValue('email', 'john.doe.no@example.com')
+      ->execute();
   }
 
   /**
@@ -155,6 +185,7 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
     }
 
     $transaction = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
       ->addWhere('idx', '=', $idx)
       ->execute()
       ->single();
@@ -162,6 +193,7 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
     $this->assertEquals($transaction['status'], $last_step['status']);
     
     $contributions = \Civi\Api4\Contribution::get()
+      ->setCheckPermissions(false)
       ->addSelect('*', 'contribution_status_id:name', 'payment_instrument_id:name')
       ->addJoin(
         'CampagnodonTransactionLink AS tlink',

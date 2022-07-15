@@ -62,6 +62,9 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
         ]
       ]
     ));
+
+    // Set permissions to 'Campagnodon api' only.
+    CRM_Core_Config::singleton()->userPermissionClass->permissions = ['Campagnodon api'];
   }
 
   /**
@@ -70,6 +73,31 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
    */
   public function tearDown() {
     parent::tearDown();
+  }
+
+  /**
+   * Check that we dont have any permission other than «Campagnodon api».
+   */
+  public function testNoApi3Permissions() {
+    $result = civicrm_api3('Contact', 'get', array('check_permissions' => 1));
+    $this->assertEquals(0, count($result['values']), 'Must have no value');
+
+    $this->expectException(CiviCRM_API3_Exception::class);
+    civicrm_api3('Contact', 'create', array('check_permissions' => 1, 'email' => 'john.doe.no@example.com'));
+  }
+
+  /**
+   * Check that we dont have any permission other than «Campagnodon api».
+   */
+  public function testNoApi4Permissions() {
+    $result = \Civi\Api4\Contact::get()->setCheckPermissions(true)->execute();
+    $this->assertEquals(0, $result->count(), 'Must have no value');
+
+    $this->expectException(API_Exception::class);
+    $result = \Civi\Api4\Contact::create()
+      ->setCheckPermissions(true)
+      ->addValue('email', 'john.doe.no@example.com')
+      ->execute();
   }
 
   /**

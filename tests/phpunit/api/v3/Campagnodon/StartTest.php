@@ -32,11 +32,15 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   public function setUp() {
     if (!$this->newsletter_group) {
       $this->newletter_group = \Civi\Api4\Group::create()
+        ->setCheckPermissions(false)
         ->addValue('name', 'Newsletter Subscribers')
         ->addValue('title', 'The Newsletter group')
         ->execute()->single();
     }
     parent::setUp();
+
+    // Set permissions to 'Campagnodon api' only.
+    CRM_Core_Config::singleton()->userPermissionClass->permissions = ['Campagnodon api'];
   }
 
   /**
@@ -332,6 +336,31 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   }
 
   /**
+   * Check that we dont have any permission other than «Campagnodon api».
+   */
+  public function testNoApi3Permissions() {
+    $result = civicrm_api3('Contact', 'get', array('check_permissions' => 1));
+    $this->assertEquals(0, count($result['values']), 'Must have no value');
+
+    $this->expectException(CiviCRM_API3_Exception::class);
+    civicrm_api3('Contact', 'create', array('check_permissions' => 1, 'email' => 'john.doe.no@example.com'));
+  }
+
+  /**
+   * Check that we dont have any permission other than «Campagnodon api».
+   */
+  public function testNoApi4Permissions() {
+    $result = \Civi\Api4\Contact::get()->setCheckPermissions(true)->execute();
+    $this->assertEquals(0, $result->count(), 'Must have no value');
+
+    $this->expectException(API_Exception::class);
+    $result = \Civi\Api4\Contact::create()
+      ->setCheckPermissions(true)
+      ->addValue('email', 'john.doe.no@example.com')
+      ->execute();
+  }
+
+  /**
    * Test campagnodon start API. Must fail if no contribution.
    */
   public function testApiStartWithoutContribution() {
@@ -399,6 +428,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
 
     // Trying to get the transaction by ID
     $obj = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
       ->addSelect('*', 'country_id:name', 'prefix_id:name')
       ->addWhere('id', '=', $transaction['id'])
       ->execute()
@@ -425,6 +455,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
 
     if (!empty($params['transaction_idx'])) {
       $obj = \Civi\Api4\CampagnodonTransaction::get()
+        ->setCheckPermissions(false)
         ->addWhere('idx', '=', $params['transaction_idx'])
         ->execute()
         ->single();
@@ -435,6 +466,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
 
     // Getting the contact. Will be used later on.
     $contact = \Civi\Api4\Contact::get()
+      ->setCheckPermissions(false)
       ->addWhere('id', '=', $transaction['contact_id'])
       ->execute()->single();
 
@@ -442,6 +474,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     // Testing that transaction_links and contributions are created
     $contribs = $params['contributions'] ?? [];
     $contributions = \Civi\Api4\Contribution::get()
+      ->setCheckPermissions(false)
       ->addSelect('*', 'financial_type_id:name')
       ->addJoin(
         'CampagnodonTransactionLink AS tlink',
@@ -454,10 +487,11 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals(count($contributions), 0, 'Contribution not yet created');
 
     $contrib_links = \Civi\Api4\CampagnodonTransactionLink::get()
-        ->addSelect('*', 'financial_type_id:name')
-        ->addWhere('campagnodon_tid', '=', $transaction['id'])
-        ->addWhere('entity_table', '=', '"civicrm_contribution"') // FIXME: should double quotes be there??
-        ->execute();
+      ->setCheckPermissions(false)
+      ->addSelect('*', 'financial_type_id:name')
+      ->addWhere('campagnodon_tid', '=', $transaction['id'])
+      ->addWhere('entity_table', '=', '"civicrm_contribution"') // FIXME: should double quotes be there??
+      ->execute();
     $this->assertEquals($contrib_links->count(), $contributions->count(), 'Same number of contribution links as number of given contributions');
     $contrib_links->indexBy('id');
     $contrib_links = (array) $contrib_links;
@@ -483,6 +517,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       return $os['type'] === 'group';
     });
     $optional_subscriptions_group_links = \Civi\Api4\CampagnodonTransactionLink::get()
+      ->setCheckPermissions(false)
       ->addSelect('*')
       ->addWhere('campagnodon_tid', '=', $transaction['id'])
       ->addWhere('entity_table', '=', 'civicrm_group')
@@ -497,6 +532,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       return $os['type'] === 'opt-in';
     });
     $optional_subscriptions_contact_links = \Civi\Api4\CampagnodonTransactionLink::get()
+      ->setCheckPermissions(false)
       ->addSelect('*')
       ->addWhere('campagnodon_tid', '=', $transaction['id'])
       ->addWhere('entity_table', '=', 'civicrm_contact')

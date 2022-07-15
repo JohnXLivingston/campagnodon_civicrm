@@ -169,5 +169,3 @@ function campagnodon_civicrm_civicrm_alterAPIPermissions($entity, $action, &$par
     'updatestatus' => ['Campagnodon api']
   ];
 }
-
-// TODO: add some unit test, with a user that only has «Campagnodon api» permission.
