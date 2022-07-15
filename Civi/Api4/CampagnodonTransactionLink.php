@@ -12,7 +12,7 @@ class CampagnodonTransactionLink extends Generic\DAOEntity {
   public static function permissions() {
     return [
       'meta' => ['access CiviCRM'],
-      'default' => ['access Campagnodon'] // FIXME: test if it works.
+      'default' => ['access CiviCRM', 'access Campagnodon'] // FIXME: test if it works.
     ];
   }
 }

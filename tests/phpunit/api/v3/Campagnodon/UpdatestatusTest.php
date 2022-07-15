@@ -157,10 +157,10 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
    * Check that we dont have any permission other than «Campagnodon api».
    */
   public function testNoApi4Permissions() {
-    $result = \Civi\Api4\Contact::get()->setCheckPermissions(true)->execute();
+    $result = \Civi\Api4\Contact::get()->setCheckPermissions(true)->selectRowCount()->execute();
     $this->assertEquals(0, $result->count(), 'Must have no value');
 
-    $this->expectException(API_Exception::class);
+    $this->expectException(\Civi\API\Exception\UnauthorizedException::class);
     $result = \Civi\Api4\Contact::create()
       ->setCheckPermissions(true)
       ->addValue('email', 'john.doe.no@example.com')
