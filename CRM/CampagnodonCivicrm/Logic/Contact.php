@@ -168,11 +168,19 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
    */
   public static function addTag($tag_id, $contact_id) {
     // Note: this API3 call only create EntityTag if not exists.
-    civicrm_api3('EntityTag', 'create', array(
-      'contact_id' => $contact_id,
-      'tag_id' => $tag_id,
-      'check_permissions' => 0
-    ));
+    // But it can raise an Exception if all tags are already there... so... try/catch
+    try {
+      civicrm_api3('EntityTag', 'create', array(
+        'contact_id' => $contact_id,
+        'tag_id' => $tag_id,
+        'check_permissions' => 0
+      ));
+    } catch (CiviCRM_API3_Exception $e) {
+      // TODO: add some unit test
+      if ($e->getMessage() != 'Unable to add tags') {
+        throw $e;
+      }
+    }
   }
 
   protected static function _testOnComplete($link, $transaction_status) {
