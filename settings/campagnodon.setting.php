@@ -1,36 +1,80 @@
 <?php
+use CRM_CampagnodonCivicrm_ExtensionUtil as E;
 
 $campagnodon_settings = array();
-$campagnodon_defaults = array(
-  'pending' => 2,
-  'completed' => 1,
-  'cancelled' => 3,
-  'failed' => 4,
-  'refunded' => 7
-);
 
-foreach ($campagnodon_defaults as $status => $default) {
-  $campagnodon_settings['campagnodon_contribution_status_'.$status] = array(
-    'name' => 'campagnodon_contribution_status_'.$status,
-    'type' => 'Integer',
-    'html_type' => 'select',
-    'default' => $default,
-    'title' => ts('Contribution status for transaction in '.$status.' status.'),
-    'is_domain' => 1,
-    'is_contact' => 0,
-    'pseudoconstant' => [
-      'optionGroupName' => 'contribution_status'
-    ],
-    'settings_pages' => ['campagnodon' => ['weight' => 10]],
-  );
-}
+$campagnodon_settings['campagnodon_contribution_status_pending'] = array(
+  'name' => 'campagnodon_contribution_status_pending',
+  'type' => 'Integer',
+  'html_type' => 'select',
+  'default' => 2,
+  'title' => E::ts('Contribution status for transaction in pending status.'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'optionGroupName' => 'contribution_status'
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 10]],
+);
+$campagnodon_settings['campagnodon_contribution_status_completed'] = array(
+  'name' => 'campagnodon_contribution_status_completed',
+  'type' => 'Integer',
+  'html_type' => 'select',
+  'default' => 1,
+  'title' => E::ts('Contribution status for transaction in completed status.'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'optionGroupName' => 'contribution_status'
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 10]],
+);
+$campagnodon_settings['campagnodon_contribution_status_cancelled'] = array(
+  'name' => 'campagnodon_contribution_status_cancelled',
+  'type' => 'Integer',
+  'html_type' => 'select',
+  'default' => 3,
+  'title' => E::ts('Contribution status for transaction in cancelled status.'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'optionGroupName' => 'contribution_status'
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 10]],
+);
+$campagnodon_settings['campagnodon_contribution_status_failed'] = array(
+  'name' => 'campagnodon_contribution_status_failed',
+  'type' => 'Integer',
+  'html_type' => 'select',
+  'default' => 4,
+  'title' => E::ts('Contribution status for transaction in failed status.'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'optionGroupName' => 'contribution_status'
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 10]],
+);
+$campagnodon_settings['campagnodon_contribution_status_refunded'] = array(
+  'name' => 'campagnodon_contribution_status_refunded',
+  'type' => 'Integer',
+  'html_type' => 'select',
+  'default' => 7,
+  'title' => E::ts('Contribution status for transaction in refunded status.'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'optionGroupName' => 'contribution_status'
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 10]],
+);
 
 $campagnodon_settings['campagnodon_dedupe_rule'] = array(
   'name' => 'campagnodon_dedupe_rule',
   'type' => 'Text',
   'html_type' => 'select',
   'default' => '',
-  'title' => ts('Deduplication rule'),
+  'title' => E::ts('Deduplication rule'),
   'is_domain' => 1,
   'is_contact' => 0,
   'pseudoconstant' => [
@@ -43,7 +87,7 @@ $campagnodon_settings['campagnodon_dedupe_rule_with_tax_receipt'] = array(
   'type' => 'Text',
   'html_type' => 'select',
   'default' => '',
-  'title' => ts('Deduplication rule with tax receipt'),
+  'title' => E::ts('Deduplication rule with tax receipt'),
   'is_domain' => 1,
   'is_contact' => 0,
   'pseudoconstant' => [
@@ -57,7 +101,7 @@ $campagnodon_settings['campagnodon_clean_nb_days'] = array(
   'type' => 'Integer',
   'html_type' => 'number',
   'default' => '',
-  'title' => ts('Number of days to keep personnal data. Empty=forever.'),
+  'title' => E::ts('Number of days to keep personnal data. Empty=forever.'),
   'is_domain' => 1,
   'is_contact' => 0,
   'settings_pages' => ['campagnodon' => ['weight' => 20]],

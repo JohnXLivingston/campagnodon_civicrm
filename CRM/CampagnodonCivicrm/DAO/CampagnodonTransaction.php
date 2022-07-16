@@ -380,7 +380,7 @@ class CRM_CampagnodonCivicrm_DAO_CampagnodonTransaction extends CRM_Core_DAO {
         'payment_url' => [
           'name' => 'payment_url',
           'type' => CRM_Utils_Type::T_STRING,
-          'title' => E::ts('Payment Url'),
+          'title' => E::ts('Payment url'),
           'description' => E::ts('The url to pay the subscriptions.'),
           'maxlength' => 255,
           'size' => 60,

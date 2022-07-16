@@ -1,0 +1,496 @@
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Campagnodon Transactions"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Campagnodon Transaction"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Unique CampagnodonTransaction ID"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Idx"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "The campagnodon key as given by the origin system (SPIP, ...). A string like: spip/12345."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "External key"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+msgid "Start Date"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "The datetime at which this transaction started."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Form/Search.php ./api/v3/Campagnodon/Updatestatus.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+msgid "Status"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "The status of the transaction."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Form/Search.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Tax Receipt"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "True if the user want a tax receipt"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+msgid "Payment url"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "The url to pay the subscriptions."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Updatestatus.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Payment Method ID"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "FK to Payment Instrument"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+msgid "Payment Method"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "FK to Contact"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Form/Search.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+msgid "Contact"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "The contact id when this transaction was created. So we can know if there was a deduplication afterward."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "New Contact"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "True if the contact was created for this transaction."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php
+msgid "Campaign ID"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "The campaign for which this Campagnodon transaction is attached."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Form/Search.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+msgid "Campaign"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Email"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Email address"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php
+msgid "Individual Prefix"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Prefix or Title for name (Ms, Mr...). FK to prefix ID"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "First Name"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "First Name."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Last Name"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Last Name."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php
+msgid "Birth Date"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Date of birth"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Street Address"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Concatenation of all routable street address components (prefix, street number, street name, suffix, unit\n      number OR P.O. Box). Apps should be able to determine physical location with this data (for mapping, mail\n      delivery, etc.)."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Postal Code"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Store both US (zip5) AND international postal codes. App is responsible for country/region appropriate validation."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "City"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "City, Town or Village Name."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Country ID"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Which Country does this address belong to."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php
+msgid "Country"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php
+msgid "Phone"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Complete phone number."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Merged"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "True if transaction information were merged into the contact"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Cleaned"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "True if personnal information were deleted from the transaction"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Campagnodon Transaction Links"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Campagnodon Transaction Link"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Unique CampagnodonTransactionLink ID"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Campagnodon Tid"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "FK to CampagnodonTransaction"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Parent CampagnodonTransactionLink ID"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Optional parent id for this CampagnodonTransactionLink. Used to find the contribution link associated to a membership subscription."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Entity table"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Table of the linked object"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Entity ID"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "ID of the linked object. Can be null if the object is not created in pending state."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "On complete"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Only when entity_table='group' or 'contact' or 'tag'. If true, the contact will be added in group only when transaction is complete."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Total Amount"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Only when entity_table='contribution'. Total amount of this contribution."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Currency"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Only when entity_table='contribution'. 3 character string, value from config setting or input via user."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Financial Type ID"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Only when entity_table='contribution'. FK to Financial Type."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Membership Type ID"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Only when entity_table='membership'. FK to Membership Type."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Opt-in"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "An opt-in action to do on the contact (or membership)."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Cancelled"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Some links can be cancelled. This field contains a keyword to describe the reason. Example: membership already exists."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Form/Search.php ./CRM/CampagnodonCivicrm/Page/Campagnodon.php ./campagnodon_civicrm.php
+msgid "Campagnodon"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Form/Search.php
+msgid "%%StatusMessage%%"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Form/Search.php
+msgid "Issue"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Form/Search.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Campagnodon IDX"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Form/Search.php
+msgid "Search"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Form/Search.php
+msgid "- select -"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Form/Search.php
+msgid "Already member"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Form/Search.php
+msgid "With tax receipt"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Form/Search.php
+msgid "Without tax receipt"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Logic/Dedupe/Contact.php
+msgid "Always create new contacts"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Logic/Dedupe/Contact.php
+msgid "Use the unsupervised rule"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Logic/Dedupe/Contact.php
+msgid "First match"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Logic/Dedupe/Contact.php
+msgid "Duplicate if multiple match"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Logic/Dedupe/Contact.php
+msgid "Use the supervised rule"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Page/CampagnodonView.php
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Page/ContactTab.php
+msgid "ContactTab"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/Upgrader/Base.php
+msgid "Upgrade %1 to revision %2"
+msgstr ""
+
+#: ./api/v3/Campagnodon/Dsp2info.php ./api/v3/Campagnodon/Start.php ./api/v3/Campagnodon/Updatestatus.php
+msgid "External identifier"
+msgstr ""
+
+#: ./api/v3/Campagnodon/Start.php
+msgid "Campagnodon API version"
+msgstr ""
+
+#: ./api/v3/Campagnodon/Start.php
+msgid "First name"
+msgstr ""
+
+#: ./api/v3/Campagnodon/Start.php
+msgid "Last name"
+msgstr ""
+
+#: ./api/v3/Campagnodon/Start.php
+msgid "E-mail"
+msgstr ""
+
+#: ./api/v3/Campagnodon/Start.php
+msgid "Postal code"
+msgstr ""
+
+#: ./campagnodon_civicrm.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl
+msgid "Search Campagnodon"
+msgstr ""
+
+#: ./campagnodon_civicrm.php
+msgid "Access to Campagnodon"
+msgstr ""
+
+#: ./campagnodon_civicrm.php
+msgid "Use Campagnodon API"
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Contribution status for transaction in pending status."
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Contribution status for transaction in completed status."
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Contribution status for transaction in cancelled status."
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Contribution status for transaction in failed status."
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Contribution status for transaction in refunded status."
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Deduplication rule"
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Deduplication rule with tax receipt"
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Number of days to keep personnal data. Empty=forever."
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+msgid "ID"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl
+msgid "View"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Campagnodon transaction"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "From"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Personnal informations"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Personnal information were cleaned."
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Personnal information were merged into contact."
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "This contact was created for this transaction."
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "This contact already existed when this transaction was created."
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "The original contact was:"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "The current contact is:"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Linked entities"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Link options"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Cancelled:"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+msgid "Campagnodon key"
+msgstr ""
+
