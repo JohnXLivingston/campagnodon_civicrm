@@ -56,9 +56,12 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   `city` varchar(64) COMMENT 'Nom de la ville, de la capitale ou du village.',
   `country_id` int unsigned COMMENT 'A quel pays cette adresse appartient.',
   `phone` varchar(32) COMMENT 'Numéro de téléphone complet.',
+  `merged` tinyint NOT NULL DEFAULT false COMMENT 'True if transaction information were merged into the contact',
+  `cleaned` tinyint NOT NULL DEFAULT false COMMENT 'True if personnal information were deleted from the transaction',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `index_idx`(idx),
   INDEX `start_date`(start_date),
+  INDEX `cleaned_start_date_idx`(cleaned, start_date),
   CONSTRAINT FK_civicrm_campagnodon_transaction_contact_id FOREIGN KEY (`contact_id`) REFERENCES `civicrm_contact`(`id`) ON DELETE SET NULL,
   CONSTRAINT FK_civicrm_campagnodon_transaction_campaign_id FOREIGN KEY (`campaign_id`) REFERENCES `civicrm_campaign`(`id`) ON DELETE SET NULL,
   CONSTRAINT FK_civicrm_campagnodon_transaction_country_id FOREIGN KEY (`country_id`) REFERENCES `civicrm_country`(`id`) ON DELETE SET NULL

@@ -271,4 +271,19 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD INDEX IF NOT EXISTS `index_cancelled`(cancelled)");
     return TRUE;
   }
+
+
+  /**
+   * New columns and index
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0010(): bool {
+    $this->ctx->log->info('Planning update 0010');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `merged` tinyint NOT NULL DEFAULT false COMMENT 'True if transaction information were merged into the contact'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `cleaned` tinyint NOT NULL DEFAULT false COMMENT 'True if personnal information were deleted from the transaction'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD INDEX IF NOT EXISTS `cleaned_start_date_idx`(cleaned, start_date)");
+    return TRUE;
+  }
 }

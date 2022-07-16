@@ -44,6 +44,16 @@
     <tr>
       <td class="label">{ts}Personnal informations{/ts}</td>
       <td>
+        {if $row.cleaned}
+          <span style="color:red;">
+            {ts}Personnal information were cleaned.{/ts}<br>
+          </span>
+        {/if}
+        {if $row.merged}
+          <span style="color:green;">
+            {ts}Personnal information were merged into contact.{/ts}<br>
+          </span>
+        {/if}
         {$row.email}<br>
         {$row.prefix} {$row.first_name} {$row.last_name}<br>
         {$row.street_address}<br>

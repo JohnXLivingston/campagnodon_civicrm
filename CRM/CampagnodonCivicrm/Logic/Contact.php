@@ -219,4 +219,126 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       }
     }
   }
+
+  /**
+   * @param $transaction_id The transaction id to merge.
+   * @return boolean success or not
+   */
+  public static function mergeIntoContact($transaction_id) {
+    $transaction = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
+      ->addSelect('*')
+      ->addWhere('id', '=', $transaction_id)
+      ->execute()
+      ->single();
+    
+    if ($transaction['cleaned']) {
+      // can't merge, as this transaction was cleaned (personnal data were removed)
+      return false;
+    }
+
+    $contact_id = $transaction['contact_id'];
+    if (!$contact_id) {
+      return false;
+    }
+
+    $contact = \Civi\Api4\Contact::get()
+      ->setCheckPermissions(false)
+      ->addSelect('*')
+      ->addWhere('id', '=', $contact_id)
+      ->execute()
+      ->first();
+    if (!$contact) {
+      return false;
+    }
+
+    if (!empty($transaction['email'])) {
+      $email = \Civi\Api4\Email::get()
+        ->setCheckPermissions(false)
+        ->addSelect('*')
+        ->addWhere('contact_id', '=', $contact_id)
+        ->addWhere('email', '=', $transaction['email'])
+        ->execute()
+        ->first();
+      if (!$email) {
+        \Civi\Api4\Email::create()
+          ->setCheckPermissions(false)
+          ->addValue('email', $transaction['email'])
+          ->addValue('contact_id', $contact_id)
+          ->addValue('is_primary', true)
+          ->execute();
+      }
+    }
+
+    if ($transaction['tax_receipt']) {
+      $is_contact_modification = false;
+      $contact_update = \Civi\Api4\Contact::update();
+      $contact_update->setCheckPermissions(false);
+      $contact_update->addWhere('id', '=', $contact_id);
+      foreach (['prefix_id', 'first_name', 'last_name'] as $field) {
+        if (!empty($transaction[$field]) && $transaction[$field] != $contact[$field]) {
+          $is_contact_modification = true;
+          $contact_update->addValue($field, $transaction[$field]);
+        }
+      }
+
+      if ($is_contact_modification) {
+        $contact_update->execute();
+      }
+
+      if (!empty($transaction['phone'])) {
+        $phone = \Civi\Api4\Phone::get()
+          ->setCheckPermissions(false)
+          ->addSelect('*')
+          ->addWhere('contact_id', '=', $contact_id)
+          ->addWhere('phone_numeric', '=', preg_replace('/[^\d]/', '', $transaction['phone']))
+          ->execute()
+          ->first();
+        if (!$phone) {
+          \Civi\Api4\Phone::create()
+            ->setCheckPermissions(false)
+            ->addValue('phone', $transaction['phone'])
+            ->addValue('contact_id', $contact_id)
+            ->addValue('is_primary', true)
+            ->execute();
+        }
+      }
+
+      if (!empty($transaction['street_address']) && !empty($transaction['city'])) {
+        $address = \Civi\Api4\Address::get()
+          ->setCheckPermissions(false)
+          ->addSelect('*')
+          ->addWhere('contact_id', '=', $contact_id);
+        foreach (['street_address', 'postal_code', 'city', 'country_id'] as $field) {
+          if (!empty($transaction[$field])) {
+            $address->addWhere($field, '=', $transaction[$field]);
+          }
+        }
+        $address = $address
+          ->execute()
+          ->first();
+        if (!$address) {
+          $address_create = \Civi\Api4\Address::create()
+            ->setCheckPermissions(false)
+            ->addValue('contact_id', $contact_id)
+            ->addValue('is_primary', true);
+          foreach (['street_address', 'postal_code', 'city', 'country_id'] as $field) {
+            if (!empty($transaction[$field])) {
+              $address_create->addValue($field, $transaction[$field]);
+            }
+          }
+          $address_create->execute();
+        }
+      }
+    }
+
+    \Civi\Api4\CampagnodonTransaction::update()
+      ->setCheckPermissions(false)
+      ->addValue('merged', true)
+      ->addWhere('id', '=', $transaction_id)
+      ->execute();
+
+      return true;
+    // TODO: add some unit tests.
+  }
 }

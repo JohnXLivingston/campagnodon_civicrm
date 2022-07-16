@@ -289,4 +289,24 @@
       <label>Phone</label>
     </html>
   </field>
+
+  <field>
+    <name>merged</name>
+    <type>boolean</type>
+    <required>true</required>
+    <default>false</default>
+    <comment>True if transaction information were merged into the contact</comment>
+  </field>
+  <field>
+    <name>cleaned</name>
+    <type>boolean</type>
+    <required>true</required>
+    <default>false</default>
+    <comment>True if personnal information were deleted from the transaction</comment>
+  </field>
+  <index>
+    <name>cleaned_start_date_idx</name>
+    <fieldName>cleaned</fieldName>
+    <fieldName>start_date</fieldName>
+  </index>
 </table>
