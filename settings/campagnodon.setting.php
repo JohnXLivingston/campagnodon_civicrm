@@ -52,4 +52,15 @@ $campagnodon_settings['campagnodon_dedupe_rule_with_tax_receipt'] = array(
   'settings_pages' => ['campagnodon' => ['weight' => 20]],
 );
 
+$campagnodon_settings['campagnodon_clean_nb_days'] = array(
+  'name' => 'campagnodon_clean_nb_days',
+  'type' => 'Integer',
+  'html_type' => 'number',
+  'default' => '',
+  'title' => ts('Number of days to keep personnal data. Empty=forever.'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'settings_pages' => ['campagnodon' => ['weight' => 20]],
+);
+
 return $campagnodon_settings;
