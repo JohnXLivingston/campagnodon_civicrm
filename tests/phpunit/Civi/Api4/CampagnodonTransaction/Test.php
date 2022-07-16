@@ -21,6 +21,9 @@ use Civi\Test\CiviEnvBuilder;
  * @group headless
  */
 class Civi_Api4_CampagnodonTransaction_Test extends \PHPUnit\Framework\TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+  // use \Civi\Test\ContactTestTrait;
+  // use \Civi\Test\Api3TestTrait;
+  // use Civi\Test\ACLPermissionTrait;
 
   /**
    * Setup used when HeadlessInterface is implemented.
@@ -52,7 +55,8 @@ class Civi_Api4_CampagnodonTransaction_Test extends \PHPUnit\Framework\TestCase 
    * Tests permissions.
    */
   public function testPermissions():void {
-    CRM_Core_Config::singleton()->userPermissionClass->permissions = ['access CiviCRM', 'access Campagnodon'];
+    // $this->createLoggedInUser();
+    CRM_Core_Config::singleton()->userPermissionClass->permissions = ['access CiviCRM', 'access Campagnodon', 'administer CiviCRM'];
     $result = civicrm_api3('Campagnodon', 'start', array(
       'check_permissions' => 0,
       'campagnodon_version' => '1',
@@ -72,6 +76,12 @@ class Civi_Api4_CampagnodonTransaction_Test extends \PHPUnit\Framework\TestCase 
     $this->assertEquals(1, $result->count(), 'Must have one transaction in DB');
     $result = \Civi\Api4\CampagnodonTransactionLink::get()->setCheckPermissions(false)->addSelect('*')->selectRowCount()->execute();
     $this->assertTrue($result->count() > 0, 'Must have transaction links in DB');
+
+    CRM_Core_Config::singleton()->userPermissionClass->permissions = ['access CiviCRM', 'access Campagnodon', 'administer CiviCRM'];
+    $result = \Civi\Api4\CampagnodonTransaction::get()->setCheckPermissions(true)->addSelect('*')->selectRowCount()->execute();
+    $this->assertEquals(1, $result->count(), 'Must found one transaction (with administer rights)');
+    $result = \Civi\Api4\CampagnodonTransactionLink::get()->addSelect('*')->selectRowCount()->execute();
+    $this->assertTrue($result->count() > 0, 'Must have transaction links in DB (with administer rights)');
 
     CRM_Core_Config::singleton()->userPermissionClass->permissions = ['access CiviCRM', 'access Campagnodon'];
     $result = \Civi\Api4\CampagnodonTransaction::get()->setCheckPermissions(true)->addSelect('*')->selectRowCount()->execute();
