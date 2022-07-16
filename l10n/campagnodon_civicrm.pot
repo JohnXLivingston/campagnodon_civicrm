@@ -54,7 +54,7 @@ msgstr ""
 msgid "The url to pay the subscriptions."
 msgstr ""
 
-#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Updatestatus.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Updatestatus.php
 msgid "Payment Method ID"
 msgstr ""
 
@@ -448,6 +448,10 @@ msgstr ""
 
 #: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
 msgid "From"
+msgstr ""
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Payment Instrument"
 msgstr ""
 
 #: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl

@@ -88,7 +88,7 @@ msgstr ""
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php
 msgid "Campaign ID"
-msgstr ""
+msgstr "ID Campagne"
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
 msgid "The campaign for which this Campagnodon transaction is attached."
@@ -96,7 +96,7 @@ msgstr ""
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Form/Search.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
 msgid "Campaign"
-msgstr ""
+msgstr "Campagne"
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
 msgid "Email"
@@ -449,6 +449,10 @@ msgstr "Transaction Campagnodon"
 #: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
 msgid "From"
 msgstr "Origine"
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Payment Instrument"
+msgstr "Méthode de paiement"
 
 #: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
 msgid "Personnal informations"

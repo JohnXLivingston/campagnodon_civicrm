@@ -26,7 +26,7 @@
       <td>{$row.payment_url}</td>
     </tr>
     <tr>
-      <td class="label">{ts}Payment Method ID{/ts}</td>
+      <td class="label">{ts}Payment Instrument{/ts}</td>
       <td>{$row.payment_instrument}</td>
     </tr>
     <tr>
