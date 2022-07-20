@@ -286,4 +286,16 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD INDEX IF NOT EXISTS `cleaned_start_date_idx`(cleaned, start_date)");
     return TRUE;
   }
+
+  /**
+   * New column
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0011(): bool {
+    $this->ctx->log->info('Planning update 0011');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `transaction_url` varchar(255) COMMENT 'The url to the original transaction.'");
+    return TRUE;
+  }
 }

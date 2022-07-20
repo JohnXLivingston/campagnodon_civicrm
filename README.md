@@ -86,7 +86,7 @@ civistrings  -o l10n/campagnodon_civicrm.pot .
 Bien vérifier qu'on n'a rien perdu avant de commiter.
 
 Ensuite, il faut reporter les modifications sur ce fichier dans [./l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.po](./l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.po).
-Attention, ne pas écraser le fichier (sinon on perd les traductions). Plutôt appliquer un patch à partir du diff du fichier principal.
+Attention, ne pas écraser le fichier (sinon on perd les traductions).
 
 Ensuite, recompiler (il faut avoir gettext installé sur sa machine):
 

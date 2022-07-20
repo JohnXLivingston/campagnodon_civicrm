@@ -88,6 +88,17 @@
       <label>Payment url</label>
     </html>
   </field>
+  <field>
+    <name>transaction_url</name>
+    <type>varchar</type>
+    <length>255</length>
+    <comment>The url to the original transaction.</comment>
+    <html>
+      <type>Text</type>
+      <size>60</size>
+      <label>Original transaction url</label>
+    </html>
+  </field>
 
   <field>
     <name>payment_instrument_id</name>

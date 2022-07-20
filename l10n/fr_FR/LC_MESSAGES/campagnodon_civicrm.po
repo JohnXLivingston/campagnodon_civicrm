@@ -50,6 +50,18 @@ msgstr "Vrai si l'utilisateur⋅rice souhaite un reçu fiscal"
 msgid "The url to pay the subscriptions."
 msgstr "L'url à laquelle effetuer le règlement."
 
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Transaction Url"
+msgstr "Url de la transaction"
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "The url to the original transaction."
+msgstr "L'url de la transaction d'origine."
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+msgid "Original transaction url"
+msgstr "Url de la transaction d'origine"
+
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
 msgid "Payment url"
 msgstr "Url de paiement"

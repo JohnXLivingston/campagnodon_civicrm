@@ -45,6 +45,13 @@
                   <a target="_blank" href="{$row.payment_url}">
                     {ts}Payment url{/ts}
                   </a>
+                  <br>
+                {/if}
+                {if $row.transaction_url}
+                  <a target="_blank" href="{$row.transaction_url}">
+                    {ts}Original transaction url{/ts}
+                  </a>
+                  <br>
                 {/if}
               </td>
               <td>{$row.payment_instrument}</td>

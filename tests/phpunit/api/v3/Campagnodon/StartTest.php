@@ -61,6 +61,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
+        'transaction_url' => 'https://www.example.com?transaction=1&test=2', // adding some & to test that there is no url encoding.
         'payment_url' => 'https://www.example.com?test=1&test=2', // adding some & to test that there is no url encoding.
         'country' => 'FR',
         'contributions' => [
@@ -231,6 +232,19 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/4',
         'payment_url' => 'this is not url /',
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            'amount' => 12,
+            'currency' => 'EUR'
+          ]
+        ]
+      )],
+      'must fail because of invalid transaction_url' => [array(
+        'campagnodon_version' => '1',
+        'email' => 'john.doe@example.com',
+        'transaction_idx' => 'test/4',
+        'transaction_url' => 'this is not url /',
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
@@ -438,6 +452,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals($obj['status'], 'init', 'The transaction status is init');
     $this->assertEquals($obj['payment_instrument_id'], null, 'payment_instrument_id is null');
     $this->assertEquals($obj['payment_url'], empty($params['payment_url']) ? null : $params['payment_url'], 'payment url should be correct');
+    $this->assertEquals($obj['transaction_url'], empty($params['transaction_url']) ? null : $params['transaction_url'], 'transaction url should be correct');
     $this->assertEquals($obj['country_id:name'], empty($params['country']) ? null : $params['country'], 'country code must be correct');
     $this->assertEquals($obj['first_name'], empty($params['first_name']) ? null : $params['first_name'], 'first_name must be correct');
     $this->assertEquals($obj['last_name'], empty($params['last_name']) ? null : $params['last_name'], 'last_name must be correct');

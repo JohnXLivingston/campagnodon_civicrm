@@ -41,6 +41,7 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   `status` varchar(20) NOT NULL DEFAULT 'init' COMMENT 'The status of the transaction.',
   `tax_receipt` tinyint NOT NULL DEFAULT false COMMENT 'True if the user want a tax receipt',
   `payment_url` varchar(255) COMMENT 'The url to pay the subscriptions.',
+  `transaction_url` varchar(255) COMMENT 'The url to the original transaction.',
   `payment_instrument_id` int unsigned COMMENT 'FK vers Instrument de Paiement',
   `contact_id` int unsigned COMMENT 'FK de contact',
   `original_contact_id` int unsigned COMMENT 'The contact id when this transaction was created. So we can know if there was a deduplication afterward.',

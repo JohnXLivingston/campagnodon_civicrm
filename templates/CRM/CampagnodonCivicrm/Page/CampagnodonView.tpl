@@ -26,6 +26,10 @@
       <td>{$row.payment_url}</td>
     </tr>
     <tr>
+      <td class="label">{ts}Original transaction url{/ts}</td>
+      <td><a target="_blank" href="{$row.transaction_url}">{$row.transaction_url}</a></td>
+    </tr>
+    <tr>
       <td class="label">{ts}Payment Instrument{/ts}</td>
       <td>{$row.payment_instrument}</td>
     </tr>
