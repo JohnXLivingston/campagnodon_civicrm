@@ -75,6 +75,25 @@ Ensuite, allez dans le dossier `civicrm/build/campagnodon_dev/web/sites/default/
 phpunit6
 ```
 
+### Mettre à jour les fichiers de langue
+
+On peut régénérer le fichier [de langue](./l10n/campagnodon_civicrm.pot) via la commande:
+
+```bash
+civistrings  -o l10n/campagnodon_civicrm.pot .
+```
+
+Bien vérifier qu'on n'a rien perdu avant de commiter.
+
+Ensuite, il faut reporter les modifications sur ce fichier dans [./l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.po](./l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.po).
+Attention, ne pas écraser le fichier (sinon on perd les traductions). Plutôt appliquer un patch à partir du diff du fichier principal.
+
+Ensuite, recompiler (il faut avoir gettext installé sur sa machine):
+
+```bash
+msgfmt l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.po -o l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.mo
+```
+
 ## TODO
 
 * Restreindre les droits nécessaires ? Ce qui permettrait d'avoir une API KEY liée à un user qui ne pourrait appeler que les API Campagnodon, et celles-ci by-passeraient les droits sur les autres API.
