@@ -213,9 +213,13 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       if (!empty($row['contact_id'])) {
         $row['contact'] = '<a href="'.CRM_Utils_System::url('civicrm/contact/view', ['reset' => 1, 'cid' => $row['contact_id']]).'">'.CRM_Contact_BAO_Contact::displayName($row['contact_id']).'</a><br>';
       }
-      if ($row['tax_receipt']) {
+      if ($row['email']) {
         $row['contact'].= '<a href="mailto:'.htmlspecialchars($row['email']).'">'.htmlspecialchars($row['email']).'</a><br>';
-        $row['contact'].= htmlspecialchars($row['phone']).'<br>';
+      }
+      if ($row['tax_receipt']) {
+        if ($row['phone']) {
+          $row['contact'].= htmlspecialchars($row['phone']).'<br>';
+        }
       }
       if (!empty($row['campaign_id'])) {
         $row['campaign'] = $row['campaign_id:label'];
