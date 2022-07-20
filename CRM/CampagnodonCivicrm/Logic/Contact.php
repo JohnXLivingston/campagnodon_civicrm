@@ -86,33 +86,24 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       $custom_fields[$matches[1]] = intval($matches[2]);
     }
 
-    // Searching for a current membership record.
-    // Note: ordering by end_date and taking last. In case there is multiple membership for this contact.
-    $current_membership = \Civi\Api4\Membership::get()
-      ->setCheckPermissions(false)
-      ->addSelect('*')
-      ->addWhere('contact_id', '=', $contact_id)
-      ->addWhere('membership_type_id', '=', $membership_type_id)
-      ->addOrderBy('end_date', 'ASC')
-      ->addOrderBy('id', 'ASC')
-      ->execute()
-      ->last();
+    $cancel = $link['cancelled'];
+    if (!$cancel) {
+      // We must search again for a current membership, because the API call will not be the same.
+      // Note: ordering by end_date and taking last. In case there is multiple membership for this contact.
+      $current_membership = \Civi\Api4\Membership::get()
+        ->setCheckPermissions(false)
+        ->addSelect('*')
+        ->addWhere('contact_id', '=', $contact_id)
+        ->addWhere('membership_type_id', '=', $membership_type_id)
+        ->addOrderBy('end_date', 'ASC')
+        ->addOrderBy('id', 'ASC')
+        ->execute()
+        ->last();
 
-    $cancel = null;
+      // Note: following API calls are based on this code: https://code.globenet.org/attacfr/spip2CiviCRM/-/blob/master/convert.py#L1053
+      if ($current_membership) {
+        $membership_id = $current_membership['id'];
 
-    // Note: following API calls are based on this code: https://code.globenet.org/attacfr/spip2CiviCRM/-/blob/master/convert.py#L1053
-    if ($current_membership) {
-      $membership_id = $current_membership['id'];
-
-      if ($period_type === 'fixed') {
-        // For fixed period membership, we don't renew if the current membership is still running
-        $end_date = $current_membership['end_date'];
-        if ($end_date >= date("Y-m-d")) {
-          $cancel = 'already_member';
-        }
-      }
-
-      if (!$cancel) {
         civicrm_api3('Membership', 'create', array_merge(
           $custom_fields,
           array(
@@ -126,21 +117,21 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
             'sequential' => true
           )
         ));
+      } else {
+        $membership = civicrm_api3('Membership', 'create', array_merge(
+          $custom_fields,
+          array(
+            'membership_type_id' => $membership_type_id,
+            'contact_id' => $contact_id,
+            'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
+            'join_date' => $receive_date,
+            'start_date' => $start_date,
+            'check_permissions' => 0,
+            'sequential' => true
+          )
+        ));
+        $membership_id = $membership['values'][0]['id'];
       }
-    } else {
-      $membership = civicrm_api3('Membership', 'create', array_merge(
-        $custom_fields,
-        array(
-          'membership_type_id' => $membership_type_id,
-          'contact_id' => $contact_id,
-          'campaign_id' => $contribution ? $contribution['campaign_id'] : null, // FIXME: keep this?
-          'join_date' => $receive_date,
-          'start_date' => $start_date,
-          'check_permissions' => 0,
-          'sequential' => true
-        )
-      ));
-      $membership_id = $membership['values'][0]['id'];
     }
 
     // FIXME: for now, the membership status is «new», and that is not correct.
@@ -187,6 +178,66 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     if ($link['on_complete'] && $transaction_status === 'completed') return true;
     if (!$link['on_complete'] && $transaction_status === 'init') return true;
     return false;
+  }
+
+  /**
+   * Search for double membership.
+   * Note: only fixed period_type are tested.
+   * TODO: add some unit tests.
+   * @return boolean
+   */
+  public static function searchDoubleMembership($contact_id, $transaction_id) {
+    $double = false;
+    $links = \Civi\Api4\CampagnodonTransactionLink::get()
+      ->setCheckPermissions(false)
+      ->addSelect('*')
+      ->addWhere('campagnodon_tid', '=', $transaction_id)
+      ->addWhere('entity_table', '=', 'civicrm_membership')
+      ->execute();
+    $links->indexBy('id');
+    foreach ($links as $lid => $link) {
+      if (!empty($link['cancelled'])) {
+        if ($link['cancelled'] === 'already_member') {
+          $double = true;
+        }
+        continue;
+      }
+      $membership_type_id = $link['membership_type_id'];
+      $membership_type = \Civi\Api4\MembershipType::get()
+        ->setCheckPermissions(false)
+        ->addWhere('id', '=', $membership_type_id)
+        ->execute()->single();
+      $period_type = $membership_type['period_type']; // 'rolling' or 'fixed'
+
+      if ($period_type === 'fixed') { // only fixed period membership are searched for double.
+        // Searching for a current membership record.
+        // Note: ordering by end_date and taking last. In case there is multiple membership for this contact.
+        $current_membership = \Civi\Api4\Membership::get()
+          ->setCheckPermissions(false)
+          ->addSelect('*')
+          ->addWhere('contact_id', '=', $contact_id)
+          ->addWhere('membership_type_id', '=', $membership_type_id)
+          ->addOrderBy('end_date', 'ASC')
+          ->addOrderBy('id', 'ASC')
+          ->execute()
+          ->last();
+
+        if ($current_membership) {
+          $end_date = $current_membership['end_date'];
+          if ($end_date >= date("Y-m-d")) {
+            $double = true;
+            \Civi\Api4\CampagnodonTransactionLink::update()
+              ->setCheckPermissions(false)
+              ->addValue('entity_id', $current_membership['id'])
+              ->addValue('cancelled', 'already_member')
+              ->addWhere('id', '=', $link['id'])
+              ->execute();
+          }
+        }
+      }
+    }
+
+    return $double;
   }
 
   public static function processLinks($contact_id, $transaction_id, $transaction_status) {

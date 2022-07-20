@@ -141,6 +141,7 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
   public function dataTestInvalidStatus() {
     return [
       'must fail when status is completed' => ['completed'],
+      'must fail when status is double_membership' => ['double_membership'],
       'must fail when status is cancelled' => ['cancelled'],
       'must fail when status is failed' => ['failed'],
       'must fail when status is refunded' => ['refunded']

@@ -7,7 +7,7 @@ $campagnodon_settings['campagnodon_contribution_status_pending'] = array(
   'name' => 'campagnodon_contribution_status_pending',
   'type' => 'Integer',
   'html_type' => 'select',
-  'default' => 2,
+  'default' => 2, // 2 = pending
   'title' => E::ts('Contribution status for transaction in pending status.'),
   'is_domain' => 1,
   'is_contact' => 0,
@@ -20,8 +20,21 @@ $campagnodon_settings['campagnodon_contribution_status_completed'] = array(
   'name' => 'campagnodon_contribution_status_completed',
   'type' => 'Integer',
   'html_type' => 'select',
-  'default' => 1,
+  'default' => 1, // 1 = completed
   'title' => E::ts('Contribution status for transaction in completed status.'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'optionGroupName' => 'contribution_status'
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 10]],
+);
+$campagnodon_settings['campagnodon_contribution_status_double_membership'] = array(
+  'name' => 'campagnodon_contribution_status_double_membership',
+  'type' => 'Integer',
+  'html_type' => 'select',
+  'default' => 1, // 1 = completed. We want the same for double_membership and completed.
+  'title' => E::ts('Contribution status for transaction in double_membership status.'),
   'is_domain' => 1,
   'is_contact' => 0,
   'pseudoconstant' => [
@@ -33,7 +46,7 @@ $campagnodon_settings['campagnodon_contribution_status_cancelled'] = array(
   'name' => 'campagnodon_contribution_status_cancelled',
   'type' => 'Integer',
   'html_type' => 'select',
-  'default' => 3,
+  'default' => 3, // 3 = cancelled
   'title' => E::ts('Contribution status for transaction in cancelled status.'),
   'is_domain' => 1,
   'is_contact' => 0,
@@ -46,7 +59,7 @@ $campagnodon_settings['campagnodon_contribution_status_failed'] = array(
   'name' => 'campagnodon_contribution_status_failed',
   'type' => 'Integer',
   'html_type' => 'select',
-  'default' => 4,
+  'default' => 4, // 4 = failed
   'title' => E::ts('Contribution status for transaction in failed status.'),
   'is_domain' => 1,
   'is_contact' => 0,
@@ -59,7 +72,7 @@ $campagnodon_settings['campagnodon_contribution_status_refunded'] = array(
   'name' => 'campagnodon_contribution_status_refunded',
   'type' => 'Integer',
   'html_type' => 'select',
-  'default' => 7,
+  'default' => 7, // 7 = refunded
   'title' => E::ts('Contribution status for transaction in refunded status.'),
   'is_domain' => 1,
   'is_contact' => 0,

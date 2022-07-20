@@ -33,6 +33,7 @@ class CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction extends CRM_CampagnodonC
       'init' => 'Init',
       'pending' => 'Pending',
       'completed' => 'Completed',
+      'double_membership' => 'Double membership',
       'cancelled' => 'Cancelled',
       'failed' => 'Failed',
       'refunded' => 'Refunded'

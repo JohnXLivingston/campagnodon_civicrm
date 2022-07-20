@@ -73,6 +73,17 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
     if (!preg_match('/^\w+$/', $status)) {
       throw new Exception('Invalid status "'.$status.'".');
     }
+
+    if ($status === 'completed') {
+      // We must first search double membership.
+      // If found, we must go to a special state.
+      // Note: must be done before computing $contribution_status
+      // TODO: add some unit tests.
+      if (CRM_CampagnodonCivicrm_Logic_Contact::searchDoubleMembership($transaction['contact_id'], $transaction['id'])) {
+        $status = 'double_membership';
+      }
+    }
+
     $contribution_status = Civi::settings()->get('campagnodon_contribution_status_'.($status === 'init' ? 'pending' : $status));
     if (!$contribution_status) {
       throw new Exception('Cant find contribution_status for "'.$status.'".');

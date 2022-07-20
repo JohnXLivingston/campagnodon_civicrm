@@ -423,6 +423,10 @@ msgid "Contribution status for transaction in completed status."
 msgstr ""
 
 #: ./settings/campagnodon.setting.php
+msgid "Contribution status for transaction in double_membership status."
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
 msgid "Contribution status for transaction in cancelled status."
 msgstr ""
 

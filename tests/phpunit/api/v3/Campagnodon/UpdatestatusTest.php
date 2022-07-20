@@ -106,6 +106,15 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       ],
       'init=>refunded' => [
         [['status' => 'refunded', 'payment_instrument' => 'Debit Card']]
+      ],
+      'init=>completed=>double_membership' => [
+        [
+          ['status' => 'completed', 'payment_instrument' => 'Debit Card'],
+          ['status' => 'double_membership', 'payment_instrument' => 'Debit Card']
+        ]
+      ],
+      'init=>double_membership' => [
+        [['status' => 'double_membership', 'payment_instrument' => 'Debit Card']]
       ]
     ];
   }
@@ -223,6 +232,10 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       case 'completed':
         $wanted_contribution_status = 1;
         $wanted_contribution_status_name = 'Completed';
+        break;
+      case 'double_membership':
+        $wanted_contribution_status = 1;
+        $wanted_contribution_status_name = 'Double membership';
         break;
       case 'cancelled':
         $wanted_contribution_status = 3;
