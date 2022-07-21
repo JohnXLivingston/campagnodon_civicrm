@@ -236,7 +236,7 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
         break;
       case 'double_membership':
         $wanted_contribution_status = 1;
-        $wanted_contribution_status_name = 'Double membership';
+        $wanted_contribution_status_name = 'Completed';
         break;
       case 'cancelled':
         $wanted_contribution_status = 3;
