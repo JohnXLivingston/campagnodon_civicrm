@@ -186,11 +186,8 @@ function civicrm_api3_campagnodon_Start($params) {
     // We need to found or create the contact.
     $contact = null;
 
-    $tax_receipt = !empty($params['tax_receipt']) && $params['tax_receipt'];
     $dedupe_contact = CRM_CampagnodonCivicrm_Logic_Dedupe_Contact::init($params);
-    if ($tax_receipt) {
-      $dedupe_contact->withTaxReceipt();
-    }
+    $tax_receipt = $dedupe_contact->getWithTaxReceipt(); // just to be sure to have the same value as CRM_CampagnodonCivicrm_Logic_Dedupe_Contact
     $contact = $dedupe_contact->getContact();
     $is_new_contact = $dedupe_contact->isNewContact();
 

@@ -109,6 +109,59 @@ $campagnodon_settings['campagnodon_dedupe_rule_with_tax_receipt'] = array(
   'settings_pages' => ['campagnodon' => ['weight' => 20]],
 );
 
+$campagnodon_settings['campagnodon_dedupe_rule_custom_1_operation_type'] = array(
+  'name' => 'campagnodon_dedupe_rule_custom_1_operation_type',
+  'type' => 'Text',
+  'html_type' => 'text',
+  'default' => '',
+  'title' => E::ts('Custom deduplication rule 1 - Operation Type'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'callback' => 'CRM_CampagnodonCivicrm_Logic_Dedupe_Contact::dedupeTables',
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 20]],
+);
+$campagnodon_settings['campagnodon_dedupe_rule_custom_1'] = array(
+  'name' => 'campagnodon_dedupe_rule_custom_1',
+  'type' => 'Text',
+  'html_type' => 'select',
+  'default' => '',
+  'title' => E::ts('Custom deduplication rule 1'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'callback' => 'CRM_CampagnodonCivicrm_Logic_Dedupe_Contact::dedupeTables',
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 20]],
+);
+$campagnodon_settings['campagnodon_dedupe_rule_custom_2_operation_type'] = array(
+  'name' => 'campagnodon_dedupe_rule_custom_2_operation_type',
+  'type' => 'Text',
+  'html_type' => 'text',
+  'default' => '',
+  'title' => E::ts('Custom deduplication rule 2 - Operation Type'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'callback' => 'CRM_CampagnodonCivicrm_Logic_Dedupe_Contact::dedupeTables',
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 20]],
+);
+$campagnodon_settings['campagnodon_dedupe_rule_custom_2'] = array(
+  'name' => 'campagnodon_dedupe_rule_custom_2',
+  'type' => 'Text',
+  'html_type' => 'select',
+  'default' => '',
+  'title' => E::ts('Custom deduplication rule 2'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'callback' => 'CRM_CampagnodonCivicrm_Logic_Dedupe_Contact::dedupeTables',
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 20]],
+);
+
 $campagnodon_settings['campagnodon_clean_nb_days'] = array(
   'name' => 'campagnodon_clean_nb_days',
   'type' => 'Integer',

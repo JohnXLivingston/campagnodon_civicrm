@@ -620,6 +620,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
    */
   public function testApiStartDedup() {
     // TODO: add more tests.
+    // TODO: add tests for dedupe_rule depending on operation_type.
     Civi::settings()->set('campagnodon_dedupe_rule', 'Unsupervised/first');
     Civi::settings()->set('campagnodon_dedupe_rule_with_tax_receipt', 'Unsupervised/first');
 

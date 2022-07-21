@@ -8,8 +8,11 @@ class CRM_CampagnodonCivicrm_Logic_Dedupe_Contact {
   protected $contact = null;
   protected $is_new_contact = null;
   protected $tax_receipt = false;
+  protected $operation_type = null;
 
-  public function __construct($contact_create_params) {
+  public function __construct($operation_type, $tax_receipt, $contact_create_params) {
+    $this->operation_type = $operation_type;
+    $this->tax_receipt = $tax_receipt;
     $this->contact_create_params = $contact_create_params;
   }
   
@@ -49,11 +52,30 @@ class CRM_CampagnodonCivicrm_Logic_Dedupe_Contact {
     if (array_key_exists('phone', $params) && !empty($params['phone'])) {
       $contact_create_params['api.phone.create'] = ['phone' => $params['phone']];
     }
-    return new CRM_CampagnodonCivicrm_Logic_Dedupe_Contact($contact_create_params);
+
+    $tax_receipt = !empty($params['tax_receipt']) && $params['tax_receipt'];
+
+    return new CRM_CampagnodonCivicrm_Logic_Dedupe_Contact($params['operation_type'], $tax_receipt, $contact_create_params);
   }
 
-  public function withTaxReceipt($tax_receipt = true) {
-    $this->tax_receipt = $tax_receipt;
+  public function getWithTaxReceipt() {
+    return $this->tax_receipt;
+  }
+
+  protected function getDedupeRule() {
+    $custom1 = Civi::settings()->get('campagnodon_dedupe_rule_custom_1_operation_type');
+    if (!empty($custom1) && $custom1 === $this->operation_type) {
+      $dedupe_rule = Civi::settings()->get('campagnodon_dedupe_rule_custom_1');
+      return $dedupe_rule;
+    }
+    $custom2 = Civi::settings()->get('campagnodon_dedupe_rule_custom_2_operation_type');
+    if (!empty($custom2) && $custom2 === $this->operation_type) {
+      $dedupe_rule = Civi::settings()->get('campagnodon_dedupe_rule_custom_2');
+      return $dedupe_rule;
+    }
+    return $this->tax_receipt
+      ? Civi::settings()->get('campagnodon_dedupe_rule_with_tax_receipt')
+      : Civi::settings()->get('campagnodon_dedupe_rule');
   }
 
   /**
@@ -66,9 +88,7 @@ class CRM_CampagnodonCivicrm_Logic_Dedupe_Contact {
     }
 
     $contact = null;
-    $dedupe_rule = $this->tax_receipt
-      ? Civi::settings()->get('campagnodon_dedupe_rule_with_tax_receipt')
-      : Civi::settings()->get('campagnodon_dedupe_rule');
+    $dedupe_rule = $this->getDedupeRule();
 
     $contact = $this->_searchContact($dedupe_rule);
 

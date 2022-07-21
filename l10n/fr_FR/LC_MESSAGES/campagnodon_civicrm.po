@@ -455,6 +455,23 @@ msgid "Deduplication rule with tax receipt"
 msgstr "Règle de dédoublonnage avec reçu fiscal"
 
 #: ./settings/campagnodon.setting.php
+msgid "Custom deduplication rule 1 - Operation Type"
+msgstr "Règle de dédoublonnage personnalisée 1 - Type d'Opération"
+
+#: ./settings/campagnodon.setting.php
+msgid "Custom deduplication rule 1"
+msgstr "Règle de dédoublonnage personnalisée 1"
+
+#: ./settings/campagnodon.setting.php
+msgid "Custom deduplication rule 2 - Operation Type"
+msgstr "Règle de dédoublonnage personnalisée 2 - Type d'Opération"
+
+#: ./settings/campagnodon.setting.php
+msgid "Custom deduplication rule 2"
+msgstr "Règle de dédoublonnage personnalisée 2"
+
+
+#: ./settings/campagnodon.setting.php
 msgid "Number of days to keep personnal data. Empty=forever."
 msgstr "Nombre de jours de conservation des données personnelles. Vide=toujours."
 

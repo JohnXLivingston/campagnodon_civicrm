@@ -22,7 +22,7 @@ msgstr ""
 msgid "External key"
 msgstr ""
 
-#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Form/Search.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
 msgid "Operation Type"
 msgstr ""
 
@@ -30,7 +30,7 @@ msgstr ""
 msgid "The operation type given by the origin system. Example: donation, membership, ... Can be any string, only used to filter transactions."
 msgstr ""
 
-#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Form/Search.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
 msgid "Start Date"
 msgstr ""
 
@@ -452,6 +452,22 @@ msgstr ""
 
 #: ./settings/campagnodon.setting.php
 msgid "Deduplication rule with tax receipt"
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Custom deduplication rule 1 - Operation Type"
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Custom deduplication rule 1"
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Custom deduplication rule 2 - Operation Type"
+msgstr ""
+
+#: ./settings/campagnodon.setting.php
+msgid "Custom deduplication rule 2"
 msgstr ""
 
 #: ./settings/campagnodon.setting.php
