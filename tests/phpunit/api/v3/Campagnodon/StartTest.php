@@ -61,6 +61,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
+        'operation_type' => 'donation',
         'transaction_url' => 'https://www.example.com?transaction=1&test=2', // adding some & to test that there is no url encoding.
         'payment_url' => 'https://www.example.com?test=1&test=2', // adding some & to test that there is no url encoding.
         'country' => 'FR',
@@ -80,6 +81,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'bill.smith@example.com',
         'transaction_idx' => 'test/123456789123456789',
+        'operation_type' => 'donation',
         'tax_receipt' => true,
         'prefix' => 2,
         'first_name' => 'Bill',
@@ -98,6 +100,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'billy.smith@example.com',
         'transaction_idx' => 'test/123456789123456789',
+        'operation_type' => 'donation',
         'tax_receipt' => false,
         'prefix' => 'Mr.',
         'first_name' => 'Billy',
@@ -114,6 +117,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
+        'operation_type' => 'donation',
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
@@ -131,6 +135,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
+        'operation_type' => 'donation',
         'country' => 'FR',
         'optional_subscriptions' => [
           ['type' => 'group', 'key' => 'Newsletter Subscribers', 'when' => 'init']
@@ -155,6 +160,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'must fail because of missing campagnodon_version' => [array(
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
+        'operation_type' => 'donation',
         'country' => 'FR',
         'contributions' => [
           'don' => [
@@ -172,6 +178,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '2',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/1',
+        'operation_type' => 'donation',
         'country' => 'FR',
         'contributions' => [
           'don' => [
@@ -189,6 +196,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'michel.martin@example.com',
         'transaction_idx' => 'test/2',
+        'operation_type' => 'donation',
         'first_name' => 'Michel',
         'last_name' => 'Martin',
         'contributions' => [
@@ -203,7 +211,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       // 'must fail because of invalid contribution currency' => [array(
       //   'campagnodon_version' => '1',
       //   'email' => 'michel.martin@example.com',
-      //   'transaction_idx' => 'test/2',
+      //   'transaction_idx' => 'test/2', 'operation_type' => 'donation',
       //   'first_name' => 'Michel',
       //   'last_name' => 'Martin',
       //   'contributions' => [
@@ -219,6 +227,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'email' => 'john.doe@example.com',
         'campaign_id' => '123456749',
         'transaction_idx' => 'test/3',
+        'operation_type' => 'donation',
         'contributions' => [
           'don' => [
             'financial_type' => 'Donation',
@@ -231,6 +240,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/4',
+        'operation_type' => 'donation',
         'payment_url' => 'this is not url /',
         'contributions' => [
           'don' => [
@@ -244,6 +254,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/4',
+        'operation_type' => 'donation',
         'transaction_url' => 'this is not url /',
         'contributions' => [
           'don' => [
@@ -257,7 +268,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       // 'must fail because of invalid country code' => [array(
       //   'campagnodon_version' => '1',
       //   'email' => 'john.doe@example.com',
-      //   'transaction_idx' => 'test/5',
+      //   'transaction_idx' => 'test/5', 'operation_type' => 'donation',
       //   'country' => 'invalid country code',
       //   'contributions' => [
       //     'don' => [
@@ -272,6 +283,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/6',
+        'operation_type' => 'donation',
         'prefix' => 123456,
         'first_name' => 'Bill',
         'last_name' => 'Smith',
@@ -287,6 +299,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/7',
+        'operation_type' => 'donation',
         'prefix' => 'no way',
         'first_name' => 'Bill',
         'last_name' => 'Smith',
@@ -302,6 +315,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'john.doe@example.com',
         'transaction_idx' => 'test/8',
+        'operation_type' => 'donation',
         'first_name' => 'Bill',
         'last_name' => 'Smith',
         'birth_date' => 'not a date',
@@ -317,7 +331,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       // 'must fail because invalid tax_receipt' => [array(
       //   'campagnodon_version' => '1',
       //   'email' => 'john.doe@example.com',
-      //   'transaction_idx' => 'test/8',
+      //   'transaction_idx' => 'test/8', 'operation_type' => 'donation',
       //   'tax_receipt' => 'not a boolean',
       //   'first_name' => 'Bill',
       //   'last_name' => 'Smith',
@@ -333,6 +347,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         'campagnodon_version' => '1',
         'email' => 'michel.martin@example.com',
         'transaction_idx' => 'test/1025201',
+        'operation_type' => 'donation',
         'first_name' => 'Michel',
         'last_name' => 'Martin',
         'contributions' => [
@@ -382,7 +397,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $result = civicrm_api3('Campagnodon', 'start', array(
       'campagnodon_version' => '1',
       'email' => 'bill.smith@example.com',
-      'transaction_idx' => 'test/10'
+      'transaction_idx' => 'test/10',
+      'operation_type' => 'donation',
     ));
   }
 
@@ -394,6 +410,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $result = civicrm_api3('Campagnodon', 'start', array(
       'campagnodon_version' => '1',
       'transaction_idx' => 'test/20',
+      'operation_type' => 'donation',
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
@@ -411,6 +428,26 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->expectException(CiviCRM_API3_Exception::class);
     $result = civicrm_api3('Campagnodon', 'start', array(
       'campagnodon_version' => '1',
+      'operation_type' => 'donation',
+      'email' => 'bill.smith@example.com',
+      'contributions' => [
+        'don' => [
+          'financial_type' => 'Donation',
+          'amount' => 45,
+          'currency' => 'EUR'
+        ]
+      ]
+    ));
+  }
+
+  /**
+   * Test campagnodon Start API. Must fail if no external operation_type.
+   */
+  public function testApiStartWithoutOperationType() {
+    $this->expectException(CiviCRM_API3_Exception::class);
+    $result = civicrm_api3('Campagnodon', 'start', array(
+      'campagnodon_version' => '1',
+      'transaction_idx' => 'test/450',
       'email' => 'bill.smith@example.com',
       'contributions' => [
         'don' => [
@@ -451,6 +488,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals($obj['id'], $transaction['id'], 'Can get the good Transaction by id');
     $this->assertEquals($obj['status'], 'init', 'The transaction status is init');
     $this->assertEquals($obj['payment_instrument_id'], null, 'payment_instrument_id is null');
+    $this->assertEquals($obj['operation_type'], $params['operation_type'], 'The operation_type is correct');
     $this->assertEquals($obj['payment_url'], empty($params['payment_url']) ? null : $params['payment_url'], 'payment url should be correct');
     $this->assertEquals($obj['transaction_url'], empty($params['transaction_url']) ? null : $params['transaction_url'], 'transaction url should be correct');
     $this->assertEquals($obj['country_id:name'], empty($params['country']) ? null : $params['country'], 'country code must be correct');
@@ -589,6 +627,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/30',
+      'operation_type' => 'donation',
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
@@ -609,6 +648,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'campagnodon_version' => '1',
       'email' => 'bill.smith@example.com',
       'transaction_idx' => 'test/31',
+      'operation_type' => 'donation',
       'first_name' => 'Bill',
       'last_name' => 'Smith',
       'contributions' => [
@@ -627,6 +667,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/32',
+      'operation_type' => 'donation',
       'first_name' => 'John',
       'last_name' => 'Doe',
       'contributions' => [
@@ -647,6 +688,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/50',
+      'operation_type' => 'donation',
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',
@@ -664,6 +706,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       'campagnodon_version' => '1',
       'email' => 'bill.smith@example.com',
       'transaction_idx' => 'test/50',
+      'operation_type' => 'donation',
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',

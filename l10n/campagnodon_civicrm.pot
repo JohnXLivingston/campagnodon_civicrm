@@ -22,6 +22,14 @@ msgstr ""
 msgid "External key"
 msgstr ""
 
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Operation Type"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "The operation type given by the origin system. Example: donation, membership, ... Can be any string, only used to filter transactions."
+msgstr ""
+
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
 msgid "Start Date"
 msgstr ""
@@ -47,7 +55,7 @@ msgid "True if the user want a tax receipt"
 msgstr ""
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
-msgid "Payment url"
+msgid "Payment Url"
 msgstr ""
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php

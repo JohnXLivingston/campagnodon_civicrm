@@ -50,6 +50,7 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => $idx,
+      'operation_type' => 'donation',
       'contributions' => [
         'don_1' => [
           'financial_type' => 'Donation',

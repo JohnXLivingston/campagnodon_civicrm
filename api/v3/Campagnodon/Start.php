@@ -97,10 +97,18 @@ function _civicrm_api3_campagnodon_Start_spec(&$spec) {
       "api.required" => 1,
       "api.default" => "",
   ];
+  $spec["operation_type"] = [
+    "name" => "operation_type",
+    "title" => ts("Operation Type"),
+    "description" => "Operation Type",
+    "type" => CRM_Utils_Type::T_STRING,
+    "api.required" => 1,
+    "api.default" => "",
+];
   $spec["payment_url"] = [
     "name" => "payment_url",
-    "title" => ts("Payment url"),
-    "description" => "Payment url",
+    "title" => ts("Payment Url"),
+    "description" => "Payment Url",
     "type" => CRM_Utils_Type::T_STRING,
     "api.required" => 0,
     "api.default" => "",
@@ -195,6 +203,7 @@ function civicrm_api3_campagnodon_Start($params) {
     $transaction_create->addValue('contact_id', $contact['id']);
     $transaction_create->addValue('email', $params['email']);
     $transaction_create->addValue('idx', $params['transaction_idx']);
+    $transaction_create->addValue('operation_type', $params['operation_type']);
     $transaction_create->addValue('tax_receipt', $tax_receipt);
     $transaction_create->addValue('original_contact_id', $contact['id']); // TODO: add some unit test
     $transaction_create->addValue('new_contact', $is_new_contact); // TODO: add some unit test

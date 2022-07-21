@@ -22,6 +22,14 @@ msgstr "La clé Campagnodon tel que donné par le système d'origine (SPIP, ...)
 msgid "External key"
 msgstr "Clé externe"
 
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Operation Type"
+msgstr "Type d'opération"
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "The operation type given by the origin system. Example: donation, membership, ... Can be any string, only used to filter transactions."
+msgstr ""
+
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
 msgid "Start Date"
 msgstr "Date de début"
@@ -63,7 +71,7 @@ msgid "Original transaction url"
 msgstr "Url de la transaction d'origine"
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
-msgid "Payment url"
+msgid "Payment Url"
 msgstr "Url de paiement"
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Updatestatus.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl

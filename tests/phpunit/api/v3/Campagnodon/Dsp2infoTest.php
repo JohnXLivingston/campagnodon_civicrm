@@ -35,6 +35,7 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
       'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/fulldata',
+      'operation_type' => 'donation',
       'country' => 'FR',
       'last_name' => 'Doe',
       'first_name' => 'John',
@@ -54,6 +55,7 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
       'campagnodon_version' => '1',
       'email' => 'john.doe2@example.com',
       'transaction_idx' => 'test/minimaldata',
+      'operation_type' => 'donation',
       'contributions' => [
         'don' => [
           'financial_type' => 'Donation',

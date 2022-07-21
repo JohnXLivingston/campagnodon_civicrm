@@ -28,6 +28,10 @@
               <td>{$form.idx.html}</td>
             </tr>
             <tr>
+              <td class="label">{$form.operation_type.label}</td>
+              <td>{$form.operation_type.html}</td>
+            </tr>
+            <tr>
               <td class="label">{$form.tax_receipt.label}</td>
               <td>{$form.tax_receipt.html}</td>
             </tr>
@@ -56,6 +60,9 @@
               {ts}Campagnodon IDX{/ts}
             </th>
             <th scope="col">
+              {ts}Operation Type{/ts}
+            </th>
+            <th scope="col">
               {ts}Start Date{/ts}
             </th>
             <th scope="col">
@@ -79,6 +86,7 @@
                 <a href="{crmURL p='civicrm/campagnodon/view' q="id=`$row.id`"}">{$row.id}</a>
               </td>
               <td>{$row.idx}</td>
+              <td>{$row.operation_type}</td>
               <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
               <td>{$row.status}</td>
               <td>{$row.contact}</td>

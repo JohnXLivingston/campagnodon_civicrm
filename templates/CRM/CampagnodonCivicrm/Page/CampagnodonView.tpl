@@ -15,6 +15,10 @@
       <td>{$row.idx}</td>
     </tr>
     <tr>
+      <td class="label">{ts}Operation Type{/ts}</td>
+      <td>{$row.operation_type}</td>
+    </tr>
+    <tr>
       <td class="label">{ts}Start Date{/ts}</td>
       <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
     <tr>
@@ -22,7 +26,7 @@
       <td>{$row.status}</td>
     </tr>
     <tr>
-      <td class="label">{ts}Payment url{/ts}</td>
+      <td class="label">{ts}Payment Url{/ts}</td>
       <td>{$row.payment_url}</td>
     </tr>
     <tr>

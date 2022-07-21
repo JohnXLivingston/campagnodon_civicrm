@@ -298,4 +298,29 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `transaction_url` varchar(255) COMMENT 'The url to the original transaction.'");
     return TRUE;
   }
+
+  /**
+   * New columns and index, data migration.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0012(): bool {
+    $this->ctx->log->info('Planning update 0012');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `operation_type` varchar(255) NOT NULL COMMENT 'The operation type given by the origin system. Example: donation, membership, ... Can be any string, only used to filter transactions.'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD INDEX IF NOT EXISTS `index_operation_type`(operation_type)");
+    CRM_Core_DAO::executeQuery(
+      "UPDATE civicrm_campagnodon_transaction "
+      ." SET `operation_type` = 'membership' "
+      ." WHERE `operation_type` = '' "
+      ." AND `id` IN (SELECT `campagnodon_tid` FROM civicrm_campagnodon_transaction_link WHERE `entity_table` = 'civicrm_membership')"
+    );
+    CRM_Core_DAO::executeQuery(
+      "UPDATE civicrm_campagnodon_transaction "
+      ." SET `operation_type` = 'donation' "
+      ." WHERE `operation_type` = '' "
+      ." AND `id` NOT IN (SELECT `campagnodon_tid` FROM civicrm_campagnodon_transaction_link WHERE `entity_table` = 'civicrm_membership')"
+    );
+    return TRUE;
+  }
 }

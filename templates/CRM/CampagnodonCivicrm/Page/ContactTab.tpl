@@ -23,7 +23,7 @@
               {ts}Status{/ts}
             </th>
             <th scope="col">
-              {ts}Payment url{/ts}
+              {ts}Payment Url{/ts}
             </th>
             <th scope="col">
               {ts}Payment Method{/ts}
@@ -43,7 +43,7 @@
               <td>
                 {if $row.payment_url}
                   <a target="_blank" href="{$row.payment_url}">
-                    {ts}Payment url{/ts}
+                    {ts}Payment Url{/ts}
                   </a>
                   <br>
                 {/if}

@@ -62,6 +62,7 @@ class Civi_Api4_CampagnodonTransaction_Test extends \PHPUnit\Framework\TestCase 
       'campagnodon_version' => '1',
       'email' => 'john.doe@example.com',
       'transaction_idx' => 'test/1',
+      'operation_type' => 'donation',
       'country' => 'FR',
       'contributions' => [
         'don' => [

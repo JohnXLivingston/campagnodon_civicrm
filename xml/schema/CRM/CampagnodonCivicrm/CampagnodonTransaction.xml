@@ -43,6 +43,23 @@
   </index>
 
   <field>
+    <name>operation_type</name>
+    <type>varchar</type>
+    <length>255</length>
+    <required>true</required>
+    <comment>The operation type given by the origin system. Example: donation, membership, ... Can be any string, only used to filter transactions.</comment>
+    <html>
+      <type>Text</type>
+      <size>30</size>
+      <label>External key</label>
+    </html>
+  </field>
+  <index>
+    <name>index_operation_type</name>
+    <fieldName>operation_type</fieldName>
+  </index>
+
+  <field>
     <name>start_date</name>
     <type>datetime</type>
     <required>true</required>
@@ -85,7 +102,7 @@
     <html>
       <type>Text</type>
       <size>60</size>
-      <label>Payment url</label>
+      <label>Payment Url</label>
     </html>
   </field>
   <field>

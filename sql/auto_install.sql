@@ -37,6 +37,7 @@ SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `civicrm_campagnodon_transaction` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonTransaction ID',
   `idx` varchar(255) NULL COMMENT 'The campagnodon key as given by the origin system (SPIP, ...). A string like: spip/12345.',
+  `operation_type` varchar(255) NOT NULL COMMENT 'The operation type given by the origin system. Example: donation, membership, ... Can be any string, only used to filter transactions.',
   `start_date` datetime NOT NULL DEFAULT NOW() COMMENT 'The datetime at which this transaction started.',
   `status` varchar(20) NOT NULL DEFAULT 'init' COMMENT 'The status of the transaction.',
   `tax_receipt` tinyint NOT NULL DEFAULT false COMMENT 'True if the user want a tax receipt',
@@ -61,6 +62,7 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   `cleaned` tinyint NOT NULL DEFAULT false COMMENT 'True if personnal information were deleted from the transaction',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `index_idx`(idx),
+  INDEX `index_operation_type`(operation_type),
   INDEX `start_date`(start_date),
   INDEX `cleaned_start_date_idx`(cleaned, start_date),
   CONSTRAINT FK_civicrm_campagnodon_transaction_contact_id FOREIGN KEY (`contact_id`) REFERENCES `civicrm_contact`(`id`) ON DELETE SET NULL,
