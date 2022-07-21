@@ -35,6 +35,10 @@
               <td class="label">{$form.tax_receipt.label}</td>
               <td>{$form.tax_receipt.html}</td>
             </tr>
+            <tr>
+              <td class="label">{ts}Start Date{/ts}</td>
+              <td>{$form.start_date_greater_than.html} {$form.start_date_lower_than.html}</td>
+            </tr>
             </tbody>
           </table>
           <div class="crm-submit-buttons">

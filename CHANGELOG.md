@@ -7,6 +7,7 @@
 * Ajout du lien vers la transaction sur le système d'origine.
 * En cas de double adhésion, on ne créé rien (sauf les contributions), et on passe dans un statut spécial. WIP.
 * Ajout d'un champ `operation_type`, affichage, et filtre de recherche.
+* Filtre de recherche sur la date de transaction.
 
 ## 0.0.3
 

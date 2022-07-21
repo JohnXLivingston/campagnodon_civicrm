@@ -97,6 +97,22 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       $this->getTaxReceiptOptions(),
       false
     );
+    $this->add(
+      'datepicker',
+      'start_date_greater_than',
+      E::ts('Start Date'),
+      [],
+      false,
+      ['time' => false]
+    );
+    $this->add(
+      'datepicker',
+      'start_date_lower_than',
+      E::ts('Start Date'),
+      [],
+      false,
+      ['time' => false]
+    );
 
     $this->addButtons(array(
       array(
@@ -203,6 +219,12 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       } else if ($this->formValues['tax_receipt'] === '0') {
         $api->addWhere('tax_receipt', '=', false);
       }
+    }
+    if (isset($this->formValues['start_date_greater_than']) && !empty($this->formValues['start_date_greater_than'])) {
+      $api->addWhere('start_date', '>=', $this->formValues['start_date_greater_than'].' 00:00:00');
+    }
+    if (isset($this->formValues['start_date_lower_than']) && !empty($this->formValues['start_date_lower_than'])) {
+      $api->addWhere('start_date', '<=', $this->formValues['start_date_lower_than'].' 23:59:59');
     }
 
     foreach (['contact_id', 'campaign_id'] as $entity_ref_field) {

@@ -32,7 +32,7 @@ msgstr ""
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
 msgid "Start Date"
-msgstr "Date de début"
+msgstr "Date de début de la transaction"
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
 msgid "The datetime at which this transaction started."
