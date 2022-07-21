@@ -57,6 +57,14 @@ function _civicrm_api3_campagnodon_Start_spec(&$spec) {
       "api.required" => 1,
       "api.default" => "",
   ];
+  $spec["source"] = [
+    "name" => "source",
+    "title" => ts("Source"),
+    "description" => ts("Source"),
+    "type" => CRM_Utils_Type::T_STRING,
+    "api.required" => 0,
+    "api.default" => "",
+];
   $spec["postal_code"] = [
       "name" => "postal_code",
       "title" => ts("Postal code"),
@@ -199,6 +207,9 @@ function civicrm_api3_campagnodon_Start($params) {
     $transaction_create->setCheckPermissions(false);
     $transaction_create->addValue('contact_id', $contact['id']);
     $transaction_create->addValue('email', $params['email']);
+    if (!empty($params['source'])) {
+      $transaction_create->addValue('source', $params['source']); // TODO: add some unit test for this field.
+    }
     $transaction_create->addValue('idx', $params['transaction_idx']);
     $transaction_create->addValue('operation_type', $params['operation_type']);
     $transaction_create->addValue('tax_receipt', $tax_receipt);

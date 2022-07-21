@@ -19,6 +19,10 @@
       <td>{$row.operation_type}</td>
     </tr>
     <tr>
+      <td class="label">{ts}Source{/ts}</td>
+      <td>{$row.source}</td>
+    </tr>
+    <tr>
       <td class="label">{ts}Start Date{/ts}</td>
       <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
     <tr>

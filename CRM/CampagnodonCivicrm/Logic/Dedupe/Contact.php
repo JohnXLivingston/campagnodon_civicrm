@@ -31,6 +31,7 @@ class CRM_CampagnodonCivicrm_Logic_Dedupe_Contact {
       'first_name' => 'first_name',
       'last_name' => 'last_name',
       'birth_date' => 'birth_date',
+      'source' => 'source'  // TODO: add some unit test for the source field.
     ] as $pfield => $create_field) {
       if (array_key_exists($pfield, $params) && !empty($params[$pfield])) {
         $contact_create_params[$create_field] = $params[$pfield];

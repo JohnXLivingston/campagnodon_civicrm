@@ -155,6 +155,9 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
         if (!empty($transaction['campaign_id'])) {
           $contribution->addValue('campaign_id', $transaction['campaign_id']);
         }
+        if (!empty($transaction['source'])) {
+          $contribution->addValue('source', $transaction['source']); // TODO: add some unit tests.
+        }
         if (!empty($payment_field)) {
           $contribution->addValue($payment_field, $payment_type);
         }

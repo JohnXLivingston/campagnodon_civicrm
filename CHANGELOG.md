@@ -9,6 +9,7 @@
 * Ajout d'un champ `operation_type`, affichage, et filtre de recherche.
 * Filtre de recherche sur la date de transaction.
 * Ajout de deduplication rules custom, qui peuvent se baser sur le type d'opération.
+* Prise en compte du champs 'source' pour les création de contact et les contributions.
 
 ## 0.0.3
 

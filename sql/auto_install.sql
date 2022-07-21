@@ -49,6 +49,7 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   `new_contact` tinyint COMMENT 'True if the contact was created for this transaction.',
   `campaign_id` int unsigned COMMENT 'The campaign for which this Campagnodon transaction is attached.',
   `email` varchar(254) COMMENT 'Courriel',
+  `source` varchar(255) NULL COMMENT 'Origin of this Transaction.',
   `prefix_id` int unsigned COMMENT 'Préfixe ou Titre du nom (M., Mme...). FK de l\'Id du préfixe',
   `first_name` varchar(64) COMMENT 'Prénom.',
   `last_name` varchar(64) COMMENT 'Nom de famille.',
