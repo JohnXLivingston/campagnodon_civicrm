@@ -124,6 +124,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
             'membership_type_id' => $membership_type_id,
             'contact_id' => $contact_id,
             'campaign_id' => $contribution ? $contribution['campaign_id'] : null,
+            'source' => $contribution ? $contribution['source'] : null, // Only doing this for new membership, not renewal.
             'join_date' => $receive_date,
             'start_date' => $start_date,
             'check_permissions' => 0,

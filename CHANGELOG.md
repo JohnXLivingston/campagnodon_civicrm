@@ -10,6 +10,7 @@
 * Filtre de recherche sur la date de transaction.
 * Ajout de deduplication rules custom, qui peuvent se baser sur le type d'opération.
 * Prise en compte du champs 'source' pour les création de contact et les contributions.
+* Prise en compte du champs 'source' pour les créations d'adhésion (pas le renouvellement).
 
 ## 0.0.3
 
