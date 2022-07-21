@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 0.0.4 (Not released yet)
+## 0.0.4
 
 * Ajout du mail et du téléphone dans la liste des transactions.
 * Ajout du lien vers la transaction sur le système d'origine.
