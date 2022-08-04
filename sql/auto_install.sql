@@ -55,6 +55,8 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   `last_name` varchar(64) COMMENT 'Nom de famille.',
   `birth_date` date COMMENT 'Date de naissance',
   `street_address` varchar(96) COMMENT 'Concaténation de tous les composants d\'adresses routables (préfixe, numéro de rue, nom de rue, suffixe, unité\nnuméro OU P.O. Boîte). Les applications doivent pouvoir déterminer l\'emplacement physique avec ces données (pour la cartographie, le courrier\nlivraison, etc.).  ',
+  `supplemental_address_1` varchar(96) COMMENT 'Informations d\'adresse supplémentaires, ligne 1',
+  `supplemental_address_2` varchar(96) COMMENT 'Informations d\'adresse supplémentaires, ligne 2',
   `postal_code` varchar(64) COMMENT 'Stockez les codes postaux américains (zip5) ET internationaux. L\'application est responsable de la validation appropriée du pays / de la région.',
   `city` varchar(64) COMMENT 'Nom de la ville, de la capitale ou du village.',
   `country_id` int unsigned COMMENT 'A quel pays cette adresse appartient.',

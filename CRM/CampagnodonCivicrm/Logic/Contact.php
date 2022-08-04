@@ -369,7 +369,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
           ->setCheckPermissions(false)
           ->addSelect('*')
           ->addWhere('contact_id', '=', $contact_id);
-        foreach (['street_address', 'postal_code', 'city', 'country_id'] as $field) {
+        foreach (['street_address', 'supplemental_address_1', 'supplemental_address_2', 'postal_code', 'city', 'country_id'] as $field) {
           if (!empty($transaction[$field])) {
             $address->addWhere($field, '=', $transaction[$field]);
           }
@@ -382,7 +382,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
             ->setCheckPermissions(false)
             ->addValue('contact_id', $contact_id)
             ->addValue('is_primary', true);
-          foreach (['street_address', 'postal_code', 'city', 'country_id'] as $field) {
+          foreach (['street_address', 'supplemental_address_1', 'supplemental_address_2', 'postal_code', 'city', 'country_id'] as $field) {
             if (!empty($transaction[$field])) {
               $address_create->addValue($field, $transaction[$field]);
             }

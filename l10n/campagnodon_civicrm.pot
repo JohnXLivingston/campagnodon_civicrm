@@ -126,6 +126,14 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Source"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Origin of this Transaction."
+msgstr ""
+
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php
 msgid "Individual Prefix"
 msgstr ""
@@ -164,6 +172,22 @@ msgstr ""
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
 msgid "Concatenation of all routable street address components (prefix, street number, street name, suffix, unit\n      number OR P.O. Box). Apps should be able to determine physical location with this data (for mapping, mail\n      delivery, etc.)."
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Supplemental Address 1"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Supplemental Address Information, Line 1"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Supplemental Address 2"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Supplemental Address Information, Line 2"
 msgstr ""
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php

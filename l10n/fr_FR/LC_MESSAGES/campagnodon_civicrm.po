@@ -167,6 +167,22 @@ msgid "Concatenation of all routable street address components (prefix, street n
 msgstr ""
 
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Supplemental Address 1"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Supplemental Address Information, Line 1"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Supplemental Address 2"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+msgid "Supplemental Address Information, Line 2"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
 msgid "Postal Code"
 msgstr ""
 

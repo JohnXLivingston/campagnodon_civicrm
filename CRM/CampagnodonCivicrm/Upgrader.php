@@ -335,4 +335,17 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `source` varchar(255) NULL COMMENT 'Origin of this Transaction.'");
     return TRUE;
   }
+
+  /**
+   * New columns
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0014(): bool {
+    $this->ctx->log->info('Planning update 0014');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `supplemental_address_1` varchar(96)");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `supplemental_address_2` varchar(96)");
+    return TRUE;
+  }
 }

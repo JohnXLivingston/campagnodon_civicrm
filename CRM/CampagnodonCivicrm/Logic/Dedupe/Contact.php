@@ -39,6 +39,8 @@ class CRM_CampagnodonCivicrm_Logic_Dedupe_Contact {
     }
     foreach ([
       'street_address' => 'street_address',
+      'supplemental_address_1' => 'supplemental_address_1',
+      'supplemental_address_2' => 'supplemental_address_2',
       'postal_code' => 'postal_code',
       'city' => 'city',
       'country' => 'country_id'

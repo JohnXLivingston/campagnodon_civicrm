@@ -46,6 +46,8 @@ function civicrm_api3_campagnodon_Clean($params) {
     ->addValue('first_name', null)
     ->addValue('last_name', null)
     ->addValue('street_address', null)
+    ->addValue('supplemental_address_1', null)
+    ->addValue('supplemental_address_2', null)
     ->addValue('postal_code', null)
     ->addValue('country_id', null)
     ->addValue('phone', null)

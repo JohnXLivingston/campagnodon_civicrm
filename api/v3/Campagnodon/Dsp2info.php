@@ -54,6 +54,8 @@ function civicrm_api3_campagnodon_Dsp2info($params) {
       'first_name' => $transaction['first_name'],
       'email' => $transaction['email'],
       'street_address' => $transaction['street_address'],
+      'supplemental_address_1' => $transaction['supplemental_address_1'],
+      'supplemental_address_2' => $transaction['supplemental_address_2'],
       'postal_code' => $transaction['postal_code'],
       'city' => $transaction['city'],
       'country' => $transaction['country_id:name']

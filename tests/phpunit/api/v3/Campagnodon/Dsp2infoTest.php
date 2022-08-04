@@ -40,6 +40,8 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
       'last_name' => 'Doe',
       'first_name' => 'John',
       'street_address' => '13 bourbon street',
+      'supplemental_address_1' => 'sup 1',
+      'supplemental_address_2' => 'sup 2',
       'postal_code' => '13120',
       'city' => 'London',
       'country' => 'GB',
@@ -116,6 +118,8 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
     $this->assertEquals('Doe', $result['values'][0]['last_name'], 'Field last_name');
     $this->assertEquals('GB', $result['values'][0]['country'], 'Field country');
     $this->assertEquals('13 bourbon street', $result['values'][0]['street_address'], 'Field street_address');
+    $this->assertEquals('sup 1', $result['values'][0]['supplemental_address_1'], 'Field supplemental_address_1');
+    $this->assertEquals('sup 2', $result['values'][0]['supplemental_address_2'], 'Field supplemental_address_2');
     $this->assertEquals('13120', $result['values'][0]['postal_code'], 'Field postal_code');
     $this->assertEquals('London', $result['values'][0]['city'], 'Field city');
   }
@@ -185,6 +189,8 @@ class api_v3_Campagnodon_Dsp2infoTest extends \PHPUnit\Framework\TestCase implem
     $this->assertEquals(null, $result['values'][0]['last_name'], 'Field last_name');
     $this->assertEquals(null, $result['values'][0]['country'], 'Field country');
     $this->assertEquals(null, $result['values'][0]['street_address'], 'Field street_address');
+    $this->assertEquals(null, $result['values'][0]['supplemental_address_1'], 'Field supplemental_address_1');
+    $this->assertEquals(null, $result['values'][0]['supplemental_address_2'], 'Field supplemental_address_2');
     $this->assertEquals(null, $result['values'][0]['postal_code'], 'Field postal_code');
     $this->assertEquals(null, $result['values'][0]['city'], 'Field city');
   }

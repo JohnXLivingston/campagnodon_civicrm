@@ -267,6 +267,28 @@
       <type>Text</type>
     </html>
   </field>
+  <field>
+    <name>supplemental_address_1</name>
+    <title>Supplemental Address 1</title>
+    <type>varchar</type>
+    <length>96</length>
+    <import>true</import>
+    <comment>Supplemental Address Information, Line 1</comment>
+    <html>
+      <type>Text</type>
+    </html>
+  </field>
+  <field>
+    <name>supplemental_address_2</name>
+    <title>Supplemental Address 2</title>
+    <type>varchar</type>
+    <length>96</length>
+    <import>true</import>
+    <comment>Supplemental Address Information, Line 2</comment>
+    <html>
+      <type>Text</type>
+    </html>
+  </field>
 
   <field>
     <name>postal_code</name>

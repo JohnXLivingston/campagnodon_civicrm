@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.0.5 (not released yet)
+
+* Complément d'adresse 1 et 2.
+
 ## 0.0.4
 
 * Ajout du mail et du téléphone dans la liste des transactions.

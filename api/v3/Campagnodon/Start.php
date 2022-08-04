@@ -218,7 +218,7 @@ function civicrm_api3_campagnodon_Start($params) {
     foreach (
       array(
         'campaign_id',
-        'first_name', 'last_name', 'birth_date', 'street_address', 'postal_code', 'city', 'phone',
+        'first_name', 'last_name', 'birth_date', 'street_address', 'supplemental_address_1', 'supplemental_address_2', 'postal_code', 'city', 'phone',
         'payment_url', 'transaction_url'
       ) as $field
     ) {

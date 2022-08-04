@@ -69,6 +69,8 @@
         {$row.email}<br>
         {$row.prefix} {$row.first_name} {$row.last_name}<br>
         {$row.street_address}<br>
+        {$row.supplemental_address_1}<br>
+        {$row.supplemental_address_2}<br>
         {$row.postal_code} {$row.city}<br>
         {$row.country_label}<br>
         {$row.phone}
