@@ -185,12 +185,16 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
     $params = $this->getSimpleStartParams($idx);
     civicrm_api3('Campagnodon', 'start', $params);
 
+    $cpt = 1;
     foreach ($update_params as $step) {
       $result = civicrm_api3('Campagnodon', 'updatestatus', array(
         'transaction_idx' => $idx,
         'status' => $step['status'],
         'payment_instrument' => $step['payment_instrument']
       ));
+      $result_line = array_pop($result['values']);
+      $result_status = $result_line['status'];
+      $this->assertEquals($step['status'], $result_status, 'The status at the step '.($cpt++).' is correct');
       $last_step = $step;
     }
 
@@ -200,7 +204,7 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       ->execute()
       ->single();
 
-    $this->assertEquals($transaction['status'], $last_step['status']);
+    $this->assertEquals($transaction['status'], $last_step['status'], 'The final status of the transaction is correct.');
     
     $contributions = \Civi\Api4\Contribution::get()
       ->setCheckPermissions(false)

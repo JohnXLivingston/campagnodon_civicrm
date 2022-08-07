@@ -355,5 +355,8 @@ function civicrm_api3_campagnodon_Start($params) {
   }
   $tx->commit();
 
-  return civicrm_api3_create_success(array($transaction['id'] => $transaction), $params, 'Campagnodon', 'transaction');
+  return civicrm_api3_create_success(array($transaction['id'] => array(
+    'id' => $transaction['id'],
+    'status' => 'init'
+  )), $params);
 }

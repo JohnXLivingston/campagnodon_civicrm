@@ -186,5 +186,18 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
   }
   $tx->commit();
 
-  return civicrm_api3_create_success(array($transaction['id'] => $transaction), $params, 'Campagnodon', 'transaction');
+  // Then we get the statut from database, to be sure we have the correct one.
+  $transaction = \Civi\Api4\CampagnodonTransaction::get()
+    ->setCheckPermissions(false)
+    ->addWhere('idx', '=', $params['transaction_idx'])
+    ->execute()
+    ->single();
+  if (!$transaction) {
+    throw new Exception('Transaction '.$params['transaction_idx'].' not found.');
+  }
+
+  return civicrm_api3_create_success(array($transaction['id'] => array(
+    'id' => $transaction['id'],
+    'status' => $transaction['status']
+  )), $params);
 }

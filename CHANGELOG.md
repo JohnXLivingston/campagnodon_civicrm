@@ -4,6 +4,8 @@
 ## 0.0.5 (not released yet)
 
 * Complément d'adresse 1 et 2.
+* Fix: les API Start et Updatestatus ne doivent pas retourner de donnée personnelle.
+* L'api Updatestatus retourne le statut de la transaction.
 
 ## 0.0.4
 

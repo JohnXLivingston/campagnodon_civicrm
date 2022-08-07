@@ -469,24 +469,28 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals(1, $result['count'], 'Must have 1 result');
     $this->assertEquals(1, count($result['values']), 'Must have one value');
 
-    $transaction = array_pop($result['values']);
+    $start_result_line = array_pop($result['values']);
 
-    $this->assertTrue(intval($transaction['id']) > 0, 'Must have a transaction id');
-    $this->assertTrue(intval($transaction['contact_id']) > 0, 'Must have a contact id');
-    $this->assertEquals($params['email'], $transaction['email'], 'Field email must have the correct value');
-    $this->assertSame($params['first_name'] ?? '', $transaction['first_name'] ?? '', 'Field first_name must have the correct value');
-    $this->assertSame($params['last_name'] ?? '', $transaction['last_name'] ?? '', 'Field last_name must have the correct value');
+    $this->assertTrue(intval($start_result_line['id']) > 0, 'Must have a transaction id');
+    $this->assertEquals('init', $start_result_line['status'], 'Status must be returned, and equal to init');
+    $this->assertFalse(array_key_exists('email', $start_result_line), 'The start API should not return personnal data. Testing that there is no email.');
 
+    $transaction_id = $start_result_line['id'];
+    
     // Trying to get the transaction by ID
     $obj = \Civi\Api4\CampagnodonTransaction::get()
       ->setCheckPermissions(false)
       ->addSelect('*', 'country_id:name', 'prefix_id:name')
-      ->addWhere('id', '=', $transaction['id'])
+      ->addWhere('id', '=', $transaction_id)
       ->execute()
       ->single();
     $this->assertTrue(!empty($obj), 'Can get Transaction by id');
-    $this->assertEquals($obj['id'], $transaction['id'], 'Can get the good Transaction by id');
+    $this->assertEquals($obj['id'], $transaction_id, 'Can get the good Transaction by id');
+    $this->assertTrue(!empty($obj['contact_id']), 'There is a contact_id');
     $this->assertEquals($obj['status'], 'init', 'The transaction status is init');
+    $this->assertEquals($obj['email'], $params['email'], 'Field email must have the correct value');
+    $this->assertSame($obj['first_name'] ?? '', $params['first_name'] ?? '', 'Field first_name must have the correct value');
+    $this->assertSame($obj['last_name'] ?? '', $params['last_name'] ?? '', 'Field last_name must have the correct value');
     $this->assertEquals($obj['payment_instrument_id'], null, 'payment_instrument_id is null');
     $this->assertEquals($obj['operation_type'], $params['operation_type'], 'The operation_type is correct');
     $this->assertEquals($obj['payment_url'], empty($params['payment_url']) ? null : $params['payment_url'], 'payment url should be correct');
@@ -514,13 +518,14 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ->single();
 
         $this->assertTrue(!empty($obj), 'Can get Transaction by idx');
-        $this->assertEquals($obj['id'], $transaction['id'], 'Can get the good Transaction by idx');
+        $this->assertEquals($obj['id'], $transaction_id, 'Can get the good Transaction by idx');
     }
 
     // Getting the contact. Will be used later on.
+    $contact_id = $obj['contact_id'];
     $contact = \Civi\Api4\Contact::get()
       ->setCheckPermissions(false)
-      ->addWhere('id', '=', $transaction['contact_id'])
+      ->addWhere('id', '=', $contact_id)
       ->execute()->single();
 
 
@@ -535,14 +540,14 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
         ['tlink.entity_table', '=', '"civicrm_contribution"'],
         ['tlink.entity_id', '=', 'id']
       )
-      ->addWhere('tlink.campagnodon_tid', '=', $transaction['id'])
+      ->addWhere('tlink.campagnodon_tid', '=', $transaction_id)
       ->execute();
     $this->assertEquals(count($contributions), 0, 'Contribution not yet created');
 
     $contrib_links = \Civi\Api4\CampagnodonTransactionLink::get()
       ->setCheckPermissions(false)
       ->addSelect('*', 'financial_type_id:name')
-      ->addWhere('campagnodon_tid', '=', $transaction['id'])
+      ->addWhere('campagnodon_tid', '=', $transaction_id)
       ->addWhere('entity_table', '=', '"civicrm_contribution"') // FIXME: should double quotes be there??
       ->execute();
     $this->assertEquals($contrib_links->count(), $contributions->count(), 'Same number of contribution links as number of given contributions');
@@ -572,7 +577,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $optional_subscriptions_group_links = \Civi\Api4\CampagnodonTransactionLink::get()
       ->setCheckPermissions(false)
       ->addSelect('*')
-      ->addWhere('campagnodon_tid', '=', $transaction['id'])
+      ->addWhere('campagnodon_tid', '=', $transaction_id)
       ->addWhere('entity_table', '=', 'civicrm_group')
       ->execute();
     $this->assertEquals(count($optional_subscriptions_group), $optional_subscriptions_group_links->count(), 'Same number of linked group as number of given optional_subscriptions');
@@ -587,14 +592,14 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $optional_subscriptions_contact_links = \Civi\Api4\CampagnodonTransactionLink::get()
       ->setCheckPermissions(false)
       ->addSelect('*')
-      ->addWhere('campagnodon_tid', '=', $transaction['id'])
+      ->addWhere('campagnodon_tid', '=', $transaction_id)
       ->addWhere('entity_table', '=', 'civicrm_contact')
       ->execute();
     $this->assertEquals(count($optional_subscriptions_opt_in), $optional_subscriptions_contact_links->count(), 'Same number of linked group as number of given optional_subscriptions');
     $optional_subscriptions_contact_links->indexBy('id');
     $optional_subscriptions_contact_links = (array) $optional_subscriptions_contact_links;
     foreach ($optional_subscriptions_contact_links as $osid => $os) {
-      $this->assertEquals($os['entity_id'], $transaction['contact_id'], 'The opt_in link '.$osid.' has the correct contact_id');
+      $this->assertEquals($os['entity_id'], $contact_id, 'The opt_in link '.$osid.' has the correct contact_id');
       if (!$os['on_complete']) {
         $this->assertEquals($contact[$os['opt_in']], false, 'Opt-in '.$os['opt_in'].' should be false because the user accepted.');
       } else {
@@ -639,7 +644,11 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     ));
 
     $this->assertEquals(1, $result['count'], 'Must have 1 result');
-    $transaction1 = array_pop($result['values']);
+    $start_result1 = array_pop($result['values']);
+    $transaction1 = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
+      ->addWhere('id', '=', $start_result1['id'])
+      ->execute()->single();
 
     $contact_id = $transaction1['contact_id'];
     $this->assertTrue(intval($contact_id) > 0, 'Must have a contact_id');
@@ -661,7 +670,11 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       ]
     ));
     $this->assertEquals(1, $result['count'], 'Second start must have 1 result');
-    $transaction2 = array_pop($result['values']);
+    $start_result2 = array_pop($result['values']);
+    $transaction2 = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
+      ->addWhere('id', '=', $start_result2['id'])
+      ->execute()->single();
     $this->assertTrue($contact_id != $transaction2['contact_id'], 'Second start must have created a new contact');
 
     $result = civicrm_api3('Campagnodon', 'start', array(
@@ -680,7 +693,11 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       ]
     ));
     $this->assertEquals(1, $result['count'], 'Third start must have 1 result');
-    $transaction3 = array_pop($result['values']);
+    $start_result3 = array_pop($result['values']);
+    $transaction3 = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
+      ->addWhere('id', '=', $start_result3['id'])
+      ->execute()->single();
     $this->assertSame($contact_id, $transaction3['contact_id'], 'Third start must have reused the first contact');
   }
 
