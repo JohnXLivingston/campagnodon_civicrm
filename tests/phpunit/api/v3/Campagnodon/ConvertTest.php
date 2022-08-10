@@ -289,13 +289,13 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
       ));
     }
 
-    $transaction = \Civi\Api4\CampagnodonTransaction::get()
+    $old_transaction = \Civi\Api4\CampagnodonTransaction::get()
       ->setCheckPermissions(false)
       ->addWhere('idx', '=', $idx)
       ->execute()
       ->single();
 
-    $this->assertEquals($transaction['status'], $update_status ? $update_status['status'] : 'init', 'The status of the transaction is correct.');
+    $this->assertEquals($old_transaction['status'], $update_status ? $update_status['status'] : 'init', 'The status of the transaction is correct.');
 
     if ($expect_exception) {
       $this->expectException($expect_exception);
@@ -307,5 +307,15 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
     if ($expect_exception) {
       return;
     }
+
+    $transaction = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
+      ->addWhere('id', '=', $old_transaction['id'])
+      ->execute()
+      ->single();
+    
+    
+    $this->assertNotEquals($old_transaction['operation_type'], $transaction['operation_type'], 'The operation type has changed.');
+    $this->assertEquals($transaction['operation_type'], $params['convert']['operation_type'], 'The operation type is the correct one.');
   }
 }

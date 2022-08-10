@@ -67,6 +67,7 @@ function _civicrm_api3_campagnodon_Convert_spec(&$spec) {
  */
 function civicrm_api3_campagnodon_Convert($params) {
   $tx = new CRM_Core_Transaction();
+  $transaction = null;
   try {
     // checking API version
     if ($params['campagnodon_version'] !== '1') {
@@ -90,7 +91,12 @@ function civicrm_api3_campagnodon_Convert($params) {
       throw new Exception('Transaction '.$params['transaction_idx'].' has already the correct operation_type.');
     }
 
-    // TODO
+    
+    \Civi\Api4\CampagnodonTransaction::update()
+      ->setCheckPermissions(false)
+      ->addWhere('id', '=', $transaction['id'])
+      ->addValue('operation_type', $params['operation_type'])
+      ->execute();
   } catch (Throwable $e) {
     $tx->rollback();
     throw $e;
@@ -99,7 +105,7 @@ function civicrm_api3_campagnodon_Convert($params) {
 
   $transaction = \Civi\Api4\CampagnodonTransaction::get()
     ->setCheckPermissions(false)
-    ->addWhere('idx', '=', $params['transaction_idx'])
+    ->addWhere('id', '=', $transaction['id'])
     ->execute()
     ->single();
   return civicrm_api3_create_success(array($transaction['id'] => array(
