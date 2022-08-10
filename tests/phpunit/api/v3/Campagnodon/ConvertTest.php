@@ -87,14 +87,12 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
       'contributions' => [
         'membership_1' => [
           'financial_type' => 'Member Dues',
-          '_financial_type_id' => 2, // this is only there for unit tests.
           'amount' => 45,
           'currency' => 'EUR',
           'membership' => $this->membership_type_rolling_id
         ],
         'membership_2' => [
           'financial_type' => 'Member Dues',
-          '_financial_type_id' => 2, // this is only there for unit tests.
           'amount' => 12,
           'currency' => 'EUR',
           'membership' => $this->membership_type_fixed_id
@@ -124,7 +122,10 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
           'campagnodon_version' => '1',
           'operation_type' => 'donation',
           'convert_financial_type' => [
-            'Member Dues' => 'Donation'
+            'Member Dues' => [
+              'new_financial_type' => 'Donation',
+              'membership' => null // remove the membership
+            ]
           ]
         ]
       ]],
@@ -134,7 +135,10 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
           'campagnodon_version' => '1',
           'operation_type' => 'donation',
           'convert_financial_type' => [
-            '2' => '1'
+            '2' => [
+              'new_financial_type' => '1',
+              'membership' => null // remove the membership
+            ]
           ]
         ]
       ]],
@@ -148,7 +152,10 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
           'campagnodon_version' => '1',
           'operation_type' => 'donation',
           'convert_financial_type' => [
-            'Member Dues' => 'Donation'
+            'Member Dues' => [
+              'new_financial_type' => 'Donation',
+              'membership' => null // remove the membership
+            ]
           ]
         ]
       ]],
@@ -162,7 +169,10 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
           'campagnodon_version' => '1',
           'operation_type' => 'donation',
           'convert_financial_type' => [
-            'Member Dues' => 'Donation'
+            'Member Dues' => [
+              'new_financial_type' => 'Donation',
+              'membership' => null // remove the membership
+            ]
           ]
         ],
         'expect_exception' => CiviCRM_API3_Exception::class
@@ -317,5 +327,9 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
     
     $this->assertNotEquals($old_transaction['operation_type'], $transaction['operation_type'], 'The operation type has changed.');
     $this->assertEquals($transaction['operation_type'], $params['convert']['operation_type'], 'The operation type is the correct one.');
+
+
+    // TODO: test that contribution financial_type have changed
+    // TODO: test that transctionlink financial_type have changed
   }
 }
