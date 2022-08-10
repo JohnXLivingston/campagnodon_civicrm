@@ -141,6 +141,11 @@ function _civicrm_api3_campagnodon_Start_spec(&$spec) {
       "title" => "Contributions",
       "api.required" => 1,
   ];
+  $spec["optional_subscriptions"] = [
+    "title" => ts("Optional subscriptions"),
+    "description" => "Optional subscriptions to add",
+    "api.required" => 0,
+  ];
 }
 
 /**

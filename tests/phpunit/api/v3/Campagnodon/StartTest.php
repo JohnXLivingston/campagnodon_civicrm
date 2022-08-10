@@ -52,7 +52,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   }
 
   /**
-   * Provide valid contacts for unit tests.
+   * Provide valid data for unit tests.
    */
   public function dataTestProviders() {
     // TODO: add some tests with a campaign_id
@@ -736,5 +736,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
   }
 
   // TODO: more tests on optional_subscriptions.
-  // TODO: test deduplication
+  // TODO: test deduplication.
+  // TODO: test contribution with membership attribute.
+  // TODO: test contribution with «source» attribute.
 }

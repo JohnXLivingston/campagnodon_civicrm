@@ -6,6 +6,7 @@
 * Complément d'adresse 1 et 2.
 * Fix: les API Start et Updatestatus ne doivent pas retourner de donnée personnelle.
 * L'api Updatestatus retourne le statut de la transaction.
+* Nouvelle API `convert`.
 
 ## 0.0.4
 
