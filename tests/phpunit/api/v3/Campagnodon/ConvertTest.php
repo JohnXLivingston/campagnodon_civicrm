@@ -77,7 +77,7 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
   }
 
   private $current_idx = 1;
-  private function getSimpleMembershipStartParams($optional_subscriptions = null) {
+  public function getSimpleMembershipStartParams($optional_subscriptions = null) {
     $idx = 'test/'.$this->current_idx++;
     $r = [
       'campagnodon_version' => '1',
