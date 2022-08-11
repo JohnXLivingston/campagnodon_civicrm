@@ -131,98 +131,143 @@ class CRM_CampagnodonCivicrm_Logic_ConvertTest extends \PHPUnit\Framework\TestCa
   }
 
   public function dataTestGetConvertFinancialTypeMap() {
+    // We must use a closure, so that setUp is called to generated membership_types.
     return [
       'missing convert_financial_type' => [
-        // params:
-        $this->_getMinimalConvertParams(),
-        // expects:
-        []
+        function ($that) {
+          return  [
+            // params:
+            $that->_getMinimalConvertParams(),
+            // expects:
+            []
+          ];
+        }
       ],
       'empty convert_financial_type' => [
-        array_merge($this->_getMinimalConvertParams(), [
-          'convert_financial_type' => []
-        ]),
-        []
+        function ($that) {
+          return [
+            array_merge($that->_getMinimalConvertParams(), [
+              'convert_financial_type' => []
+            ]),
+            []
+          ];
+        }
       ],
       'keeps financial_type as ids' => [
-        array_merge($this->_getMinimalConvertParams(), [
-          'convert_financial_type' => [
-            '2' => [
-              'new_financial_type' => '1',
-              'membership' => null
+        function ($that) {
+          return [
+            // params:
+            array_merge(
+              $that->_getMinimalConvertParams(),
+              [
+                'convert_financial_type' => [
+                  '2' => [
+                    'new_financial_type' => '1',
+                    'membership' => null
+                  ]
+                ]
+              ]
+            ),
+            // expects:
+            [
+              '2' => [
+                'new_financial_type_id' => '1',
+                'membership_id' => null
+              ]
             ]
-          ]
-        ]),
-        [
-          '2' => [
-            'new_financial_type_id' => '1',
-            'membership_id' => null
-          ]
-        ]
+          ];
+        }
       ],
       'converts financial_type to ids' => [
-        array_merge($this->_getMinimalConvertParams(), [
-          'convert_financial_type' => [
-            'Member Dues' => [
-              'new_financial_type' => 'Donation',
-              'membership' => null
+        function ($that) {
+          return [
+            array_merge(
+              $that->_getMinimalConvertParams(),
+              [
+                'convert_financial_type' => [
+                  'Member Dues' => [
+                    'new_financial_type' => 'Donation',
+                    'membership' => null
+                  ]
+                ]
+              ]
+            ),
+            [
+              '2' => [
+                'new_financial_type_id' => '1',
+                'membership_id' => null
+              ]
             ]
-          ]
-        ]),
-        [
-          '2' => [
-            'new_financial_type_id' => '1',
-            'membership_id' => null
-          ]
-        ]
+          ];
+        }
       ],
       'keeps membership as ids' => [
-        array_merge($this->_getMinimalConvertParams(), [
-          'convert_financial_type' => [
-            'Member Dues' => [
-              'new_financial_type' => 'Donation',
-              'membership' => $this->membership_type_fixed_id
-            ],
-            'Donation' => [
-              'new_financial_type' => 'Member Dues',
-              'membership' => $this->membership_type_rolling_id
+        function ($that) {
+          if ($that->membership_type_fixed_id === null) {
+            throw new Exception('$that->membership_type_fixed_id should not be null');
+          }
+          if ($that->membership_type_rolling_id === null) {
+            throw new Exception('$that->membership_type_rolling_id should not be null');
+          }
+          return [
+            array_merge(
+              $that->_getMinimalConvertParams(),
+              [
+                'convert_financial_type' => [
+                  'Member Dues' => [
+                    'new_financial_type' => 'Donation',
+                    'membership' => $that->membership_type_fixed_id
+                  ],
+                  'Donation' => [
+                    'new_financial_type' => 'Member Dues',
+                    'membership' => $that->membership_type_rolling_id
+                  ]
+                ]
+              ]
+            ),
+            [
+              '2' => [
+                'new_financial_type_id' => '1',
+                'membership_id' => $that->membership_type_fixed_id
+              ],
+              '1' => [
+                'new_financial_type_id' => '2',
+                'membership_id' => $that->membership_type_rolling_id
+              ]
             ]
-          ]
-        ]),
-        [
-          '2' => [
-            'new_financial_type_id' => '1',
-            'membership_id' => $this->membership_type_fixed_id
-          ],
-          '1' => [
-            'new_financial_type_id' => '2',
-            'membership_id' => $this->membership_type_rolling_id
-          ]
-        ]
+          ];
+        }
       ],
       'converts membership to ids' => [
-        array_merge($this->_getMinimalConvertParams(), [
-          'convert_financial_type' => [
-            'Member Dues' => [
-              'new_financial_type' => 'Donation',
-              'membership' => 'Fixed'
-            ],
-            'Donation' => [
-              'new_financial_type' => 'Member Dues',
-              'membership' => 'Rolling'
+        function ($that) {
+          return [
+            array_merge(
+              $that->_getMinimalConvertParams(),
+              [
+                'convert_financial_type' => [
+                  'Member Dues' => [
+                    'new_financial_type' => 'Donation',
+                    'membership' => 'Fixed'
+                  ],
+                  'Donation' => [
+                    'new_financial_type' => 'Member Dues',
+                    'membership' => 'Rolling'
+                  ]
+                ]
+              ]
+            ),
+            [
+              '2' => [
+                'new_financial_type_id' => '1',
+              'membership_id' => $that->membership_type_fixed_id
+              ],
+              '1' => [
+                'new_financial_type_id' => '2',
+                'membership_id' => $that->membership_type_rolling_id
+              ]
             ]
-          ]
-        ]),
-        [
-          '2' => [
-            'new_financial_type_id' => '1',
-            'membership_id' => $this->membership_type_fixed_id
-          ],
-          '1' => [
-            'new_financial_type_id' => '2',
-            'membership_id' => $this->membership_type_rolling_id
-          ]
-        ]
+          ];
+        }
       ]
     ];
   }
@@ -230,7 +275,8 @@ class CRM_CampagnodonCivicrm_Logic_ConvertTest extends \PHPUnit\Framework\TestCa
   /**
    * @dataProvider dataTestGetConvertFinancialTypeMap
    */
-  public function testGetConvertFinancialTypeMap($params, $expects): void {
+  public function testGetConvertFinancialTypeMap($params_function): void {
+    list($params, $expects) = $params_function($this);
     $convert = new CRM_CampagnodonCivicrm_Logic_Convert($params);
     $this->assertEquals($expects, $convert->getConvertFinancialTypeMap());
   }

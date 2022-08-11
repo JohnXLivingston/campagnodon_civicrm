@@ -113,8 +113,8 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
    */
   public function dataTestProviders() {
     return [
-      'simple use case' => [[
-        'start' => $this->getSimpleMembershipStartParams(),
+      'simple use case' => [function ($that) { return [
+        'start' => $that->getSimpleMembershipStartParams(),
         'convert' => [
           'campagnodon_version' => '1',
           'operation_type' => 'donation',
@@ -125,9 +125,9 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
             ]
           ]
         ]
-      ]],
-      'simple use case, using ids for convert_financial_type' => [[
-        'start' => $this->getSimpleMembershipStartParams(),
+      ];}],
+      'simple use case, using ids for convert_financial_type' => [function ($that) { return [
+        'start' => $that->getSimpleMembershipStartParams(),
         'convert' => [
           'campagnodon_version' => '1',
           'operation_type' => 'donation',
@@ -138,9 +138,9 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
             ]
           ]
         ]
-      ]],
-      'simple use case, in pending status' => [[
-        'start' => $this->getSimpleMembershipStartParams(),
+      ];}],
+      'simple use case, in pending status' => [function ($that) { return [
+        'start' => $that->getSimpleMembershipStartParams(),
         'updatestatus' => [
           'status' => 'pending',
           'payment_instrument' => 'Debit Card'
@@ -155,9 +155,9 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
             ]
           ]
         ]
-      ]],
-      'simple use case, in completed status. Must fail' => [[
-        'start' => $this->getSimpleMembershipStartParams(),
+      ];}],
+      'simple use case, in completed status. Must fail' => [function ($that) { return [
+        'start' => $that->getSimpleMembershipStartParams(),
         'updatestatus' => [
           'status' => 'completed',
           'payment_instrument' => 'Debit Card'
@@ -173,15 +173,15 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
           ]
         ],
         'expect_exception' => CiviCRM_API3_Exception::class
-      ]],
-      'simple use case, trying to convert to the same operation_type. Must fail' => [[
-        'start' => $this->getSimpleMembershipStartParams(),
+      ];}],
+      'simple use case, trying to convert to the same operation_type. Must fail' => [function ($that) { return [
+        'start' => $that->getSimpleMembershipStartParams(),
         'convert' => [
           'campagnodon_version' => '1',
           'operation_type' => 'membership'
         ],
         'expect_exception' => CiviCRM_API3_Exception::class
-      ]],
+      ];}],
     ];
   }
 
@@ -281,7 +281,8 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
    * Test some classic use cases.
    * @dataProvider dataTestProviders
    */
-  public function testApiConvert($params) {
+  public function testApiConvert($params_function) {
+    $params = $params_function($this);
     $idx = $params['start']['transaction_idx'];
     $update_status = array_key_exists('updatestatus', $params) ? $params['updatestatus'] : null;
     $expect_exception = array_key_exists('expect_exception', $params) ? $params['expect_exception'] : null;
