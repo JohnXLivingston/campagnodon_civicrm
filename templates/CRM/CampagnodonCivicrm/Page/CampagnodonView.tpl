@@ -96,6 +96,7 @@
       <td>
         <table class="selector row-highlight">
           <tr>
+            <th>{ts}Link ID{/ts}</th>
             <th>{ts}Entity table{/ts}</th>
             <th>{ts}Entity ID{/ts}</th>
             <th></th>
@@ -103,6 +104,7 @@
           </tr>
           {foreach from=$links item=link}
             <tr>
+              <td>{if $link.parent_id}{$link.parent_id}/{/if}{$link.id}</td>
               <td>{$link.entity_table}</td>
               <td>{$link.entity_id}</td>
               <td>{$link.view}</td>
