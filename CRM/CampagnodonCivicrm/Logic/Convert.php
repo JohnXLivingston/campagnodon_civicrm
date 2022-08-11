@@ -90,7 +90,6 @@ class CRM_CampagnodonCivicrm_Logic_Convert {
       $new_financial_type_id = $current_map['new_financial_type_id'];
       if (!empty($contribution_link['entity_id'])) {
         // Updating the contribution...
-        throw new Exception('voila');
         \Civi\Api4\Contribution::update()
           ->setCheckPermissions(false)
           ->addWhere('id', '=', $contribution_link['entity_id'])
