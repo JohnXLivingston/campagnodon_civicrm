@@ -223,7 +223,7 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
       ->addWhere('idx', '=', $idx)
       ->execute()
       ->single();
-    $this->assertEquals($transaction['status'], 'init', 'Status is init');
+    $this->assertEquals('init', $transaction['status'], 'Status is init');
 
     $contributions = \Civi\Api4\Contribution::get()
       ->setCheckPermissions(false)
@@ -238,9 +238,9 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
       ->execute()
       ->indexBy('id');
     foreach ($contributions as $cid => $contribution) {
-      $this->assertEquals($contribution['contribution_status_id'], 2, 'Contribution '.$cid.' is in status 2');
-      $this->assertEquals($contribution['contribution_status_id:name'], 'Pending', 'Contribution '.$cid.' is in status pending');
-      $this->assertEquals($contribution['financial_type_id'], 2, 'Contribution '.$cid.' has a financial type equal to 2');
+      $this->assertEquals(2, $contribution['contribution_status_id'], 'Contribution '.$cid.' is in status 2');
+      $this->assertEquals('Pending', $contribution['contribution_status_id:name'], 'Contribution '.$cid.' is in status pending');
+      $this->assertEquals(2, $contribution['financial_type_id'], 'Contribution '.$cid.' has a financial type equal to 2');
     }
   }
 
@@ -323,7 +323,7 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
     
     
     $this->assertNotEquals($old_transaction['operation_type'], $transaction['operation_type'], 'The operation type has changed.');
-    $this->assertEquals($transaction['operation_type'], $params['convert']['operation_type'], 'The operation type is the correct one.');
+    $this->assertEquals($params['convert']['operation_type'], $transaction['operation_type'], 'The operation type is the correct one.');
 
 
     // TODO: test that contribution financial_type have changed
