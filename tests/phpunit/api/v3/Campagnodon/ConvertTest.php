@@ -77,7 +77,7 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
   }
 
   private $current_idx = 1;
-  private function getSimpleMembershipStartParams($keep_optional_subscriptions = null, $optional_subscriptions = null) {
+  private function getSimpleMembershipStartParams($optional_subscriptions = null) {
     $idx = 'test/'.$this->current_idx++;
     $r = [
       'campagnodon_version' => '1',
@@ -101,9 +101,6 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
       ]
     ];
 
-    if ($keep_optional_subscriptions) {
-      $r['keep_optional_subscriptions'] = $keep_optional_subscriptions;
-    }
     if ($optional_subscriptions) {
       $r['optional_subscriptions'] = $keep_optional_subscriptions;
     }
