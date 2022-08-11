@@ -77,6 +77,9 @@ class CRM_CampagnodonCivicrm_Logic_Convert {
 
     // we must convert some contributions...
     foreach ($contribution_links as $contribution_link) {
+      if ($contribution_link['cancelled']) {
+        continue;
+      }
       $current_financial_type_id = strval($contribution_link['financial_type_id']);
       if (!array_key_exists($current_financial_type_id, $financial_type_map)) {
         continue;
@@ -87,17 +90,53 @@ class CRM_CampagnodonCivicrm_Logic_Convert {
       $new_financial_type_id = $current_map['new_financial_type_id'];
       if (!empty($contribution_link['entity_id'])) {
         // Updating the contribution...
+        throw new Exception('voila');
         \Civi\Api4\Contribution::update()
           ->setCheckPermissions(false)
+          ->addWhere('id', '=', $contribution_link['entity_id'])
           ->addValue('financial_type_id', $new_financial_type_id)
           ->execute();
       }
 
       $new_membership_type_id = $current_map['membership_id'] ?? null;
+      $membership_link = \Civi\Api4\CampagnodonTransactionLink::get()
+        ->setCheckPermissions(false)
+        ->addWhere('campagnodon_tid', '=', $transaction['id'])
+        ->addWhere('parent_id', '=', $contribution_link['id'])
+        ->addWhere('entity_table', '=', 'civicrm_membership')
+        ->execute()->first();
+
+      if (!empty($new_membership_id)) {
+        // TODO
+        throw new Exception('Not implemented yet (adding a membership on a conversion)');
+        // if (!empty($membership_link)) {
+        //   \Civi\Api4\CampagnodonTransactionLink::update()
+        //     ->setCheckPermissions(false)
+        //     ->addWhere('id', '=', $membership_link['id'])
+        //     ->addValue('membership_type_id', $new_membership_type_id)
+        //     ->execute();
+        //   // FIXME: must also change some opt-in !
+        // } else {
+        //   // TODO: create the membership.
+        // }
+      } else {
+        if ($membership_link) {
+          // We must remove the membership.
+          // To do so, we just cancel it.
+          // TODO: add some unit test.
+          if (empty($membership_link['cancelled'])) {
+            \Civi\Api4\CampagnodonTransactionLink::update()
+              ->setCheckPermissions(false)
+              ->addWhere('id', '=', $membership_link['id'])
+              ->addValue('cancelled', 'converted')
+              ->execute();
+          }
+        }
+      }
 
       \Civi\Api4\CampagnodonTransactionLink::update()
         ->setCheckPermissions(false)
-        ->addWhere('id', '=', $contribution_link['entity_id'])
+        ->addWhere('id', '=', $contribution_link['id'])
         ->addValue('financial_type_id', $new_financial_type_id)
         ->addValue('membership_type_id', $new_membership_type_id)
         ->execute();
