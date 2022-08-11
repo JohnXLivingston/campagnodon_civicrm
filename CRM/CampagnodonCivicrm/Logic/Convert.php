@@ -124,13 +124,12 @@ class CRM_CampagnodonCivicrm_Logic_Convert {
           // We must remove the membership.
           // To do so, we just cancel it.
           // TODO: add some unit test.
-          if (empty($membership_link['cancelled'])) {
-            \Civi\Api4\CampagnodonTransactionLink::update()
-              ->setCheckPermissions(false)
-              ->addWhere('id', '=', $membership_link['id'])
-              ->addValue('cancelled', 'converted')
-              ->execute();
-          }
+          // NB: we must overwrite any previous value for `cancelled`. Otherwise, the transaction status could be already_member again.
+          \Civi\Api4\CampagnodonTransactionLink::update()
+            ->setCheckPermissions(false)
+            ->addWhere('id', '=', $membership_link['id'])
+            ->addValue('cancelled', 'converted')
+            ->execute();
         }
       }
 
