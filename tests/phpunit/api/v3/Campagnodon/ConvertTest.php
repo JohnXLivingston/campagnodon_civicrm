@@ -58,6 +58,8 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
         'domain_id' => 1,
         'financial_type_id' => 2,
         'is_active' => 1,
+        'fixed_period_start_day' => '301',
+        'fixed_period_rollover_day' => '1111',
         'visibility' => 'Public',
       ])->execute()->single();
 
