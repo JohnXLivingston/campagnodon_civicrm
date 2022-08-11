@@ -92,18 +92,18 @@ class CRM_CampagnodonCivicrm_Logic_ConvertTest extends \PHPUnit\Framework\TestCa
    */
   public function testNormalizeFinancialTypeId() {
     $this->assertEquals(
-      CRM_CampagnodonCivicrm_Logic_Convert::normalizeFinancialTypeId('2'),
       '2',
+      CRM_CampagnodonCivicrm_Logic_Convert::normalizeFinancialTypeId('2'),
       'Numeric values remains itself'
     );
     $this->assertEquals(
-      CRM_CampagnodonCivicrm_Logic_Convert::normalizeFinancialTypeId(2),
       '2',
+      CRM_CampagnodonCivicrm_Logic_Convert::normalizeFinancialTypeId(2),
       'int becomes strings'
     );
     $this->assertEquals(
-      CRM_CampagnodonCivicrm_Logic_Convert::normalizeFinancialTypeId('Donation'),
       '1',
+      CRM_CampagnodonCivicrm_Logic_Convert::normalizeFinancialTypeId('Donation'),
       'Donation becomes 1'
     );
     $this->expectException(API_Exception::class, 'should fail if the financial type does not exists');
@@ -112,18 +112,18 @@ class CRM_CampagnodonCivicrm_Logic_ConvertTest extends \PHPUnit\Framework\TestCa
 
   public function testNormalizeMembershipTypeId() {
     $this->assertEquals(
-      CRM_CampagnodonCivicrm_Logic_Convert::normalizeMembershipTypeId(strval($this->membership_type_fixed_id)),
       strval($this->membership_type_fixed_id),
+      CRM_CampagnodonCivicrm_Logic_Convert::normalizeMembershipTypeId(strval($this->membership_type_fixed_id)),
       'Numeric values remains itself'
     );
     $this->assertEquals(
-      CRM_CampagnodonCivicrm_Logic_Convert::normalizeMembershipTypeId(intval($this->membership_type_fixed_id)),
       strval($this->membership_type_fixed_id),
+      CRM_CampagnodonCivicrm_Logic_Convert::normalizeMembershipTypeId(intval($this->membership_type_fixed_id)),
       'int becomes strings'
     );
     $this->assertEquals(
-      CRM_CampagnodonCivicrm_Logic_Convert::normalizeMembershipTypeId('Fixed'),
       strval($this->membership_type_fixed_id),
+      CRM_CampagnodonCivicrm_Logic_Convert::normalizeMembershipTypeId('Fixed'),
       'Fixed becomes the id'
     );
     $this->expectException(API_Exception::class, 'should fail if the membership type does not exists');
@@ -199,7 +199,7 @@ class CRM_CampagnodonCivicrm_Logic_ConvertTest extends \PHPUnit\Framework\TestCa
             'membership_id' => $this->membership_type_rolling_id
           ]
         ]
-          ],
+      ],
       'converts membership to ids' => [
         array_merge($this->_getMinimalConvertParams(), [
           'convert_financial_type' => [
@@ -232,6 +232,6 @@ class CRM_CampagnodonCivicrm_Logic_ConvertTest extends \PHPUnit\Framework\TestCa
    */
   public function testGetConvertFinancialTypeMap($params, $expects): void {
     $convert = new CRM_CampagnodonCivicrm_Logic_Convert($params);
-    $this->assertEquals($convert->getConvertFinancialTypeMap(), $expects);
+    $this->assertEquals($expects, $convert->getConvertFinancialTypeMap());
   }
 }
