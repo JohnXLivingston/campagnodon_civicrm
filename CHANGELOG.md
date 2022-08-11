@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 0.0.5 (not released yet)
+## 0.0.5
 
 * Complément d'adresse 1 et 2.
 * Fix: les API Start et Updatestatus ne doivent pas retourner de donnée personnelle.
