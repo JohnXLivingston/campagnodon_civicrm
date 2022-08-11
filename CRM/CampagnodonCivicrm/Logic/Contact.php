@@ -44,7 +44,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
    * @param $membership_type_id
    * @param $contact_id
    */
-  public static function addMembership($transaction_link_id, $transaction_link_parent_id, $membership_type_id, $contact_id, $opt_in) {
+  public static function addMembership($transaction_link_id, $transaction_link_cancelled, $transaction_link_parent_id, $membership_type_id, $contact_id, $opt_in) {
     // TODO: handle cases when membership already exists.
 
     $membership_type = \Civi\Api4\MembershipType::get()
@@ -86,8 +86,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       $custom_fields[$matches[1]] = intval($matches[2]);
     }
 
-    $cancel = $link['cancelled'];
-    if (!$cancel) {
+    if (!$transaction_link_cancelled) {
       // We must search again for a current membership, because the API call will not be the same.
       // Note: ordering by end_date and taking last. In case there is multiple membership for this contact.
       $current_membership = \Civi\Api4\Membership::get()
@@ -111,7 +110,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
             'membership_type_id' => $membership_type_id,
             'num_terms' => 1,
             'skipStatusCal' => 0,
-            'campaign_id' => $contribution ? $contribution['campaign_id'] : null,
+            'campaign_id' => $contribution && array_key_exists('campaign_id', $contribution) ? $contribution['campaign_id'] : null,
             'start_date' => $start_date,
             'check_permissions' => 0,
             'sequential' => true
@@ -123,7 +122,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
           array(
             'membership_type_id' => $membership_type_id,
             'contact_id' => $contact_id,
-            'campaign_id' => $contribution ? $contribution['campaign_id'] : null,
+            'campaign_id' => $contribution && array_key_exists('campaign_id', $contribution) ? $contribution['campaign_id'] : null,
             'source' => $contribution ? $contribution['source'] : null, // Only doing this for new membership, not renewal.
             'join_date' => $receive_date,
             'start_date' => $start_date,
@@ -138,7 +137,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     // FIXME: for now, the membership status is «new», and that is not correct.
 
     // Linking payment
-    if (!$cancel && $contribution_id) {
+    if (!$transaction_link_cancelled && $contribution_id) {
       civicrm_api3('MembershipPayment', 'create', array(
         'membership_id' => $membership_id,
         'contribution_id' => $contribution_id,
@@ -149,7 +148,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     \Civi\Api4\CampagnodonTransactionLink::update()
       ->setCheckPermissions(false)
       ->addValue('entity_id', $membership_id)
-      ->addValue('cancelled', $cancel)
+      ->addValue('cancelled', $transaction_link_cancelled)
       ->addWhere('id', '=', $transaction_link_id)
       ->execute();
   }
@@ -270,7 +269,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
           && empty($link['entity_id']) // only add the membership the first time.
         ) {
           // FIXME: do something when payment is cancelled?
-          CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['parent_id'], $link['membership_type_id'], $contact_id, $link['opt_in']);
+          CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['cancelled'], $link['parent_id'], $link['membership_type_id'], $contact_id, $link['opt_in']);
         }
       } else if ($link['entity_table'] === 'civicrm_tag') {
         if (CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {
