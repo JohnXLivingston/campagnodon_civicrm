@@ -99,17 +99,18 @@ class CRM_CampagnodonCivicrm_Logic_Convert {
       }
 
       $new_membership_type_id = $current_map['membership_id'] ?? null;
-      $membership_link = \Civi\Api4\CampagnodonTransactionLink::get()
+      $membership_links = \Civi\Api4\CampagnodonTransactionLink::get()
         ->setCheckPermissions(false)
         ->addWhere('campagnodon_tid', '=', $transaction['id'])
         ->addWhere('parent_id', '=', $contribution_link['id'])
         ->addWhere('entity_table', '=', 'civicrm_membership')
-        ->execute()->first();
+        ->execute();
 
       if (!empty($new_membership_id)) {
         // TODO
         throw new Exception('Not implemented yet (adding a membership on a conversion)');
-        // if (!empty($membership_link)) {
+        // if (membership_links  count > 0) {
+        //  foreach...
         //   \Civi\Api4\CampagnodonTransactionLink::update()
         //     ->setCheckPermissions(false)
         //     ->addWhere('id', '=', $membership_link['id'])
@@ -120,7 +121,7 @@ class CRM_CampagnodonCivicrm_Logic_Convert {
         //   // TODO: create the membership.
         // }
       } else {
-        if ($membership_link) {
+        foreach ($membership_links as $membership_link) {
           // We must remove the membership.
           // To do so, we just cancel it.
           // TODO: add some unit test.
