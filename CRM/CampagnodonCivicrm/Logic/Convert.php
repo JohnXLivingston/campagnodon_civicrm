@@ -4,7 +4,6 @@ use CRM_CampagnodonCivicrm_ExtensionUtil as E;
 
 class CRM_CampagnodonCivicrm_Logic_Convert {
   protected $params = null;
-  protected $financial_type_map = [];
 
   /**
    * CRM_CampagnodonCivicrm_Logic_Convert constructor.
@@ -13,7 +12,6 @@ class CRM_CampagnodonCivicrm_Logic_Convert {
    */
   public function __construct($params) {
     $this->params = $params;
-    $this->_readConvertFinancialType();
   }
 
   public static function normalizeFinancialTypeId($p) {
@@ -41,29 +39,27 @@ class CRM_CampagnodonCivicrm_Logic_Convert {
     return strval($membership['id']);
   }
 
-  protected function _readConvertFinancialType() {
-    $this->financial_type_map = [];
+  public function getConvertFinancialTypeMap() {
+    $financial_type_map = [];
     if (
       !array_key_exists('convert_financial_type', $this->params)
       || !is_array($this->params['convert_financial_type'])
     ) {
-      return;
+      return [];
     }
 
     foreach ($this->params['convert_financial_type'] as $old_financial_type_id_p => $convert_financial_type) {
-      $old_financial_type_id = $this->normalizeFinancialTypeId($old_financial_type_id_p);
-      $new_financial_type_id = $this->normalizeFinancialTypeId($convert_financial_type['new_financial_type']);
-      $new_membership_id = $this->normalizeMembershipTypeId(array_key_exists('membership', $convert_financial_type) ? $convert_financial_type['membership'] : null);
+      $old_financial_type_id = $this::normalizeFinancialTypeId($old_financial_type_id_p);
+      $new_financial_type_id = $this::normalizeFinancialTypeId($convert_financial_type['new_financial_type']);
+      $new_membership_p = array_key_exists('membership', $convert_financial_type) ? $convert_financial_type['membership'] : null;
+      $new_membership_id = $this::normalizeMembershipTypeId($new_membership_p);
 
-      $this->financial_type_map[$old_financial_type_id] = [
+      $financial_type_map[$old_financial_type_id] = [
         'new_financial_type_id' => $new_financial_type_id,
         'membership_id' => $new_membership_id
       ];
     }
-  }
-
-  public function getConvertFinancialTypeMap() {
-    return $this->financial_type_map;
+    return $financial_type_map;
   }
 
   public function convertTransactionFinancialType($transaction) {
