@@ -44,7 +44,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
    * @param $membership_type_id
    * @param $contact_id
    */
-  public static function addMembership($transaction_link_id, $transaction_link_cancelled, $transaction_link_parent_id, $membership_type_id, $contact_id, $opt_in) {
+  public static function addMembership($transaction_link_id, $transaction_link_parent_id, $membership_type_id, $contact_id, $opt_in) {
     // TODO: handle cases when membership already exists.
 
     $membership_type = \Civi\Api4\MembershipType::get()
@@ -86,58 +86,56 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       $custom_fields[$matches[1]] = intval($matches[2]);
     }
 
-    if (!$transaction_link_cancelled) {
-      // We must search again for a current membership, because the API call will not be the same.
-      // Note: ordering by end_date and taking last. In case there is multiple membership for this contact.
-      $current_membership = \Civi\Api4\Membership::get()
-        ->setCheckPermissions(false)
-        ->addSelect('*')
-        ->addWhere('contact_id', '=', $contact_id)
-        ->addWhere('membership_type_id', '=', $membership_type_id)
-        ->addOrderBy('end_date', 'ASC')
-        ->addOrderBy('id', 'ASC')
-        ->execute()
-        ->last();
+    // We must search again for a current membership, because the API call will not be the same.
+    // Note: ordering by end_date and taking last. In case there is multiple membership for this contact.
+    $current_membership = \Civi\Api4\Membership::get()
+      ->setCheckPermissions(false)
+      ->addSelect('*')
+      ->addWhere('contact_id', '=', $contact_id)
+      ->addWhere('membership_type_id', '=', $membership_type_id)
+      ->addOrderBy('end_date', 'ASC')
+      ->addOrderBy('id', 'ASC')
+      ->execute()
+      ->last();
 
-      // Note: following API calls are based on this code: https://code.globenet.org/attacfr/spip2CiviCRM/-/blob/master/convert.py#L1053
-      if ($current_membership) {
-        $membership_id = $current_membership['id'];
+    // Note: following API calls are based on this code: https://code.globenet.org/attacfr/spip2CiviCRM/-/blob/master/convert.py#L1053
+    if ($current_membership) {
+      $membership_id = $current_membership['id'];
 
-        civicrm_api3('Membership', 'create', array_merge(
-          $custom_fields,
-          array(
-            'id' => $membership_id,
-            'membership_type_id' => $membership_type_id,
-            'num_terms' => 1,
-            'skipStatusCal' => 0,
-            'campaign_id' => $contribution && array_key_exists('campaign_id', $contribution) ? $contribution['campaign_id'] : null,
-            'start_date' => $start_date,
-            'check_permissions' => 0,
-            'sequential' => true
-          )
-        ));
-      } else {
-        $membership = civicrm_api3('Membership', 'create', array_merge(
-          $custom_fields,
-          array(
-            'membership_type_id' => $membership_type_id,
-            'contact_id' => $contact_id,
-            'campaign_id' => $contribution && array_key_exists('campaign_id', $contribution) ? $contribution['campaign_id'] : null,
-            'source' => $contribution ? $contribution['source'] : null, // Only doing this for new membership, not renewal.
-            'join_date' => $receive_date,
-            'start_date' => $start_date,
-            'check_permissions' => 0,
-            'sequential' => true
-          )
-        ));
-        $membership_id = $membership['values'][0]['id'];
-      }
+      civicrm_api3('Membership', 'create', array_merge(
+        $custom_fields,
+        array(
+          'id' => $membership_id,
+          'membership_type_id' => $membership_type_id,
+          'num_terms' => 1,
+          'skipStatusCal' => 0,
+          'campaign_id' => $contribution && array_key_exists('campaign_id', $contribution) ? $contribution['campaign_id'] : null,
+          'start_date' => $start_date,
+          'check_permissions' => 0,
+          'sequential' => true
+        )
+      ));
+    } else {
+      $membership = civicrm_api3('Membership', 'create', array_merge(
+        $custom_fields,
+        array(
+          'membership_type_id' => $membership_type_id,
+          'contact_id' => $contact_id,
+          'campaign_id' => $contribution && array_key_exists('campaign_id', $contribution) ? $contribution['campaign_id'] : null,
+          'source' => $contribution ? $contribution['source'] : null, // Only doing this for new membership, not renewal.
+          'join_date' => $receive_date,
+          'start_date' => $start_date,
+          'check_permissions' => 0,
+          'sequential' => true
+        )
+      ));
+      $membership_id = $membership['values'][0]['id'];
     }
 
     // FIXME: for now, the membership status is «new», and that is not correct.
 
     // Linking payment
-    if (!$transaction_link_cancelled && $contribution_id) {
+    if ($contribution_id) {
       civicrm_api3('MembershipPayment', 'create', array(
         'membership_id' => $membership_id,
         'contribution_id' => $contribution_id,
@@ -148,7 +146,6 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     \Civi\Api4\CampagnodonTransactionLink::update()
       ->setCheckPermissions(false)
       ->addValue('entity_id', $membership_id)
-      ->addValue('cancelled', $transaction_link_cancelled)
       ->addWhere('id', '=', $transaction_link_id)
       ->execute();
   }
@@ -248,6 +245,10 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       ->execute();
     $links->indexBy('id');
     foreach ($links as $lid => $link) {
+      if ($link['cancelled']) {
+        continue;
+      }
+
       if ($link['entity_table'] === 'civicrm_group') {
         if (CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {
           CRM_CampagnodonCivicrm_Logic_Contact::addInGroup($link['entity_id'], $contact_id);
@@ -269,7 +270,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
           && empty($link['entity_id']) // only add the membership the first time.
         ) {
           // FIXME: do something when payment is cancelled?
-          CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['cancelled'], $link['parent_id'], $link['membership_type_id'], $contact_id, $link['opt_in']);
+          CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['parent_id'], $link['membership_type_id'], $contact_id, $link['opt_in']);
         }
       } else if ($link['entity_table'] === 'civicrm_tag') {
         if (CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {
