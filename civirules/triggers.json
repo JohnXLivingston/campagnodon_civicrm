@@ -1,0 +1,10 @@
+[
+  {
+    "name": "new_campagnodon_transaction",
+    "label": "Campagnodon transaction is added",
+    "object_name": "CampagnodonTransaction",
+    "op": "create",
+    "class_name": null,
+    "cron": "0"
+  }
+]
