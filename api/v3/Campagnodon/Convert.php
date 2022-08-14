@@ -39,16 +39,12 @@ function _civicrm_api3_campagnodon_Convert_spec(&$spec) {
     "description" => "Financial type ids (or names) to convert. Array where keys are old value et value are the new ones.",
     "api.required" => 0,
   ];
-  $spec["keep_optional_subscriptions"] = [
-    "title" => ts("Keep optional subscriptions"),
-    "description" => "Optional subscriptions to keep, if present.",
-    "api.required" => 0,
-  ];
-  $spec["optional_subscriptions"] = [
-    "title" => ts("Optional subscriptions"),
-    "description" => "Optional subscriptions to add",
-    "api.required" => 0,
-  ];
+  // TODO:
+  // $spec["cancel_optional_subscription"] = [
+  //   "title" => ts("Cancel optional subscriptions"),
+  //   "description" => "Optional subscriptions to cancel. Array of optional subscriptions names.",
+  //   "api.required" => 0,
+  // ];
 }
 
 /**

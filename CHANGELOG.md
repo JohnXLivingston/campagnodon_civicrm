@@ -4,6 +4,7 @@
 ## 0.0.6 (Not Released Yet)
 
 * Ajout d'un nom optionnel pour les «souscriptions optionnelles», qui pourra servir à l'API de conversion.
+* API Convert: nettoyage des paramètres non utilisés.
 
 ## 0.0.5
 

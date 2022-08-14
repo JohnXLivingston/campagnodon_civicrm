@@ -259,8 +259,7 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
       'campagnodon_version' => '0',
       'transaction_idx' => $idx,
       'operation_type' => 'donation',
-      'keep_optional_subscriptions' => [],
-      'optional_subscriptions' => [],
+      // 'cancel_optional_subscription' => []
     ]);
   }
 
@@ -274,8 +273,7 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
       'campagnodon_version' => '1',
       'transaction_idx' => $idx,
       'operation_type' => 'donation',
-      'keep_optional_subscriptions' => [],
-      'optional_subscriptions' => [],
+      // 'cancel_optional_subscription' => []
     ]);
   }
 
