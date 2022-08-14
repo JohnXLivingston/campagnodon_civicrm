@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.0.6 (Not Released Yet)
+
+* Ajout d'un nom optionnel pour les «souscriptions optionnelles», qui pourra servir à l'API de conversion.
+
 ## 0.0.5
 
 * Complément d'adresse 1 et 2.

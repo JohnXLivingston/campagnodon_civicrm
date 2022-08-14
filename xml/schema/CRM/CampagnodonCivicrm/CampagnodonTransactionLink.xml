@@ -49,6 +49,15 @@
   </foreignKey>
 
   <field>
+    <name>optional_subscription_name</name>
+    <type>varchar</type>
+    <length>64</length>
+    <required>false</required>
+    <default>NULL</default>
+    <comment>Optional name for optional subscription. Can be used by APIs.</comment>
+  </field>
+
+  <field>
     <name>entity_table</name>
     <title>Entity table</title>
     <type>varchar</type>

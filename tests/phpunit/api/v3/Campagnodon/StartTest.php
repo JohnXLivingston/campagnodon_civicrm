@@ -74,7 +74,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
           ]
         ],
         'optional_subscriptions' => [
-          ['type' => 'opt-in', 'key' => 'do_not_trade', 'when' => 'init']
+          ['name' => 'this_is_the_name', 'type' => 'opt-in', 'key' => 'do_not_trade', 'when' => 'init']
         ]
       )],
       'bill' => [array(
@@ -605,6 +605,27 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
       } else {
         $this->assertEquals($contact[$os['opt_in']], true, 'Opt-in '.$os['opt_in'].' should be true because the user doesnt accept yet.');
       }
+    }
+
+    // Testing that the optional_subscription_name param is correctly handled.
+    $optional_subscriptions_with_name = array_filter($optional_subscriptions, function ($os) {
+      return !empty($os['name']);
+    });
+    $optional_subscriptions_with_name_links = \Civi\Api4\CampagnodonTransactionLink::get()
+      ->setCheckPermissions(false)
+      ->addSelect('*')
+      ->addWhere('campagnodon_tid', '=', $transaction_id)
+      ->addWhere('optional_subscription_name', 'IS NOT NULL')
+      ->execute();
+    $this->assertEquals(count($optional_subscriptions_with_name), $optional_subscriptions_with_name_links->count(), 'Correction number of links with an optional_subscription_name');
+    foreach ($optional_subscriptions_with_name as $os) {
+      $optional_subscriptions_with_this_name_links = \Civi\Api4\CampagnodonTransactionLink::get()
+        ->setCheckPermissions(false)
+        ->addSelect('*')
+        ->addWhere('campagnodon_tid', '=', $transaction_id)
+        ->addWhere('optional_subscription_name', '=', $os['name'])
+        ->execute();
+      $this->assertEquals(1, $optional_subscriptions_with_this_name_links->count(), 'There is exactly 1 optional_subscription with name '.$os['name']);
     }
   }
 

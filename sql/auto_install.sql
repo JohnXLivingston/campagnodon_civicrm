@@ -85,6 +85,7 @@ CREATE TABLE `civicrm_campagnodon_transaction_link` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonTransactionLink ID',
   `campagnodon_tid` int unsigned NOT NULL COMMENT 'FK to CampagnodonTransaction',
   `parent_id` int unsigned DEFAULT NULL COMMENT 'Optional parent id for this CampagnodonTransactionLink. Used to find the contribution link associated to a membership subscription.',
+  `optional_subscription_name` varchar(64) NULL DEFAULT NULL COMMENT 'Optional name for optional subscription. Can be used by APIs.',
   `entity_table` varchar(64) NOT NULL COMMENT 'Table of the linked object',
   `entity_id` int unsigned NULL DEFAULT NULL COMMENT 'ID of the linked object. Can be null if the object is not created in pending state.',
   `on_complete` tinyint DEFAULT false COMMENT 'Only when entity_table=\'group\' or \'contact\' or \'tag\'. If true, the contact will be added in group only when transaction is complete.',
