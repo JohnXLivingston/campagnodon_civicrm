@@ -28,7 +28,7 @@ class CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction extends CRM_CampagnodonC
    *
    * @return array
    */
-  public static function statusTables(): array {
+  public static function statusTables() {
     return [
       'init' => 'Init',
       'pending' => 'Pending',
@@ -42,11 +42,18 @@ class CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction extends CRM_CampagnodonC
   }
 
   /**
+   * Return true if the status is a «not paid status».
+   */
+  public static function isStatusNotPaid($status) {
+    return $status === 'init' || $status === 'pending' || $status === 'failed';
+  }
+
+  /**
    * Possible values for opt-in fields
    *
    * @return array
    */
-  public static function optInTables(): array {
+  public static function optInTables() {
     return [
       'do_not_trade' => 'do_not_trade'
     ];

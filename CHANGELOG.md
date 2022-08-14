@@ -6,6 +6,7 @@
 * Ajout d'un nom optionnel pour les «souscriptions optionnelles», qui pourra servir à l'API de conversion.
 * API Convert: nettoyage des paramètres non utilisés.
 * Ajout d'un trigger Civirules à la création d'une transaction.
+* Ajout d'une condition Civirules «non payé».
 
 ## 0.0.5
 
