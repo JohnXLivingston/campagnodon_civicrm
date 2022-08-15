@@ -188,6 +188,10 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
       // 'simple double_membership use case' => [function ($that) { return [
       //   'start' => $that->getSimpleMembershipStartParams(),
       //   'double_membership' => true,
+      //   'updatestatus' => [
+      //     'status' => 'completed',
+      //     'payment_instrument' => 'Debit Card'
+      //   ],
       //   'convert' => [
       //     'campagnodon_version' => '1',
       //     'operation_type' => 'donation',
