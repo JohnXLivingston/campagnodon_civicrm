@@ -29,7 +29,18 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NotPaid 
       // Dont know if it can happen...
       return FALSE;
     }
-    $status = $triggerCampagnodonTransaction['status'];
+    // Nb: for a not well-understanded reason, $triggerCampagnodonTransaction['status'] is empty...
+    // So we get the transaction from the Database to check...
+    $transaction = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
+      ->addSelect('*')
+      ->addWhere('id', '=', $triggerCampagnodonTransaction['id'])
+      ->execute()->first();
+    if (empty($transaction)) {
+      // Transaction deleted?
+      return FALSE;
+    }
+    $status = $transaction['status'];
     if (CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::isStatusNotPaid($status)) {
       return TRUE;
     }
