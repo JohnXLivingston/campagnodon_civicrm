@@ -184,6 +184,21 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
         ],
         'expect_exception' => CiviCRM_API3_Exception::class
       ];}],
+      // FIXME: double_membership tests dont work for now.
+      // 'simple double_membership use case' => [function ($that) { return [
+      //   'start' => $that->getSimpleMembershipStartParams(),
+      //   'double_membership' => true,
+      //   'convert' => [
+      //     'campagnodon_version' => '1',
+      //     'operation_type' => 'donation',
+      //     'convert_financial_type' => [
+      //       'Member Dues' => [
+      //         'new_financial_type' => 'Donation',
+      //         'membership' => null // remove the membership
+      //       ]
+      //     ]
+      //   ]
+      // ];}],
     ];
   }
 
@@ -285,7 +300,15 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
     $params = $params_function($this);
     $idx = $params['start']['transaction_idx'];
     $update_status = array_key_exists('updatestatus', $params) ? $params['updatestatus'] : null;
+    $test_double_membership = array_key_exists('double_membership', $params) && $params['double_membership'] === true;
     $expect_exception = array_key_exists('expect_exception', $params) ? $params['expect_exception'] : null;
+
+    if ($test_double_membership) {
+      // Just creating a double_membership, by calling the start API a first time...
+      Civi::settings()->set('campagnodon_dedupe_rule', 'Unsupervised/first');
+      Civi::settings()->set('campagnodon_dedupe_rule_with_tax_receipt', 'Unsupervised/first');
+      civicrm_api3('Campagnodon', 'start', $this->getSimpleMembershipStartParams());
+    }
   
     civicrm_api3('Campagnodon', 'start', $params['start']);
     if ($update_status) {
@@ -303,7 +326,11 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
       ->execute()
       ->single();
 
-    $this->assertEquals($old_transaction['status'], $update_status ? $update_status['status'] : 'init', 'The status of the transaction is correct.');
+    if ($test_double_membership) {
+      $this->assertEquals('double_membership', $old_transaction['status'], 'The status of the transaction is double_membership.');
+    } else {
+      $this->assertEquals($update_status ? $update_status['status'] : 'init', $old_transaction['status'], 'The status of the transaction is correct.');
+    }
 
     if ($expect_exception) {
       $this->expectException($expect_exception);
@@ -325,9 +352,31 @@ class api_v3_Campagnodon_ConvertTest extends \PHPUnit\Framework\TestCase impleme
     
     $this->assertNotEquals($old_transaction['operation_type'], $transaction['operation_type'], 'The operation type has changed.');
     $this->assertEquals($params['convert']['operation_type'], $transaction['operation_type'], 'The operation type is the correct one.');
+    if ($test_double_membership) {
+      $this->assertEquals('init', $transaction['status'], 'The transaction status is back to init (double_membership) just after the convert');
+    } else {
+      $this->assertEquals($old_transaction['status'], $transaction['status'], 'The transaction is in the same status just after the convert');
+    }
 
 
     // TODO: test that contribution financial_type have changed
     // TODO: test that transctionlink financial_type have changed
+
+    // // If updatestatus was provided, we try to sync again the status
+    // if ($test_double_membership && $update_status) {
+    //   civicrm_api3('Campagnodon', 'updatestatus', array_merge(
+    //     array(
+    //       'transaction_idx' => $idx
+    //     ),
+    //     $params['updatestatus']
+    //   ));
+
+    //   $transaction = \Civi\Api4\CampagnodonTransaction::get()
+    //     ->setCheckPermissions(false)
+    //     ->addWhere('id', '=', $old_transaction['id'])
+    //     ->execute()
+    //     ->single();
+    //   $this->assertEquals($update_status['status'], $transaction['status'], 'The status of the transaction is correct after another updatestatus call.');
+    // }
   }
 }
