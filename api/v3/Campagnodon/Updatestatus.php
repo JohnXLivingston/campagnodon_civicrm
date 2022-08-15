@@ -51,6 +51,7 @@ function _civicrm_api3_campagnodon_Updatestatus_spec(&$spec) {
 function civicrm_api3_campagnodon_Updatestatus($params) {
   $tx = new CRM_Core_Transaction();
   try {
+    Civi::log()->debug(__FUNCTION__.' Entering in Updatestatus API');
     $transaction = \Civi\Api4\CampagnodonTransaction::get()
       ->setCheckPermissions(false)
       ->addWhere('idx', '=', $params['transaction_idx'])
@@ -84,6 +85,8 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       }
     }
 
+    Civi::log()->debug(__FUNCTION__.' the status to set is: '.$status.'. Current transaction status is: '.$transaction['status']);
+
     $contribution_status = Civi::settings()->get('campagnodon_contribution_status_'.($status === 'init' ? 'pending' : $status));
     if (!$contribution_status) {
       throw new Exception('Cant find contribution_status for "'.$status.'".');
@@ -103,6 +106,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       $transaction_has_update = true;
     }
     if ($transaction_has_update) {
+      Civi::log()->debug(__FUNCTION__.' updating the transaction...');
       $transaction_update->execute();
     }
 
@@ -181,9 +185,12 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       CRM_CampagnodonCivicrm_Logic_Contact::mergeIntoContact($transaction['id']);
     }
   } catch (Throwable $e) {
+    Civi::log()->debug(__FUNCTION__.' rollbacking...');
     $tx->rollback();
     throw $e;
   }
+
+  Civi::log()->debug(__FUNCTION__.' commiting...');
   $tx->commit();
 
   // Then we get the statut from database, to be sure we have the correct one.
