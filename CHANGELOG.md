@@ -7,6 +7,7 @@
 * API Convert: nettoyage des paramètres non utilisés.
 * Ajout d'un trigger Civirules à la création d'une transaction.
 * Ajout d'une condition Civirules «non payé».
+* Wrapper pour l'API Campaign, pour appliquer les droits «campagnodon api».
 
 ## 0.0.5
 

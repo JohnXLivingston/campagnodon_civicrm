@@ -167,6 +167,7 @@ function campagnodon_civicrm_civicrm_alterAPIPermissions($entity, $action, &$par
     'start' => ['Campagnodon api'],
     'dsp2info' => ['Campagnodon api'],
     'updatestatus' => ['Campagnodon api'],
-    'convert' => ['Campagnodon api']
+    'convert' => ['Campagnodon api'],
+    'campaign' => ['Campagnodon api']
   ];
 }
