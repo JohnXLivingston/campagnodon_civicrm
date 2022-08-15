@@ -155,20 +155,35 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
    * @param $contact_id
    */
   public static function addTag($tag_id, $contact_id) {
-    // Note: this API3 call only create EntityTag if not exists.
-    // But it can raise an Exception if all tags are already there... so... try/catch
-    try {
-      civicrm_api3('EntityTag', 'create', array(
-        'contact_id' => $contact_id,
-        'tag_id' => $tag_id,
-        'check_permissions' => 0
-      ));
-    } catch (CiviCRM_API3_Exception $e) {
-      // TODO: add some unit test
-      if ($e->getMessage() != 'Unable to add tags') {
-        throw $e;
-      }
+    $entity_tag = \Civi\Api4\EntityTag::get()
+      ->setCheckPermissions(false)
+      ->addWhere('tag_id', '=', $tag_id)
+      ->addWhere('entity_table', '=', 'civicrm_contact')
+      ->addWhere('entity_id', '=', $contact_id)
+      ->execute()->first();
+    if (!$entity_tag) {
+      \Civi\Api4\EntityTag::create()
+        ->setCheckPermissions(false)
+        ->addValue('entity_table', 'civicrm_contact')
+        ->addValue('entity_id', $contact_id)
+        ->addValue('tag_id', $tag_id)
+        ->execute();
     }
+    // the code bellow seams to provoke unwanted and invisible rollback...
+    // // Note: this API3 call only create EntityTag if not exists.
+    // // But it can raise an Exception if all tags are already there... so... try/catch
+    // try {
+    //   civicrm_api3('EntityTag', 'create', array(
+    //     'contact_id' => $contact_id,
+    //     'tag_id' => $tag_id,
+    //     'check_permissions' => 0
+    //   ));
+    // } catch (CiviCRM_API3_Exception $e) {
+    //   // TODO: add some unit test
+    //   if ($e->getMessage() != 'Unable to add tags') {
+    //     throw $e;
+    //   }
+    // }
   }
 
   protected static function _testOnComplete($link, $transaction_status) {
