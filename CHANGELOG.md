@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 0.0.6 (Not Released Yet)
+## 0.0.6
 
 * Ajout d'un nom optionnel pour les «souscriptions optionnelles», qui pourra servir à l'API de conversion.
 * API Convert: nettoyage des paramètres non utilisés.
