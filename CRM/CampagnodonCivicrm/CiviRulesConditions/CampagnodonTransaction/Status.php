@@ -1,6 +1,6 @@
 <?php
 
-class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NotPaid extends CRM_Civirules_Condition {
+class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Status extends CRM_Civirules_Condition {
   /**
    * Returns a redirect url to extra data input from the user after adding a condition
    *
@@ -12,7 +12,21 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NotPaid 
    * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return FALSE;
+    return CRM_Utils_System::url('civicrm/campagnodon/civirule/form/condition/campagnodontransactionstatus', "rule_id={$ruleConditionId}");
+  }
+
+  /**
+   * Method to set the Rule Condition data
+   *
+   * @param array $ruleCondition
+   * @access public
+   */
+  public function setRuleConditionData($ruleCondition) {
+    parent::setRuleConditionData($ruleCondition);
+    $this->conditionParams = array();
+    if (!empty($this->ruleCondition['condition_params'])) {
+      $this->conditionParams = unserialize($this->ruleCondition['condition_params']);
+    }
   }
 
   /**
@@ -24,10 +38,11 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NotPaid 
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData)
   {
+    Civi::log()->debug(__FUNCTION__.' We must test the CampagnodonTransaction_Status condition');
     $triggerCampagnodonTransaction = $triggerData->getEntityData('CampagnodonTransaction');
     if (!$triggerCampagnodonTransaction) {
-      // Dont know if it can happen...
       Civi::log()->error(__FUNCTION__.' There is no CampagnodonTransaction');
+      // Dont know if it can happen...
       return FALSE;
     }
     // Nb: for a not well-understanded reason, $triggerCampagnodonTransaction['status'] is empty...
@@ -42,10 +57,13 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NotPaid 
       return FALSE;
     }
     $status = $transaction['status'];
-    if (CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::isStatusNotPaid($status)) {
-      return TRUE;
+    $in = in_array($status, $this->conditionParams['status_id']);
+    Civi::log()->debug(__FUNCTION__.' Transation id='.$transaction['id'].', status is in = '.($in ? 'yes' : 'no'));
+    if (1 == $this->conditionParams['operator']) {
+      Civi::log()->debug(__FUNCTION__.' The operator was "not one of", inverting the result');
+      return !$in;
     }
-    return FALSE;
+    return $in;
   }
 
   /**

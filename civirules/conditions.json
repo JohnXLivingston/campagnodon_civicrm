@@ -3,5 +3,10 @@
     "name": "campagnodon_transaction_not_paid",
     "label": "Campagnodon Transaction not paid",
     "class_name": "CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NotPaid"
+  },
+  {
+    "name": "campagnodon_transaction_status",
+    "label": "Campagnodon Transaction status",
+    "class_name": "CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Status"
   }
 ]

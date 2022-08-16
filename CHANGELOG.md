@@ -5,6 +5,7 @@
 
 * On retirer l'ancien filtre «problèmes» dans la recherche de transaction.
 * Remplacement du trigger Civirule new_campagnodon_transaction par un trigger de type cron «X jours après».
+* Ajout des conditions CiviRules: Status, 
 
 ## 0.0.6
 

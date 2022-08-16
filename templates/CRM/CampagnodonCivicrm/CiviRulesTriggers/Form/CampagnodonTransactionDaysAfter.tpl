@@ -1,6 +1,6 @@
 {crmScope extensionKey='campagnodon_civicrm'}
   <h3>{$ruleTriggerHeader}</h3>
-  <div class="crm-block crm-form-block crm-civirule-cron_trigger-block-activity_date">
+  <div class="crm-block crm-form-block">
   <div class="help">{$ruleTriggerHelp}</div>
   <div class="crm-section">
     <div class="label">{$form.days.label}</div>
