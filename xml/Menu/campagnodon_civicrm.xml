@@ -30,4 +30,10 @@
     <title>Search</title>
     <access_arguments>access Campagnodon</access_arguments>
   </item>
+  <item>
+    <path>civicrm/campagnodon/civirule/form/trigger/campagnodontransactiondaysafter</path>
+    <page_callback>CRM_CampagnodonCivicrm_CiviRulesTriggers_Form_CampagnodonTransactionDaysAfter</page_callback>
+    <title>X Days after Campagnodon transaction</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
 </menu>
