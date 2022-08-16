@@ -96,5 +96,5 @@ msgfmt l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.po -o l10n/fr_FR/LC_MESSAGES/c
 
 ## TODO
 
-* Restreindre les droits nécessaires ? Ce qui permettrait d'avoir une API KEY liée à un user qui ne pourrait appeler que les API Campagnodon, et celles-ci by-passeraient les droits sur les autres API.
+* Il y a des problèmes de droits avec CiviRules, qui n'a que les permissions «Campagnodon api». Voir comment on peut corriger.
 * Documentation les règles de dédoublonnage custom.
