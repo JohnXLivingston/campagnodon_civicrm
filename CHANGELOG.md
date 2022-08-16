@@ -4,6 +4,7 @@
 ## 0.0.7 (Not Released Yet)
 
 * On retirer l'ancien filtre «problèmes» dans la recherche de transaction.
+* API Start, UpdateStatus et Convert: on donne les droits max sur civicrm au processus en cours d'execution. Ceci afin d'éviter les problèmes avec Civirules.
 
 ## 0.0.6
 

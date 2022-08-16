@@ -50,8 +50,11 @@ function _civicrm_api3_campagnodon_Updatestatus_spec(&$spec) {
  */
 function civicrm_api3_campagnodon_Updatestatus($params) {
   $tx = new CRM_Core_Transaction();
+  // CiviRules is buggy is we only have 'Campagnodon api' permission... So we are cheating by changing the permissions during the API call.
+  $previous_permissions = CRM_Core_Config::singleton()->userPermissionClass->permissions;
   try {
     Civi::log()->debug(__FUNCTION__.' Entering in Updatestatus API');
+    CRM_Core_Config::singleton()->userPermissionClass->permissions = ['access CiviCRM', 'access Campagnodon', 'administer CiviCRM', 'Campagnodon api'];
     $transaction = \Civi\Api4\CampagnodonTransaction::get()
       ->setCheckPermissions(false)
       ->addWhere('idx', '=', $params['transaction_idx'])
@@ -188,6 +191,8 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
     Civi::log()->debug(__FUNCTION__.' rollbacking...');
     $tx->rollback();
     throw $e;
+  } finally {
+    CRM_Core_Config::singleton()->userPermissionClass->permissions = $previous_permissions;
   }
 
   Civi::log()->debug(__FUNCTION__.' commiting...');

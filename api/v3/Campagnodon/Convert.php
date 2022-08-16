@@ -64,7 +64,10 @@ function _civicrm_api3_campagnodon_Convert_spec(&$spec) {
 function civicrm_api3_campagnodon_Convert($params) {
   $tx = new CRM_Core_Transaction();
   $transaction = null;
+  // CiviRules is buggy is we only have 'Campagnodon api' permission... So we are cheating by changing the permissions during the API call.
+  $previous_permissions = CRM_Core_Config::singleton()->userPermissionClass->permissions;
   try {
+    CRM_Core_Config::singleton()->userPermissionClass->permissions = ['access CiviCRM', 'access Campagnodon', 'administer CiviCRM', 'Campagnodon api'];
     // checking API version
     if ($params['campagnodon_version'] !== '1') {
       throw new API_Exception("Unkwnown API version '".($params['campagnodon_version'] ?? '')."'");
@@ -98,6 +101,8 @@ function civicrm_api3_campagnodon_Convert($params) {
   } catch (Throwable $e) {
     $tx->rollback();
     throw $e;
+  } finally {
+    CRM_Core_Config::singleton()->userPermissionClass->permissions = $previous_permissions;
   }
   $tx->commit();
 
