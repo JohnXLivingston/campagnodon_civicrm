@@ -342,10 +342,6 @@ msgstr "Campagnodon"
 msgid "%%StatusMessage%%"
 msgstr ""
 
-#: ./CRM/CampagnodonCivicrm/Form/Search.php
-msgid "Issue"
-msgstr "Problème"
-
 #: ./CRM/CampagnodonCivicrm/Form/Search.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
 msgid "Campagnodon IDX"
 msgstr "IDX Campagnodon"

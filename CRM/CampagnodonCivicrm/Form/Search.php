@@ -52,13 +52,6 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
 
     $this->add(
       'select', // field type
-      'issue', // field name
-      E::ts('Issue'), // field label
-      $this->getIssueOptions(), // list of options
-      false // is required
-    );
-    $this->add(
-      'select', // field type
       'status', // field name
       E::ts('Status'), // field label
       $this->getStatusOptions(), // list of options
@@ -147,14 +140,6 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
     parent::postProcess();
   }
 
-  public function getIssueOptions() {
-    $options = array(
-      '' => E::ts('- select -'),
-    );
-    $options['already_member'] = E::ts('Already member');
-    return $options;
-  }
-
   public function getStatusOptions() {
     $statuses = CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::statusTables();
     $options = array(
@@ -196,14 +181,6 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       $api->setOffset($this->offset);
     }
 
-    if (isset($this->formValues['issue']) && !empty($this->formValues['issue'])) {
-      $api->addJoin(
-        'CampagnodonTransactionLink AS tlink',
-        'INNER', null,
-        ['tlink.campagnodon_tid', '=', 'id']
-      );
-      $api->addWhere('tlink.cancelled', '=', $this->formValues['issue']);
-    }
     if (isset($this->formValues['status']) && !empty($this->formValues['status'])) {
       $api->addWhere('status', '=', $this->formValues['status']);
     }

@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.0.7 (Not Released Yet)
+
+* On retirer l'ancien filtre «problèmes» dans la recherche de transaction.
+
 ## 0.0.6
 
 * Ajout d'un nom optionnel pour les «souscriptions optionnelles», qui pourra servir à l'API de conversion.
