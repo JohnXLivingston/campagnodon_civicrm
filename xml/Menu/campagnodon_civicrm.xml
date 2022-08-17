@@ -39,7 +39,13 @@
   <item>
     <path>civicrm/campagnodon/civirule/form/condition/campagnodontransactionstatus</path>
     <page_callback>CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Form_Status</page_callback>
-    <title>Campagnodon transaction status</title>
+    <title>Campagnodon Transaction status</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/campagnodon/civirule/form/condition/campagnodontransactionoperationtype</path>
+    <page_callback>CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Form_OperationType</page_callback>
+    <title>Campagnodon Transaction Operation Type</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
 </menu>

@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.0.8 (Not Released Yet)
+
+* Ajout de la condition CiviRules sur le type de transaction.
+
 ## 0.0.7
 
 * On retirer l'ancien filtre «problèmes» dans la recherche de transaction.

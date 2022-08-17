@@ -8,5 +8,10 @@
     "name": "campagnodon_transaction_status",
     "label": "Campagnodon Transaction status",
     "class_name": "CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Status"
+  },
+  {
+    "name": "campagnodon_transaction_operation_type",
+    "label": "Campagnodon Transaction Operation Type",
+    "class_name": "CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_OperationType"
   }
 ]

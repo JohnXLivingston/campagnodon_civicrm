@@ -1,6 +1,6 @@
 <?php
 
-class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Status extends CRM_Civirules_Condition {
+class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_OperationType extends CRM_Civirules_Condition {
   /**
    * Returns a redirect url to extra data input from the user after adding a condition
    *
@@ -12,7 +12,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Status e
    * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/campagnodon/civirule/form/condition/campagnodontransactionstatus', "rule_id={$ruleConditionId}");
+    return CRM_Utils_System::url('civicrm/campagnodon/civirule/form/condition/campagnodontransactionoperationtype', "rule_id={$ruleConditionId}");
   }
 
   /**
@@ -38,7 +38,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Status e
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData)
   {
-    Civi::log()->debug(__FUNCTION__.' We must test the CampagnodonTransaction_Status condition');
+    Civi::log()->debug(__FUNCTION__.' We must test the CampagnodonTransaction_OperationType condition');
     $triggerCampagnodonTransaction = $triggerData->getEntityData('CampagnodonTransaction');
     if (!$triggerCampagnodonTransaction) {
       Civi::log()->error(__FUNCTION__.' There is no CampagnodonTransaction');
@@ -46,7 +46,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Status e
       return FALSE;
     }
     // Nb: for a not well-understanded reason, $triggerCampagnodonTransaction['status'] is empty...
-    // So we get the transaction from the Database to check...
+    // I dont know if we get the same issue for operation_type. So we get the transaction from the Database to check...
     $transaction = \Civi\Api4\CampagnodonTransaction::get()
       ->setCheckPermissions(false)
       ->addSelect('*')
@@ -56,13 +56,23 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Status e
       // Transaction deleted?
       return FALSE;
     }
-    $status = $transaction['status'];
 
-    $statuses = $this->conditionParams['status_id'];
-    Civi::log()->debug(__FUNCTION__.' here is the list of statuses in the condition: '.print_r($statuses, true));
+    $operation_types = $this->conditionParams['operation_type'] ?? '';
+    $operation_types = explode(',', $operation_types);
+    $operation_types_clean = array();
+    foreach ($operation_types as $operation_type) {
+      $operation_type = trim($operation_type);
+      if (empty($operation_type)) {
+        continue;
+      }
+      $operation_types_clean[] = $operation_type;
+    }
+    $operation_types = $operation_types_clean;
 
-    $in = in_array($status, $statuses);
-    Civi::log()->debug(__FUNCTION__.' Transation id='.$transaction['id'].', status '.$status.' is in = '.($in ? 'yes' : 'no'));
+    Civi::log()->debug(__FUNCTION__.' here is the list of operation_types in the condition: '.print_r($operation_types, true));
+
+    $in = in_array($transaction['operation_type'], $operation_types);
+    Civi::log()->debug(__FUNCTION__.' Transation id='.$transaction['id'].', operation_type '.$transaction['operation_type'].' is in = '.($in ? 'yes' : 'no'));
     if (1 == $this->conditionParams['operator']) {
       Civi::log()->debug(__FUNCTION__.' The operator was "not one of", inverting the result');
       return !$in;
