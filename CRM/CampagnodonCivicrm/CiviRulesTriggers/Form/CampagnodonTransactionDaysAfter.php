@@ -22,7 +22,7 @@ class CRM_CampagnodonCivicrm_CiviRulesTriggers_Form_CampagnodonTransactionDaysAf
   public function setDefaultValues() {
     $defaultValues = parent::setDefaultValues();
     $data = unserialize($this->rule->trigger_params);
-    if (!empty($data['days'])) {
+    if (!empty($data['days']) || $data['days'] === '0') {
       $defaultValues['days'] = $data['days'];
     }
     return $defaultValues;
