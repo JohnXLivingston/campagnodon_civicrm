@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 0.0.9 (Not Released Yet)
+## 0.0.9
 
 * Fix formulaire de la condition DaysAfter, quand days = 0.
 * Ajout de la condition CiviRules «pas d'autre transaction pour le contact».
