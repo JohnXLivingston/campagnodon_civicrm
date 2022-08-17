@@ -24,7 +24,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Form_NoO
     $this->add('text', 'operation_type', $label, [], FALSE);
     $this->add('select', 'operation_type_operator', ts('Operator'), [0 => ts('is one of'), 1 => ts('is NOT one of')], TRUE);
 
-    $this->add('text', 'days', ts('Days after creation'), array('class' => 'huge'), TRUE);
+    $this->add('text', 'days', ts('Days after creation'), array('class' => 'huge'), FALSE);
     $this->addRule('days', ts('Interval should be a numeric value'), 'numeric');
 
     $this->addButtons(array(

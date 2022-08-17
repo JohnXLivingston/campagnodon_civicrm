@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.0.11
+
+* Condition NoOther: days est optionnel.
+
 ## 0.0.10
 
 * Condition NoOther: ajout d'une option «ces X derniers jours».
