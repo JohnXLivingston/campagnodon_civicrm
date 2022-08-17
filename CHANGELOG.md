@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.0.14
+
+* Dsp2: on retourne aussi le téléphone.
+
 ## 0.0.13
 
 * Fix échappement html dans les templates.
