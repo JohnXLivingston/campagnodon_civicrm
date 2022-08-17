@@ -35,7 +35,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Form_Sta
     $defaultValues = parent::setDefaultValues();
     $data = unserialize($this->ruleCondition->condition_params);
 
-    $data['status_id'] = $data['status_id'] ?? NULL;
+    $data['status_id'] = $data['status_id'] ?? [];
     if (!is_array($data['status_id'])) {
       $data['status_id'] = [$data['status_id']];
     }
