@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 0.0.8 (Not Released Yet)
+## 0.0.8
 
 * Ajout de la condition CiviRules sur le type de transaction.
 * Fix url pour l'édition des conditions, qui pouvaient entrainer une corruption de la base à la sauvegarde.
