@@ -33,7 +33,7 @@ class CRM_CampagnodonCivicrm_CiviRulesTriggers_CampagnodonTransactionDaysAfter e
       Civi::log()->debug(__METHOD__.' fetched the transaction id='.$this->dao->id);
       $data = array();
       CRM_Core_DAO::storeValues($this->dao, $data);
-      $triggerData = new CRM_Civirules_TriggerData_Cron($this->dao->id, 'CampagnodonTransaction', $data);
+      $triggerData = new CRM_Civirules_TriggerData_Cron($this->dao->contact_id, 'CampagnodonTransaction', $data, $this->dao->id);
       return $triggerData;
     }
     return false;

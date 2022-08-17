@@ -7,6 +7,7 @@
 * Ajout de la condition CiviRules «pas d'autre transaction pour le contact».
 * Meilleure présentation pour les formulaires de condition Civirule.
 * Logs: utilisation de __METHOD__ au lieu de __FUNCTION__.
+* Fix Civirules: le mauvais ID était stocké dans la table de log.
 
 ## 0.0.8
 
