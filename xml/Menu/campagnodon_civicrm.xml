@@ -48,4 +48,10 @@
     <title>Campagnodon Transaction Operation Type</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/campagnodon/civirule/form/condition/campagnodontransactionnoother</path>
+    <page_callback>CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Form_NoOther</page_callback>
+    <title>Campagnodon Transaction no other transaction for the contact</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
 </menu>

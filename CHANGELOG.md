@@ -4,6 +4,7 @@
 ## 0.0.9 (Not Released Yet)
 
 * Fix formulaire de la condition DaysAfter, quand days = 0.
+* Ajout de la condition CiviRules «pas d'autre transaction pour le contact».
 
 ## 0.0.8
 
