@@ -19,6 +19,7 @@ SET FOREIGN_KEY_CHECKS=0;
 
 DROP TABLE IF EXISTS `civicrm_campagnodon_transaction_link`;
 DROP TABLE IF EXISTS `civicrm_campagnodon_transaction`;
+DROP TABLE IF EXISTS `civicrm_campagnodon_civirules_log`;
 
 SET FOREIGN_KEY_CHECKS=1;
 -- /*******************************************************
@@ -26,6 +27,23 @@ SET FOREIGN_KEY_CHECKS=1;
 -- * Create new tables
 -- *
 -- *******************************************************/
+
+-- /*******************************************************
+-- *
+-- * civicrm_campagnodon_civirules_log
+-- *
+-- *******************************************************/
+CREATE TABLE `civicrm_campagnodon_civirules_log` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonCivirulesLog ID',
+  `rule_id` int unsigned DEFAULT NULL,
+  `trigger_name` varchar(255) NOT NULL,
+  `entity_table` varchar(255) DEFAULT NULL,
+  `entity_id` int unsigned DEFAULT NULL,
+  `log_date` datetime NOT NULL DEFAULT NOW(),
+  PRIMARY KEY (`id`),
+  INDEX `idx_rule_id_name_entity`(rule_id, trigger_name, entity_table, entity_id)
+)
+ENGINE=InnoDB;
 
 -- /*******************************************************
 -- *

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/CampagnodonCivicrm</base>
+  <class>CampagnodonCivirulesLog</class>
+  <name>civicrm_campagnodon_civirules_log</name>
+  <log>false</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique CampagnodonCivirulesLog ID</comment>
+    <html>
+      <type>Number</type>
+    </html>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <field>
+    <name>rule_id</name>
+    <type>int unsigned</type>
+    <default>NULL</default>
+  </field>
+
+  <field>
+    <name>trigger_name</name>
+    <type>varchar</type>
+    <length>255</length>
+    <required>true</required>
+  </field>
+
+  <field>
+    <name>entity_table</name>
+    <type>varchar</type>
+    <length>255</length>
+    <default>NULL</default>
+  </field>
+  <field>
+    <name>entity_id</name>
+    <type>int unsigned</type>
+    <default>NULL</default>
+  </field>
+
+  <field>
+    <name>log_date</name>
+    <type>datetime</type>
+    <required>true</required>
+    <default>NOW()</default>
+  </field>
+
+  <index>
+    <name>idx_rule_id_name_entity</name>
+    <fieldName>rule_id</fieldName>
+    <fieldName>trigger_name</fieldName>
+    <fieldName>entity_table</fieldName>
+    <fieldName>entity_id</fieldName>
+  </index>
+</table>

@@ -360,4 +360,26 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN IF NOT EXISTS `optional_subscription_name` varchar(64) NULL DEFAULT NULL COMMENT 'Optional name for optional subscription. Can be used by APIs.'");
     return TRUE;
   }
+
+  /**
+   * New table
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0016(): bool {
+    $this->ctx->log->info('Planning update 0016');
+    CRM_Core_DAO::executeQuery("CREATE TABLE `civicrm_campagnodon_civirules_log` (
+      `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonCivirulesLog ID',
+      `rule_id` int unsigned DEFAULT NULL,
+      `trigger_name` varchar(255) NOT NULL,
+      `entity_table` varchar(255) DEFAULT NULL,
+      `entity_id` int unsigned DEFAULT NULL,
+      `log_date` datetime NOT NULL DEFAULT NOW(),
+      PRIMARY KEY (`id`),
+      INDEX `idx_rule_id_name_entity`(rule_id, trigger_name, entity_table, entity_id)
+    )
+    ENGINE=InnoDB");
+    return TRUE;
+  }
 }

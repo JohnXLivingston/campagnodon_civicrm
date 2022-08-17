@@ -4,6 +4,7 @@
 ## 0.0.12
 
 * Condition NoOther: labels and help.
+* Fix Trigger CamapnodonTransactionDaysAfter: on ne le lance qu'une fois par transaction.
 
 ## 0.0.11
 

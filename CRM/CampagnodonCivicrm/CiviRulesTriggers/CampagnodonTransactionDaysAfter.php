@@ -34,6 +34,17 @@ class CRM_CampagnodonCivicrm_CiviRulesTriggers_CampagnodonTransactionDaysAfter e
       $data = array();
       CRM_Core_DAO::storeValues($this->dao, $data);
       $triggerData = new CRM_Civirules_TriggerData_Cron($this->dao->contact_id, 'CampagnodonTransaction', $data, $this->dao->id);
+
+      // Note: Were are using a Cron Civirule trigger, to avoid permissions issue (the api uses a user with restricted rights)
+      // But doing so, if civirules' conditions are not met, this trigger will execute everytime.
+      // So we are using a special table to store the fact that we already triggered on this entity.
+      $log = \Civi\Api4\CampagnodonCivirulesLog::create()
+        ->addValue('entity_table', 'civicrm_campagnodon_transaction')
+        ->addValue('entity_id', $this->dao->id)
+        ->addValue('trigger_name', 'daysafter')
+        ->addValue('rule_id', $this->ruleId)
+        ->execute();
+
       return $triggerData;
     }
     return false;
@@ -54,10 +65,11 @@ class CRM_CampagnodonCivicrm_CiviRulesTriggers_CampagnodonTransactionDaysAfter e
 
     $sql = "SELECT t.*
             FROM `civicrm_campagnodon_transaction` AS `t`
-            LEFT JOIN `civirule_rule_log` AS `rule_log`
+            LEFT JOIN `civicrm_campagnodon_civirules_log` AS `rule_log`
               ON `rule_log`.`rule_id` = %1
                   AND `rule_log`.`entity_table` = 'civicrm_campagnodon_transaction'
                   AND `rule_log`.`entity_id` = t.id
+                  AND  `rule_log`.`trigger_name` = 'daysafter'
             WHERE DATE(`t`.`start_date`) = DATE_SUB(CURRENT_DATE(), INTERVAL %2 DAY)
               AND `rule_log`.`id` IS NULL
     ";
