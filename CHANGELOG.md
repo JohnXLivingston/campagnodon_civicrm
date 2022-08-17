@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 0.0.13 (Not Released Yet)
+## 0.0.13
 
 * Fix échappement html dans les templates.
 
