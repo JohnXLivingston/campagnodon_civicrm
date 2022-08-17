@@ -24,6 +24,9 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Form_NoO
     $this->add('text', 'operation_type', $label, [], FALSE);
     $this->add('select', 'operation_type_operator', ts('Operator'), [0 => ts('is one of'), 1 => ts('is NOT one of')], TRUE);
 
+    $this->add('text', 'days', ts('Days after creation'), array('class' => 'huge'), TRUE);
+    $this->addRule('days', ts('Interval should be a numeric value'), 'numeric');
+
     $this->addButtons(array(
       array('type' => 'next', 'name' => ts('Save'), 'isDefault' => TRUE,),
       array('type' => 'cancel', 'name' => ts('Cancel'))));
@@ -56,6 +59,11 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Form_NoO
     if (!empty($data['operation_type_operator'])) {
       $defaultValues['operation_type_operator'] = $data['operation_type_operator'];
     }
+
+    if (!empty($data['days']) || $data['days'] === '0') {
+      $defaultValues['days'] = $data['days'];
+    }
+
     return $defaultValues;
   }
 
@@ -70,6 +78,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Form_NoO
     $data['status_operator'] = $this->_submitValues['status_operator'];
     $data['operation_type'] = $this->_submitValues['operation_type'];
     $data['operation_type_operator'] = $this->_submitValues['operation_type_operator'];
+    $data['days'] = $this->_submitValues['days'];
     $this->ruleCondition->condition_params = serialize($data);
     $this->ruleCondition->save();
     parent::postProcess();

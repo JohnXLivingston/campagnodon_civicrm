@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.0.10
+
+* Condition NoOther: ajout d'une option «ces X derniers jours».
+
 ## 0.0.9
 
 * Fix formulaire de la condition DaysAfter, quand days = 0.

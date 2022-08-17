@@ -83,6 +83,16 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NoOther 
       $transactions_get->addWhere('operation_type', $nop.'IN', $operation_types);
     }
 
+    $days = $this->conditionParams['days'];
+    if (!empty($days) || $days === '0') {
+      Civi::log()->debug(__METHOD__.' must search start_date>=now-'.$days.' days');
+      $date = new DateTime();
+      $date->modify('-'.$days.' day');
+      $date = $date->format('Y-m-d');
+      Civi::log()->debug(__METHOD__.' that means start_date>='.$date);
+      $transactions_get->addWhere('start_date', '>=', $date);
+    }
+
     $transactions_get = $transactions_get->execute();
 
     // With CiviCRM 5.50+, there is a new countMatched method. Using it when available.
