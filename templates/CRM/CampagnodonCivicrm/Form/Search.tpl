@@ -85,12 +85,12 @@
               <td>
                 <a href="{crmURL p='civicrm/campagnodon/view' q="id=`$row.id`"}">{$row.id}</a>
               </td>
-              <td>{$row.idx}</td>
-              <td>{$row.operation_type}</td>
+              <td>{$row.idx|escape}</td>
+              <td>{$row.operation_type|escape}</td>
               <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
-              <td>{$row.status}</td>
+              <td>{$row.status|escape}</td>
               <td>{$row.contact}</td>
-              <td>{$row.campaign}</td>
+              <td>{$row.campaign|escape}</td>
               <td><input type="checkbox" disabled {if $row.tax_receipt} checked {/if}></td>
               <td class="right nowrap">
                   <span>

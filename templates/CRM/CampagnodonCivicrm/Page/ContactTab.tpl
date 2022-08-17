@@ -37,9 +37,9 @@
             <tr>
               <td>{$row.view}</td>
               <td>{$row.contact}</td>
-              <td>{$row.idx}</td>
+              <td>{$row.idx|escape}</td>
               <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
-              <td>{$row.status}</td>
+              <td>{$row.status|escape}</td>
               <td>
                 {if $row.payment_url}
                   <a target="_blank" href="{$row.payment_url}">
@@ -54,8 +54,8 @@
                   <br>
                 {/if}
               </td>
-              <td>{$row.payment_instrument}</td>
-              <td>{$row.campaign_title}</td>
+              <td>{$row.payment_instrument|escape}</td>
+              <td>{$row.campaign_title|escape}</td>
             </tr>
           {/foreach}
         </table>

@@ -12,22 +12,22 @@
     </tr>
     <tr>
       <td class="label">{ts}Campagnodon IDX{/ts}</td>
-      <td>{$row.idx}</td>
+      <td>{$row.idx|escape}</td>
     </tr>
     <tr>
       <td class="label">{ts}Operation Type{/ts}</td>
-      <td>{$row.operation_type}</td>
+      <td>{$row.operation_type|escape}</td>
     </tr>
     <tr>
       <td class="label">{ts}Source{/ts}</td>
-      <td>{$row.source}</td>
+      <td>{$row.source|escape}</td>
     </tr>
     <tr>
       <td class="label">{ts}Start Date{/ts}</td>
       <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
     <tr>
       <td class="label">{ts}Status{/ts}</td>
-      <td>{$row.status}</td>
+      <td>{$row.status|escape}</td>
     </tr>
     <tr>
       <td class="label">{ts}Payment Url{/ts}</td>
@@ -39,13 +39,13 @@
     </tr>
     <tr>
       <td class="label">{ts}Payment Instrument{/ts}</td>
-      <td>{$row.payment_instrument}</td>
+      <td>{$row.payment_instrument|escape}</td>
     </tr>
     <tr>
       <td class="label">{ts}Campaign{/ts}</td>
       <td>
         {if $row.campaign_id}
-          {$row.campaign_id}: {$row.campaign_title}
+          {$row.campaign_id|escape}: {$row.campaign_title|escape}
         {/if}
       </td>
     </tr>
@@ -66,14 +66,14 @@
             {ts}Personnal information were merged into contact.{/ts}<br>
           </span>
         {/if}
-        {$row.email}<br>
-        {$row.prefix} {$row.first_name} {$row.last_name}<br>
-        {$row.street_address}<br>
-        {$row.supplemental_address_1}<br>
-        {$row.supplemental_address_2}<br>
-        {$row.postal_code} {$row.city}<br>
-        {$row.country_label}<br>
-        {$row.phone}
+        {$row.email|escape}<br>
+        {$row.prefix|escape} {$row.first_name|escape} {$row.last_name|escape}<br>
+        {$row.street_address|escape}<br>
+        {$row.supplemental_address_1|escape}<br>
+        {$row.supplemental_address_2|escape}<br>
+        {$row.postal_code|escape} {$row.city|escape}<br>
+        {$row.country_label|escape}<br>
+        {$row.phone|escape}
       </td>
     </tr>
     <tr>
@@ -106,8 +106,8 @@
           {foreach from=$links item=link}
             <tr>
               <td>{if $link.parent_id}{$link.parent_id}/{/if}{$link.id}</td>
-              <td>{$link.optional_subscription_name}</td>
-              <td>{$link.entity_table}</td>
+              <td>{$link.optional_subscription_name|escape}</td>
+              <td>{$link.entity_table|escape}</td>
               <td>{$link.entity_id}</td>
               <td>{$link.view}</td>
               <td>
@@ -117,7 +117,7 @@
                   {/if}
                 {/if}
                 {if $link.entity_table === 'civicrm_contribution'}
-                  {$link.financial_type}
+                  {$link.financial_type|escape}
                   {$link.total_amount|crmMoney:$link.currency}
                 {/if}
                 {if $link.entity_table === 'civicrm_contact'}
@@ -139,7 +139,7 @@
                 {if $link.cancelled}
                   <br>
                   {ts}Cancelled:{/ts}
-                  <span style="color:red;">{$link.cancelled}</span>
+                  <span style="color:red;">{$link.cancelled|escape}</span>
                 {/if}
               </td>
             </tr>

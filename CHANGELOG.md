@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.0.13 (Not Released Yet)
+
+* Fix échappement html dans les templates.
+
 ## 0.0.12
 
 * Condition NoOther: labels and help.
