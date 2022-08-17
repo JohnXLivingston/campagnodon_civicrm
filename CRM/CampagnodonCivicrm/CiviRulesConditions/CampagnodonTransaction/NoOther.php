@@ -79,7 +79,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NoOther 
       if ($this->conditionParams['operation_type_operator'] == 1) {
         $nop = 'NOT ';
       }
-      Civi::log()->debug(__METHOD__.' must test operation_types '.$nop.' IN : '.print_r($operation_types, true));
+      Civi::log()->debug(__METHOD__.' must test operation_type '.$nop.' IN : '.print_r($operation_types, true));
       $transactions_get->addWhere('operation_type', $nop.'IN', $operation_types);
     }
 
