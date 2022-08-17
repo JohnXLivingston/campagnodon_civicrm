@@ -24,7 +24,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Form_NoO
     $this->add('text', 'operation_type', $label, [], FALSE);
     $this->add('select', 'operation_type_operator', ts('Operator'), [0 => ts('is one of'), 1 => ts('is NOT one of')], TRUE);
 
-    $this->add('text', 'days', ts('Days after creation'), array('class' => 'huge'), FALSE);
+    $this->add('text', 'days', ts('These X last days'), array('class' => 'huge'), FALSE);
     $this->addRule('days', ts('Interval should be a numeric value'), 'numeric');
 
     $this->addButtons(array(
@@ -112,6 +112,11 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Form_NoO
       $s.= '<li>'.htmlspecialchars($dao->unique_operation_type).'</li>';
     }
     $s.= '</ul>';
+
+    $s.= '<br>';
+    $s.= ts('These X last days');
+    $s.= ': ';
+    $s.= E::ts('Only search for transaction created these X last days. If empty, this condition will not be tested.');
     return $s;
   }
 }

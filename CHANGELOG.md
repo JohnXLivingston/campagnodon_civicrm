@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.0.12
+
+* Condition NoOther: labels and help.
+
 ## 0.0.11
 
 * Condition NoOther: days est optionnel.
