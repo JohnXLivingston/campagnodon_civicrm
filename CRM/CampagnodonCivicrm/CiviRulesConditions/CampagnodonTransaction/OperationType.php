@@ -12,7 +12,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Operatio
    * @abstract
    */
   public function getExtraDataInputUrl($ruleConditionId) {
-    return CRM_Utils_System::url('civicrm/campagnodon/civirule/form/condition/campagnodontransactionoperationtype', "rule_id={$ruleConditionId}");
+    return CRM_Utils_System::url('civicrm/campagnodon/civirule/form/condition/campagnodontransactionoperationtype', "rule_condition_id={$ruleConditionId}");
   }
 
   /**
