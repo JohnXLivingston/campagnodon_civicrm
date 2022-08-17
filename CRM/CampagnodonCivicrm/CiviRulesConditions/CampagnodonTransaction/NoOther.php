@@ -83,7 +83,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NoOther 
       $transactions_get->addWhere('operation_type', $nop.'IN', $operation_types);
     }
 
-    $transactions_get->execute();
+    $transactions_get = $transactions_get->execute();
 
     // With CiviCRM 5.50+, there is a new countMatched method. Using it when available.
     $count = method_exists($transactions_get, 'countMatched') ? $transactions_get->countMatched() : $transactions_get->count();
