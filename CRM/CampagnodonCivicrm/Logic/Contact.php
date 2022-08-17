@@ -253,7 +253,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
   }
 
   public static function processLinks($contact_id, $transaction_id, $transaction_status) {
-    Civi::log()->debug(__FUNCTION__.' Entering processLinks...');
+    Civi::log()->debug(__METHOD__.' Entering processLinks...');
     $links = \Civi\Api4\CampagnodonTransactionLink::get()
       ->setCheckPermissions(false)
       ->addSelect('*')
@@ -262,19 +262,19 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     $links->indexBy('id');
     foreach ($links as $lid => $link) {
       if ($link['cancelled']) {
-        Civi::log()->debug(__FUNCTION__.' link cancelled, ignoring: '.$lid);
+        Civi::log()->debug(__METHOD__.' link cancelled, ignoring: '.$lid);
         continue;
       }
 
       if ($link['entity_table'] === 'civicrm_group') {
         if (CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {
-          Civi::log()->debug(__FUNCTION__.' Calling addInGroup for link '.$lid);
+          Civi::log()->debug(__METHOD__.' Calling addInGroup for link '.$lid);
           CRM_CampagnodonCivicrm_Logic_Contact::addInGroup($link['entity_id'], $contact_id);
         }
       } else if ($link['entity_table'] === 'civicrm_contact') {
         if (!empty($link['opt_in']) && CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {
           if (CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::isOptInValid($link['opt_in'])) {
-            Civi::log()->debug(__FUNCTION__.' Updating the contact for link '.$lid);
+            Civi::log()->debug(__METHOD__.' Updating the contact for link '.$lid);
             $contact_update = \Civi\Api4\Contact::update()
               ->setCheckPermissions(false)
               ->addWhere('id', '=', $link['entity_id'])
@@ -289,12 +289,12 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
           && empty($link['entity_id']) // only add the membership the first time.
         ) {
           // FIXME: do something when payment is cancelled?
-          Civi::log()->debug(__FUNCTION__.' Calling addMembership for link '.$lid);
+          Civi::log()->debug(__METHOD__.' Calling addMembership for link '.$lid);
           CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['parent_id'], $link['membership_type_id'], $contact_id, $link['opt_in']);
         }
       } else if ($link['entity_table'] === 'civicrm_tag') {
         if (CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {
-          Civi::log()->debug(__FUNCTION__.' Calling addTag for link '.$lid);
+          Civi::log()->debug(__METHOD__.' Calling addTag for link '.$lid);
           CRM_CampagnodonCivicrm_Logic_Contact::addTag($link['entity_id'], $contact_id);
         }
       }

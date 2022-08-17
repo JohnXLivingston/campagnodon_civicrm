@@ -38,10 +38,10 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Operatio
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData)
   {
-    Civi::log()->debug(__FUNCTION__.' We must test the CampagnodonTransaction_OperationType condition');
+    Civi::log()->debug(__METHOD__.' We must test the CampagnodonTransaction_OperationType condition');
     $triggerCampagnodonTransaction = $triggerData->getEntityData('CampagnodonTransaction');
     if (!$triggerCampagnodonTransaction) {
-      Civi::log()->error(__FUNCTION__.' There is no CampagnodonTransaction');
+      Civi::log()->error(__METHOD__.' There is no CampagnodonTransaction');
       // Dont know if it can happen...
       return FALSE;
     }
@@ -69,12 +69,12 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Operatio
     }
     $operation_types = $operation_types_clean;
 
-    Civi::log()->debug(__FUNCTION__.' here is the list of operation_types in the condition: '.print_r($operation_types, true));
+    Civi::log()->debug(__METHOD__.' here is the list of operation_types in the condition: '.print_r($operation_types, true));
 
     $in = in_array($transaction['operation_type'], $operation_types);
-    Civi::log()->debug(__FUNCTION__.' Transation id='.$transaction['id'].', operation_type '.$transaction['operation_type'].' is in = '.($in ? 'yes' : 'no'));
+    Civi::log()->debug(__METHOD__.' Transation id='.$transaction['id'].', operation_type '.$transaction['operation_type'].' is in = '.($in ? 'yes' : 'no'));
     if (1 == $this->conditionParams['operator']) {
-      Civi::log()->debug(__FUNCTION__.' The operator was "not one of", inverting the result');
+      Civi::log()->debug(__METHOD__.' The operator was "not one of", inverting the result');
       return !$in;
     }
     return $in;

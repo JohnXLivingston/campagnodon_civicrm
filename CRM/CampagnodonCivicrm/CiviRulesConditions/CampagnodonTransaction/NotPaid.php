@@ -27,7 +27,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NotPaid 
     $triggerCampagnodonTransaction = $triggerData->getEntityData('CampagnodonTransaction');
     if (!$triggerCampagnodonTransaction) {
       // Dont know if it can happen...
-      Civi::log()->error(__FUNCTION__.' There is no CampagnodonTransaction');
+      Civi::log()->error(__METHOD__.' There is no CampagnodonTransaction');
       return FALSE;
     }
     // Nb: for a not well-understanded reason, $triggerCampagnodonTransaction['status'] is empty...

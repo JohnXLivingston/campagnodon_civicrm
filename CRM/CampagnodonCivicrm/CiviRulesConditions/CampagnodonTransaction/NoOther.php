@@ -38,15 +38,15 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NoOther 
    */
   public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData)
   {
-    Civi::log()->debug(__FUNCTION__.' We must test the CampagnodonTransaction_NoOther condition');
+    Civi::log()->debug(__METHOD__.' We must test the CampagnodonTransaction_NoOther condition');
     $triggerCampagnodonTransaction = $triggerData->getEntityData('CampagnodonTransaction');
     if (!$triggerCampagnodonTransaction) {
-      Civi::log()->error(__FUNCTION__.' There is no CampagnodonTransaction');
+      Civi::log()->error(__METHOD__.' There is no CampagnodonTransaction');
       // Dont know if it can happen...
       return FALSE;
     }
 
-    Civi::log()->debug(__FUNCTION__.' Searching for other transaction for contact_id='.$triggerCampagnodonTransaction['contact_id']);
+    Civi::log()->debug(__METHOD__.' Searching for other transaction for contact_id='.$triggerCampagnodonTransaction['contact_id']);
     $transactions_get = \Civi\Api4\CampagnodonTransaction::get()
       ->setCheckPermissions(false)
       ->selectRowCount()
@@ -59,7 +59,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NoOther 
       if ($this->conditionParams['status_operator'] == 1) {
         $nop = 'NOT ';
       }
-      Civi::log()->debug(__FUNCTION__.' must test status '.$nop.' IN : '.print_r($statuses, true));
+      Civi::log()->debug(__METHOD__.' must test status '.$nop.' IN : '.print_r($statuses, true));
       $transactions_get->addWhere('status', $nop.'IN', $statuses);
     }
 
@@ -79,7 +79,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NoOther 
       if ($this->conditionParams['operation_type_operator'] == 1) {
         $nop = 'NOT ';
       }
-      Civi::log()->debug(__FUNCTION__.' must test operation_types '.$nop.' IN : '.print_r($operation_types, true));
+      Civi::log()->debug(__METHOD__.' must test operation_types '.$nop.' IN : '.print_r($operation_types, true));
       $transactions_get->addWhere('operation_type', $nop.'IN', $operation_types);
     }
 
@@ -87,7 +87,7 @@ class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NoOther 
 
     // With CiviCRM 5.50+, there is a new countMatched method. Using it when available.
     $count = method_exists($transactions_get, 'countMatched') ? $transactions_get->countMatched() : $transactions_get->count();
-    Civi::log()->debug(__FUNCTION__.' Found '.$count.' other transactions.');
+    Civi::log()->debug(__METHOD__.' Found '.$count.' other transactions.');
 
     return $count === 0;
   }

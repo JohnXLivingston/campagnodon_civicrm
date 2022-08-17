@@ -6,6 +6,7 @@
 * Fix formulaire de la condition DaysAfter, quand days = 0.
 * Ajout de la condition CiviRules «pas d'autre transaction pour le contact».
 * Meilleure présentation pour les formulaires de condition Civirule.
+* Logs: utilisation de __METHOD__ au lieu de __FUNCTION__.
 
 ## 0.0.8
 

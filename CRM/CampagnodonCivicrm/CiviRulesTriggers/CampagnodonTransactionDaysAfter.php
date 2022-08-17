@@ -30,7 +30,7 @@ class CRM_CampagnodonCivicrm_CiviRulesTriggers_CampagnodonTransactionDaysAfter e
       }
     }
     if ($this->dao->fetch()) {
-      Civi::log()->debug(__FUNCTION__.' fetched the transaction id='.$this->dao->id);
+      Civi::log()->debug(__METHOD__.' fetched the transaction id='.$this->dao->id);
       $data = array();
       CRM_Core_DAO::storeValues($this->dao, $data);
       $triggerData = new CRM_Civirules_TriggerData_Cron($this->dao->id, 'CampagnodonTransaction', $data);
@@ -50,7 +50,7 @@ class CRM_CampagnodonCivicrm_CiviRulesTriggers_CampagnodonTransactionDaysAfter e
       return false;
     }
 
-    Civi::log()->debug(__FUNCTION__.' Constructing sql request for rule id='.$this->ruleId.' with days='.$days);
+    Civi::log()->debug(__METHOD__.' Constructing sql request for rule id='.$this->ruleId.' with days='.$days);
 
     $sql = "SELECT t.*
             FROM `civicrm_campagnodon_transaction` AS `t`
