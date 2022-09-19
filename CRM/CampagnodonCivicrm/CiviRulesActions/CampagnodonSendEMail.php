@@ -1,6 +1,7 @@
 <?php
 
 use CRM_CampagnodonCivicrm_ExtensionUtil as E;
+use Civi\Token\TokenProcessor;
 
 class CRM_CampagnodonCivicrm_CiviRulesActions_CampagnodonSendEMail extends CRM_Civirules_Action {
   /**
@@ -74,6 +75,8 @@ class CRM_CampagnodonCivicrm_CiviRulesActions_CampagnodonSendEMail extends CRM_C
       throw new Exception($message);
     }
 
+    Civi::log()->info(__CLASS__.'::'.__METHOD__ . ' Sending a Campagnodon email for the transaction '.$triggerCampagnodonTransaction['id'].'...');
+
     if (!empty($params['from_email']) && !empty($params['from_name'])) {
       $from = '"' . $params['from_name'] . '" <' . $params['from_email'] . '>';
     } elseif (!empty($params['from_email']) || !empty($params['from_name'])) {
@@ -105,11 +108,71 @@ class CRM_CampagnodonCivicrm_CiviRulesActions_CampagnodonSendEMail extends CRM_C
       $toEmail = $contact['email'];
     }
 
-    $subject = 'TODO';
-    $text = 'TODO';
-    $html = 'TODO';
+    list ($subject, $html, $text) = $this->_processTemplate($messageTemplates, $contactId, $triggerCampagnodonTransaction);
 
     // Creating an activity
+    $activity = $this->_createActivity($contactId, $subject, $html, $text);
+
+    $mailParams = [
+      'from' => $from,
+      'toName' => $toName,
+      'toEmail' => $toEmail,
+      'subject' => $subject,
+      'text' => $text,
+      'html' => $html,
+      'contactId' => $contactId,
+    ];
+    // Try to send the email.
+    Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' Sending the mail with CRM_Utils_Mail');
+    $result = CRM_Utils_Mail::send($mailParams);
+    if (!$result) {
+      Civi::log()->error(__CLASS__.'::'.__METHOD__ . ' Failed to send mail.');
+      throw new Exception('Error sending email to ' . $toEmail . '.');
+    }
+
+    // Mail sent, updating the activity.
+    $this->_completeActivity($activity);
+  }
+
+  private function _processTemplate($messageTemplates, $contactId, $triggerCampagnodonTransaction) {
+    Civi::log()->debug(__CLASS__.'::'.__METHOD__ . 'Processing the template...');
+    $schema = [];
+    $context = [];
+    $schema['contactId'] = 'contactId';
+    $context['contactId'] = $contactId;
+    $schema['campagnodontransactionId'] = 'campagnodontransactionId';
+    $context['campagnodontransactionId'] = $triggerCampagnodonTransaction['id'];
+    $context['campagnodontransaction'] = $triggerCampagnodonTransaction;
+
+    $useSmarty = (defined('CIVICRM_MAIL_SMARTY') && CIVICRM_MAIL_SMARTY);
+
+    $tokenProcessor = new TokenProcessor(\Civi::dispatcher(), [
+      'controller' => __CLASS__,
+      'schema' => $schema,
+      'smarty' => $useSmarty,
+    ]);
+
+    $tokenProcessor->addMessage('messageSubject', $messageTemplates->msg_subject, 'text/plain');
+    $tokenProcessor->addMessage('html', $messageTemplates->msg_html, 'text/html');
+    $tokenProcessor->addMessage('text',
+      $messageTemplates->msg_text
+        ? $messageTemplates->msg_text : CRM_Utils_String::htmlToText($messageTemplates->msg_html), 'text/plain'
+    );
+    $row = $tokenProcessor->addRow($context);
+    $tokenProcessor->evaluate();
+
+    $subject = $row->render('messageSubject');
+    $html = $row->render('html');
+    $text = $row->render('text');
+
+    Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' Template processed.');
+
+    return [$subject, $html, $text];
+  }
+
+  private function _createActivity($contactId, $subject, $html, $text) {
+    Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' Creating an activity');
+
     $activityTypeID = CRM_Core_PseudoConstant::getKey('CRM_Activity_BAO_Activity', 'activity_type_id', 'Email');
     if (!empty($html) && !empty($text)) {
       $details = "-ALTERNATIVE ITEM 0-\n$html\n-ALTERNATIVE ITEM 1-\n$text\n-ALTERNATIVE END-\n";
@@ -124,6 +187,7 @@ class CRM_CampagnodonCivicrm_CiviRulesActions_CampagnodonSendEMail extends CRM_C
       'status_id' => CRM_Core_PseudoConstant::getKey('CRM_Activity_BAO_Activity', 'activity_status_id', 'Cancelled'),
     ];
     $activity = civicrm_api3('Activity', 'create', $activityParams);
+
     $activityContacts = CRM_Core_OptionGroup::values('activity_contacts', FALSE, FALSE, FALSE, NULL, 'name');
     $targetID = CRM_Utils_Array::key('Activity Targets', $activityContacts);
 
@@ -134,23 +198,12 @@ class CRM_CampagnodonCivicrm_CiviRulesActions_CampagnodonSendEMail extends CRM_C
     ];
     CRM_Activity_BAO_ActivityContact::create($activityTargetParams);
 
-    $mailParams = [
-      'from' => $from,
-      'toName' => $toName,
-      'toEmail' => $toEmail,
-      'subject' => $subject,
-      'text' => $text,
-      'html' => $html,
-      'contactId' => $contactId,
-    ];
+    return $activity;
+  }
 
-    // Try to send the email.
-    $result = CRM_Utils_Mail::send($mailParams);
-    if (!$result) {
-      throw new Exception('Error sending email to ' . $toEmail . '.');
-    }
+  private function _completeActivity($activity) {
+    Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' Updating the activity to set it completed');
 
-    // Mail sent, updating the activity.
     $activityParams = [
       'id' => $activity['id'],
       'status_id' => CRM_Core_PseudoConstant::getKey('CRM_Activity_BAO_Activity', 'activity_status_id', 'Completed'),
