@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.1.1 (not released yet)
+
+* Ajout de l'action d'envoi de mail.
+
 ## 0.1.0
 
 * API de test.

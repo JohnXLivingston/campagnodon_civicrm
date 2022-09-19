@@ -1,0 +1,7 @@
+[
+  {
+    "name": "campagnodon_send_email",
+    "label": "Send a Campagnodon e-mail",
+    "class_name": "CRM_CampagnodonCivicrm_CiviRulesActions_CampagnodonSendEMail"
+  }
+]

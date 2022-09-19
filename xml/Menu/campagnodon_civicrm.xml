@@ -54,4 +54,10 @@
     <title>Campagnodon Transaction no other transaction for the contact</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
+  <item>
+    <path>civicrm/campagnodon/civirule/form/action/campagnodontransactionsendemail</path>
+    <page_callback>CRM_CampagnodonCivicrm_CiviRulesActions_Form_CampagnodonTransactionSendEMail</page_callback>
+    <title>Send Campagnodon e-mail</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
 </menu>
