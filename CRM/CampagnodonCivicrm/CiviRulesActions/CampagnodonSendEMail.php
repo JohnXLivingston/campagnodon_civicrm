@@ -63,9 +63,9 @@ class CRM_CampagnodonCivicrm_CiviRulesActions_CampagnodonSendEMail extends CRM_C
    *
    */
   public function processAction(CRM_Civirules_TriggerData_TriggerData $triggerData) {
-    $parameters = $this->getActionParameters();
+    $params = $this->getActionParameters();
     $contactId = $triggerData->getContactId();
-    $parameters['contact_id'] = $contactId;
+    $params['contact_id'] = $contactId;
 
     $triggerCampagnodonTransaction = $triggerData->getEntityData('CampagnodonTransaction');
     if (!$triggerCampagnodonTransaction) {
