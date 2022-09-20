@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 0.1.1 (not released yet)
+## 0.1.1
 
 * Ajout de l'action d'envoi de mail.
 
