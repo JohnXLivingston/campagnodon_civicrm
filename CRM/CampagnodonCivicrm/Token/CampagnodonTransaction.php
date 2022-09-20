@@ -5,7 +5,7 @@ use CRM_CampagnodonCivicrm_ExtensionUtil as E;
 class CRM_CampagnodonCivicrm_Token_CampagnodonTransaction extends \Civi\Token\AbstractTokenSubscriber {
   public function __construct() {
     parent::__construct('campagnodonTransaction', [
-      'payment_link' => E::ts('Payment Link'),
+      'payment_url' => E::ts('Payment Url'),
       'email' => E::ts('Email address'),
       'first_name' => E::ts('First Name'),
       'last_name' => E::ts('Last Name')
@@ -32,11 +32,11 @@ class CRM_CampagnodonCivicrm_Token_CampagnodonTransaction extends \Civi\Token\Ab
       return;
     }
 
-    if ($field === 'payment_link') {
+    if ($field === 'payment_url') {
       $url = $row->context['campagnodonTransaction']['payment_url'] ?? '';
-      $link = '<a href="'.$url.'">'.htmlspecialchars($url).'</a>';
-      $row->format('text/plain')->tokens($entity, $field, $url);
-      $row->format('text/html')->tokens($entity, $field, $link);
+      // For text mode, we have to replace &amp; by & (see for example CRM_Utils_Token::getActionTokenReplacement)
+      $row->format('text/plain')->tokens($entity, $field, str_replace('&amp;', '&', $url));
+      $row->format('text/html')->tokens($entity, $field, $url);
       return;
     }
     
