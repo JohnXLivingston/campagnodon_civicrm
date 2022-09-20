@@ -12,6 +12,7 @@ use CRM_CampagnodonCivicrm_ExtensionUtil as E;
  */
 function campagnodon_civicrm_civicrm_config(&$config) {
   _campagnodon_civicrm_civix_civicrm_config($config);
+  \Civi::dispatcher()->addSubscriber(new CRM_CampagnodonCivicrm_Token_CampagnodonTransaction());
 }
 
 /**

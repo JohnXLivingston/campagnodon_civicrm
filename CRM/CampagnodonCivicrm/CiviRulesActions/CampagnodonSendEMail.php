@@ -140,9 +140,9 @@ class CRM_CampagnodonCivicrm_CiviRulesActions_CampagnodonSendEMail extends CRM_C
     $context = [];
     $schema['contactId'] = 'contactId';
     $context['contactId'] = $contactId;
-    $schema['campagnodontransactionId'] = 'campagnodontransactionId';
-    $context['campagnodontransactionId'] = $triggerCampagnodonTransaction['id'];
-    $context['campagnodontransaction'] = $triggerCampagnodonTransaction;
+    $schema['campagnodonTransactionId'] = 'campagnodonTransactionId';
+    $context['campagnodonTransactionId'] = $triggerCampagnodonTransaction['id'];
+    $context['campagnodonTransaction'] = $triggerCampagnodonTransaction;
 
     $useSmarty = (defined('CIVICRM_MAIL_SMARTY') && CIVICRM_MAIL_SMARTY);
 
