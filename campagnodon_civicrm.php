@@ -155,8 +155,14 @@ function campagnodon_civicrm_civicrm_tabset($path, &$tabs, $context) {
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_permission/
  */
 function campagnodon_civicrm_civicrm_permission(&$permissions) {
-  $permissions['access Campagnodon'] = E::ts('Access to Campagnodon');
-  $permissions['Campagnodon api'] = E::ts('Use Campagnodon API');
+  $permissions['access Campagnodon'] = [
+    E::ts('Access to Campagnodon'),
+    E::ts('Permission to see Campagnodon application in CiviCRM')
+  ];
+  $permissions['Campagnodon api'] = [
+    E::ts('Use Campagnodon API'),
+    E::ts('Permission for the Campagnodon API user (external system: SPIP, ...)')
+  ];
 }
 
 /**

@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.0.0 (Not Released Yet)
+
+* Descriptions des permissions.
+
 ## 0.1.1
 
 * Ajout de l'action d'envoi de mail.
