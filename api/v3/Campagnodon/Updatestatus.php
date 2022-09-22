@@ -109,6 +109,13 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       $transaction_update->addValue('status', $status);
       $transaction_has_update = true;
     }
+    if (array_key_exists('recurring_status', $params) && $params['recurring_status']) {
+      // Civi::log()->debug(__METHOD__.' The API call contains a recurring_status: ' . $params['recurring_status'];
+      if ($params['recurring_status'] !== $transaction['recurring_status']) {
+        $transaction_update->addValue('recurring_status', $params['recurring_status']);
+        $transaction_has_update = true;
+      }
+    }
     if (!empty($payment_field)) { // FIXME: avoid update when value does not change (difficult because of the pseudoConstant)
       $transaction_update->addValue($payment_field, $payment_type);
       $transaction_has_update = true;
@@ -213,6 +220,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
 
   return civicrm_api3_create_success(array($transaction['id'] => array(
     'id' => $transaction['id'],
-    'status' => $transaction['status']
+    'status' => $transaction['status'],
+    'recurring_status' => $transaction['recurring_status']
   )), $params);
 }
