@@ -47,6 +47,7 @@ class CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction extends CRM_CampagnodonC
    */
   public static function recurringStatusTables() {
     return [
+      'init' => 'Init',
       'ongoing' => 'Ongoing',
       'ended' => 'Ended'
     ];

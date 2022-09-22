@@ -146,6 +146,13 @@ function _civicrm_api3_campagnodon_Start_spec(&$spec) {
     "description" => "Optional subscriptions to add",
     "api.required" => 0,
   ];
+  $spec["is_recurring"] = [
+    "name" => "is_recurring",
+    "title" => "Is Recurring",
+    "description" => "true if this is a recurring transaction (only for the parent)",
+    "type" => CRM_Utils_Type::T_BOOLEAN,
+    "api.required" => 0
+  ];
 }
 
 /**
@@ -220,6 +227,9 @@ function civicrm_api3_campagnodon_Start($params) {
     $transaction_create->addValue('tax_receipt', $tax_receipt);
     $transaction_create->addValue('original_contact_id', $contact['id']); // TODO: add some unit test
     $transaction_create->addValue('new_contact', $is_new_contact); // TODO: add some unit test
+    if (array_key_exists('is_recurring', $params) && $params['is_recurring']) {
+      $transaction_create->addValue('recurring_status', 'init');
+    }
     foreach (
       array(
         'campaign_id',
@@ -366,6 +376,7 @@ function civicrm_api3_campagnodon_Start($params) {
 
   return civicrm_api3_create_success(array($transaction['id'] => array(
     'id' => $transaction['id'],
-    'status' => 'init'
+    'status' => 'init',
+    'recurring_status' => array_key_exists('is_recurring', $params) && $params['is_recurring'] ? 'init' : null
   )), $params);
 }

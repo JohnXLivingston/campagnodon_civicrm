@@ -148,6 +148,25 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
             'currency' => 'EUR'
           ]
         ]
+      )],
+      'a recurring transaction' => [array(
+        'campagnodon_version' => '1',
+        'email' => 'john.doe@example.com',
+        'transaction_idx' => 'test/1',
+        'operation_type' => 'donation',
+        'is_recurring' => true,
+        'country' => 'FR',
+        'contributions' => [
+          'don' => [
+            'financial_type' => 'Donation',
+            '_financial_type_id' => 1, // this is only there for unit tests.
+            'amount' => 12,
+            'currency' => 'EUR'
+          ]
+        ],
+        'optional_subscriptions' => [
+          ['name' => 'this_is_the_name', 'type' => 'opt-in', 'key' => 'do_not_trade', 'when' => 'init']
+        ]
       )]
     ];
   }
@@ -473,6 +492,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
 
     $this->assertTrue(intval($start_result_line['id']) > 0, 'Must have a transaction id');
     $this->assertEquals('init', $start_result_line['status'], 'Status must be returned, and equal to init');
+    $this->assertEquals(array_key_exists('is_recurring', $params) && true === $params['is_recurring'] ? 'init' : null, $start_result_line['recurring_status'], 'Recurring Status must be returned, and equal to the correct value');
     $this->assertFalse(array_key_exists('email', $start_result_line), 'The start API should not return personnal data. Testing that there is no email.');
 
     $transaction_id = $start_result_line['id'];
@@ -489,7 +509,7 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertTrue(!empty($obj['contact_id']), 'There is a contact_id');
     $this->assertEquals($obj['status'], 'init', 'The transaction status is init');
     $this->assertEquals($obj['parent_id'], null, 'parent id must be null');
-    $this->assertEquals($obj['recurring_status'], null, 'Recurring status must be null');
+    $this->assertEquals($obj['recurring_status'], array_key_exists('is_recurring', $params) && true === $params['is_recurring'] ? 'init' : null, 'Recurring status must be null or "init" depending on is_recurring parameter');
     $this->assertEquals($obj['email'], $params['email'], 'Field email must have the correct value');
     $this->assertSame($obj['first_name'] ?? '', $params['first_name'] ?? '', 'Field first_name must have the correct value');
     $this->assertSame($obj['last_name'] ?? '', $params['last_name'] ?? '', 'Field last_name must have the correct value');

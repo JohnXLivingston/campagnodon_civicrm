@@ -34,6 +34,14 @@ function _civicrm_api3_campagnodon_Updatestatus_spec(&$spec) {
     "api.required" => 0,
     "api.default" => "",
   ];
+  $spec["recurring_status"] = [
+    "name" => "recurring_status",
+    "title" => ts("Recurring Status"),
+    "description" => "Recurring status",
+    "type" => CRM_Utils_Type::T_STRING,
+    "api.required" => 0,
+    "api.default" => "",
+  ];
 }
 
 /**
