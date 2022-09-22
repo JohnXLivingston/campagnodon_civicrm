@@ -83,6 +83,8 @@ On peut régénérer le fichier [de langue](./l10n/campagnodon_civicrm.pot) via 
 civistrings  -o l10n/campagnodon_civicrm.pot .
 ```
 
+TODO: ne vaut-il pas mieux faire `civistrings  -o l10n/campagnodon_civicrm.pot .` ? Il semblerait que l'option `-a` ajoute en fin au lieu d'écraser.
+
 Bien vérifier qu'on n'a rien perdu avant de commiter.
 
 Ensuite, il faut reporter les modifications sur ce fichier dans [./l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.po](./l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.po).
