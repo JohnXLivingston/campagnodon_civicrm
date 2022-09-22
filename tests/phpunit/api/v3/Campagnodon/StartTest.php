@@ -488,6 +488,8 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals($obj['id'], $transaction_id, 'Can get the good Transaction by id');
     $this->assertTrue(!empty($obj['contact_id']), 'There is a contact_id');
     $this->assertEquals($obj['status'], 'init', 'The transaction status is init');
+    $this->assertEquals($obj['parent_id'], null, 'parent id must be null');
+    $this->assertEquals($obj['recurring_status'], null, 'Recurring status must be null');
     $this->assertEquals($obj['email'], $params['email'], 'Field email must have the correct value');
     $this->assertSame($obj['first_name'] ?? '', $params['first_name'] ?? '', 'Field first_name must have the correct value');
     $this->assertSame($obj['last_name'] ?? '', $params['last_name'] ?? '', 'Field last_name must have the correct value');

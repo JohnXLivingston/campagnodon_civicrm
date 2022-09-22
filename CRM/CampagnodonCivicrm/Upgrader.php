@@ -382,4 +382,19 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     ENGINE=InnoDB");
     return TRUE;
   }
+
+  /**
+   * New column and index.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0017(): bool {
+    $this->ctx->log->info('Planning update 0017');
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `parent_id` int unsigned NULL DEFAULT NULL COMMENT 'Optional parent id for this CampagnodonTransaction. Used for recurring transaction.'");
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `recurring_status` varchar(20) NULL DEFAULT NULL COMMENT 'The recurring status of the transaction (if this is a recurring transaction).'");
+
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD CONSTRAINT FK_civicrm_campagnodon_transaction_parent_id FOREIGN KEY (`parent_id`) REFERENCES `civicrm_campagnodon_transaction`(`id`) ON DELETE SET NULL");
+    return TRUE;
+  }
 }

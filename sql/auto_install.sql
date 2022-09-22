@@ -55,9 +55,11 @@ ENGINE=InnoDB;
 CREATE TABLE `civicrm_campagnodon_transaction` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique CampagnodonTransaction ID',
   `idx` varchar(255) NULL COMMENT 'The campagnodon key as given by the origin system (SPIP, ...). A string like: spip/12345.',
+  `parent_id` int unsigned NULL DEFAULT NULL COMMENT 'Optional parent id for this CampagnodonTransaction. Used for recurring transaction.',
   `operation_type` varchar(255) NOT NULL COMMENT 'The operation type given by the origin system. Example: donation, membership, ... Can be any string, only used to filter transactions.',
   `start_date` datetime NOT NULL DEFAULT NOW() COMMENT 'The datetime at which this transaction started.',
   `status` varchar(20) NOT NULL DEFAULT 'init' COMMENT 'The status of the transaction.',
+  `recurring_status` varchar(20) NULL DEFAULT NULL COMMENT 'The recurring status of the transaction (if this is a recurring transaction).',
   `tax_receipt` tinyint NOT NULL DEFAULT false COMMENT 'True if the user want a tax receipt',
   `payment_url` varchar(255) COMMENT 'The url to pay the subscriptions.',
   `transaction_url` varchar(255) COMMENT 'The url to the original transaction.',
@@ -86,6 +88,7 @@ CREATE TABLE `civicrm_campagnodon_transaction` (
   INDEX `index_operation_type`(operation_type),
   INDEX `start_date`(start_date),
   INDEX `cleaned_start_date_idx`(cleaned, start_date),
+  CONSTRAINT FK_civicrm_campagnodon_transaction_parent_id FOREIGN KEY (`parent_id`) REFERENCES `civicrm_campagnodon_transaction`(`id`) ON DELETE SET NULL,
   CONSTRAINT FK_civicrm_campagnodon_transaction_contact_id FOREIGN KEY (`contact_id`) REFERENCES `civicrm_contact`(`id`) ON DELETE SET NULL,
   CONSTRAINT FK_civicrm_campagnodon_transaction_campaign_id FOREIGN KEY (`campaign_id`) REFERENCES `civicrm_campaign`(`id`) ON DELETE SET NULL,
   CONSTRAINT FK_civicrm_campagnodon_transaction_country_id FOREIGN KEY (`country_id`) REFERENCES `civicrm_country`(`id`) ON DELETE SET NULL

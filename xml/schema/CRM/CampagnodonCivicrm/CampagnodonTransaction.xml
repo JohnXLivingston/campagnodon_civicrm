@@ -43,6 +43,21 @@
   </index>
 
   <field>
+    <name>parent_id</name>
+    <title>Parent CampagnodonTransaction ID</title>
+    <type>int unsigned</type>
+    <required>false</required>
+    <default>NULL</default>
+    <comment>Optional parent id for this CampagnodonTransaction. Used for recurring transaction.</comment>
+  </field>
+  <foreignKey>
+    <name>parent_id</name>
+    <table>civicrm_campagnodon_transaction</table>
+    <key>id</key>
+    <onDelete>SET NULL</onDelete>
+  </foreignKey>
+
+  <field>
     <name>operation_type</name>
     <type>varchar</type>
     <length>255</length>
@@ -80,6 +95,21 @@
     <comment>The status of the transaction.</comment>
     <pseudoconstant>
       <callback>CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::statusTables</callback>
+    </pseudoconstant>
+    <html>
+      <type>Select</type>
+    </html>
+  </field>
+
+  <field>
+    <name>recurring_status</name>
+    <type>varchar</type>
+    <length>20</length>
+    <required>false</required>
+    <default>NULL</default>
+    <comment>The recurring status of the transaction (if this is a recurring transaction).</comment>
+    <pseudoconstant>
+      <callback>CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction::recurringStatusTables</callback>
     </pseudoconstant>
     <html>
       <type>Select</type>

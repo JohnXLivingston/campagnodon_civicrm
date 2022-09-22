@@ -42,6 +42,17 @@ class CRM_CampagnodonCivicrm_BAO_CampagnodonTransaction extends CRM_CampagnodonC
   }
 
   /**
+   * Possible values for the recurring_status field.
+   * @return array
+   */
+  public static function recurringStatusTables() {
+    return [
+      'ongoing' => 'Ongoing',
+      'ended' => 'Ended'
+    ];
+  }
+
+  /**
    * Return true if the status is a «not paid status».
    */
   public static function isStatusNotPaid($status) {

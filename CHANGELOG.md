@@ -3,6 +3,7 @@
 
 ## 1.0.0 (Not Released Yet)
 
+* Dons récurrents.
 * Descriptions des permissions.
 * Ajout de traductions manquantes.
 
