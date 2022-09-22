@@ -4,6 +4,7 @@
 ## 1.0.0 (Not Released Yet)
 
 * Descriptions des permissions.
+* Ajout de traductions manquantes.
 
 ## 0.1.1
 

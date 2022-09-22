@@ -22,7 +22,7 @@ msgstr "La clé Campagnodon tel que donné par le système d'origine (SPIP, ...)
 msgid "External key"
 msgstr "Clé externe"
 
-#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Form/Search.php ./api/v3/Campagnodon/Convert.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
 msgid "Operation Type"
 msgstr "Type d'opération"
 
@@ -70,7 +70,7 @@ msgstr "L'url de la transaction d'origine."
 msgid "Original transaction url"
 msgstr "Url de la transaction d'origine"
 
-#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Token/CampagnodonTransaction.php ./api/v3/Campagnodon/Start.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl ./templates/CRM/CampagnodonCivicrm/Page/ContactTab.tpl
 msgid "Payment Url"
 msgstr "Url de paiement"
 
@@ -122,7 +122,7 @@ msgstr "Campagne"
 msgid "Email"
 msgstr ""
 
-#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Token/CampagnodonTransaction.php
 msgid "Email address"
 msgstr ""
 
@@ -134,7 +134,7 @@ msgstr ""
 msgid "Prefix or Title for name (Ms, Mr...). FK to prefix ID"
 msgstr ""
 
-#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Token/CampagnodonTransaction.php
 msgid "First Name"
 msgstr ""
 
@@ -142,7 +142,7 @@ msgstr ""
 msgid "First Name."
 msgstr ""
 
-#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransaction.php ./CRM/CampagnodonCivicrm/Token/CampagnodonTransaction.php
 msgid "Last Name"
 msgstr ""
 
@@ -262,6 +262,14 @@ msgstr ""
 msgid "Optional parent id for this CampagnodonTransactionLink. Used to find the contribution link associated to a membership subscription."
 msgstr ""
 
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Optional Subscription Name"
+msgstr ""
+
+#: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php
+msgid "Optional name for optional subscription. Can be used by APIs."
+msgstr ""
+
 #: ./CRM/CampagnodonCivicrm/DAO/CampagnodonTransactionLink.php ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
 msgid "Entity table"
 msgstr ""
@@ -355,10 +363,6 @@ msgid "- select -"
 msgstr "- sélectionner -"
 
 #: ./CRM/CampagnodonCivicrm/Form/Search.php
-msgid "Already member"
-msgstr "Déjà adhérant"
-
-#: ./CRM/CampagnodonCivicrm/Form/Search.php
 msgid "With tax receipt"
 msgstr "Avec reçu fiscal"
 
@@ -398,13 +402,17 @@ msgstr ""
 msgid "Upgrade %1 to revision %2"
 msgstr ""
 
-#: ./api/v3/Campagnodon/Dsp2info.php ./api/v3/Campagnodon/Start.php ./api/v3/Campagnodon/Updatestatus.php
+#: ./api/v3/Campagnodon/Convert.php ./api/v3/Campagnodon/Start.php
+msgid "Campagnodon API version"
+msgstr "Version de l'API Campagnodon"
+
+#: ./api/v3/Campagnodon/Convert.php ./api/v3/Campagnodon/Dsp2info.php ./api/v3/Campagnodon/Start.php ./api/v3/Campagnodon/Updatestatus.php
 msgid "External identifier"
 msgstr "Identifiant externe"
 
-#: ./api/v3/Campagnodon/Start.php
-msgid "Campagnodon API version"
-msgstr "Campagnodon version API"
+#: ./api/v3/Campagnodon/Convert.php
+msgid "Convert financial types"
+msgstr ""
 
 #: ./api/v3/Campagnodon/Start.php
 msgid "First name"
@@ -422,6 +430,10 @@ msgstr "E-mail"
 msgid "Postal code"
 msgstr "Code postal"
 
+#: ./api/v3/Campagnodon/Start.php
+msgid "Optional subscriptions"
+msgstr ""
+
 #: ./campagnodon_civicrm.php ./templates/CRM/CampagnodonCivicrm/Form/Search.tpl
 msgid "Search Campagnodon"
 msgstr "Recherche Campagnodon"
@@ -431,8 +443,16 @@ msgid "Access to Campagnodon"
 msgstr "Accéder à Campagnodon"
 
 #: ./campagnodon_civicrm.php
+msgid "Permission to see Campagnodon application in CiviCRM"
+msgstr "Permission de voir l'application Campagnodon dans CiviCRM"
+
+#: ./campagnodon_civicrm.php
 msgid "Use Campagnodon API"
 msgstr "Utiliser l'API Campagnodon"
+
+#: ./campagnodon_civicrm.php
+msgid "Permission for the Campagnodon API user (external system: SPIP, ...)"
+msgstr "Permission pour l'utilisateur API Campagnodon (système externe: SPIP, ...)"
 
 #: ./settings/campagnodon.setting.php
 msgid "Contribution status for transaction in pending status."
@@ -538,6 +558,10 @@ msgstr "Le contact courant est :"
 #: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
 msgid "Linked entities"
 msgstr "Entités liées"
+
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Link ID"
+msgstr "ID du lien"
 
 #: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
 msgid "Link options"
