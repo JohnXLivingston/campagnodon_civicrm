@@ -112,7 +112,7 @@ function _civicrm_api3_campagnodon_Start_spec(&$spec) {
     "type" => CRM_Utils_Type::T_STRING,
     "api.required" => 1,
     "api.default" => "",
-];
+  ];
   $spec["payment_url"] = [
     "name" => "payment_url",
     "title" => ts("Payment Url"),

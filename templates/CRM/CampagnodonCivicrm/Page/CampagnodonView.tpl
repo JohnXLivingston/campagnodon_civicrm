@@ -14,6 +14,14 @@
       <td class="label">{ts}Campagnodon IDX{/ts}</td>
       <td>{$row.idx|escape}</td>
     </tr>
+    {if $row.parent_id}
+      <tr>
+        <td class="label">{ts}Parent CampagnodonTransaction ID{/ts}</td>
+        <td>
+          <a href="{crmURL p='civicrm/campagnodon/view' q="id=`$row.parent_id`"}">{$row.parent_id}</a>
+        </td>
+      </tr>
+    {/if}
     <tr>
       <td class="label">{ts}Operation Type{/ts}</td>
       <td>{$row.operation_type|escape}</td>
