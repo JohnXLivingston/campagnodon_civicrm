@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.0.1
+
+* Mise à jour des infos de l'extension.
+
 ## 1.0.0
 
 * Dons récurrents.
