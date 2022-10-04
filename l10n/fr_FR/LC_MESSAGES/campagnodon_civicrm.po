@@ -575,3 +575,6 @@ msgstr "Annulée:"
 msgid "Campagnodon key"
 msgstr "Clé Campagnodon"
 
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Related transactions"
+msgstr "Transactions liées"

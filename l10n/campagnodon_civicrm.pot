@@ -582,3 +582,6 @@ msgstr ""
 msgid "Campagnodon key"
 msgstr ""
 
+#: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
+msgid "Related transactions"
+msgstr ""

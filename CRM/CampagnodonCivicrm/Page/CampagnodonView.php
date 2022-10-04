@@ -105,6 +105,18 @@ class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
 
     $this->assign('links', $links);
 
+    $childs = \Civi\Api4\CampagnodonTransaction::get()
+      ->addSelect('*')
+      ->addWhere('parent_id', '=', $id)
+      ->addOrderBy('start_date', 'DESC')
+      ->addOrderBy('id', 'DESC')
+      ->execute();
+    if (count((array) $childs)) {
+      $this->assign('childs', $childs);
+    } else {
+      $this->assign('childs', null);
+    }
+
     parent::run();
   }
 }

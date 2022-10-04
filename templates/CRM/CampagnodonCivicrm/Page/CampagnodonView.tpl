@@ -161,6 +161,29 @@
         </table>
       </td>
     </tr>
+    {if $childs}
+      <tr>
+        <td class="label">{ts}Related transactions{/ts}</td>
+        <td>
+          <table class="selector row-highlight">
+            <tr>
+              <th>{ts}ID{/ts}</th>
+              <th>{ts}Campagnodon IDX{/ts}</th>
+              <th>{ts}Operation Type{/ts}</th>
+              <th>{ts}Start Date{/ts}</th>
+            </tr>
+            {foreach from=$childs item=child}
+              <tr>
+                <td><a href="{crmURL p='civicrm/campagnodon/view' q="id=`$child.id`"}">{$child.id}</a></td>
+                <td>{$child.idx|escape}</td>
+                <td>{$child.operation_type|escape}</td>
+                <td>{$child.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
+              </tr>
+            {/foreach}
+          </table>
+        </td>
+      </tr>
+          {/if}
   </table>
 </div>
 {/crmScope}

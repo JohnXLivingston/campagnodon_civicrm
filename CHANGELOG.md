@@ -4,6 +4,7 @@
 ## 1.0.2
 
 * Affichage des statuts de récurrence.
+* Affichage de la liste des transactions enfants.
 
 ## 1.0.1
 
