@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.0.2
+
+* Affichage des statuts de récurrence.
+
 ## 1.0.1
 
 * Mise à jour des infos de l'extension.

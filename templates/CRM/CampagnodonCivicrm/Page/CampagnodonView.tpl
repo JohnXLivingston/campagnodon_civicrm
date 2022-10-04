@@ -37,6 +37,12 @@
       <td class="label">{ts}Status{/ts}</td>
       <td>{$row.status|escape}</td>
     </tr>
+    {if $row.recurring_status}
+      <tr>
+        <td class="label">{ts}Recurring Status{/ts}</td>
+        <td>{$row.recurring_status|escape}</td>
+      </tr>
+    {/if}
     <tr>
       <td class="label">{ts}Payment Url{/ts}</td>
       <td>{$row.payment_url}</td>
