@@ -98,5 +98,4 @@ msgfmt l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.po -o l10n/fr_FR/LC_MESSAGES/c
 
 ## TODO
 
-* Il y a des problèmes de droits avec CiviRules, qui n'a que les permissions «Campagnodon api». Voir comment on peut corriger.
 * Documentation les règles de dédoublonnage custom.
