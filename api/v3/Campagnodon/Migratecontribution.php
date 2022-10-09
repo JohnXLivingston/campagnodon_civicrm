@@ -50,8 +50,8 @@ function _civicrm_api3_campagnodon_Migratecontribution_spec(&$spec) {
     "api.required" => 1,
     "api.default" => "",
   ];
-  $spec['date'] = [
-    "name" => "date",
+  $spec['start_date'] = [
+    "name" => "start_date",
     "title" => ts("Start Date"),
     "description" => "Start Date",
     'type' => CRM_Utils_Type::T_DATE + CRM_Utils_Type::T_TIME,
