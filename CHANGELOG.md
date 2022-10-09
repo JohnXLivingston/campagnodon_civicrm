@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.1.0
+
+* API de Migration pour les anciennes contributions.
+
 ## 1.0.2
 
 * Affichage des statuts de récurrence.
