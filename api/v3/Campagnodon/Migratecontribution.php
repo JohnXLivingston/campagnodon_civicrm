@@ -50,6 +50,14 @@ function _civicrm_api3_campagnodon_Migratecontribution_spec(&$spec) {
     "api.required" => 1,
     "api.default" => "",
   ];
+  $spec['date'] = [
+    "name" => "date",
+    "title" => ts("Start Date"),
+    "description" => "Start Date",
+    'type' => CRM_Utils_Type::T_DATE + CRM_Utils_Type::T_TIME,
+    "api.required" => 1,
+    "api.default" => "",
+  ];
 }
 
 /**
@@ -101,6 +109,7 @@ function civicrm_api3_campagnodon_Migratecontribution($params) {
     $transaction_create->addValue('campaign_id', $contribution['campaign_id']);
 
     $transaction_create->addValue('operation_type', $params['operation_type']);
+    $transaction_create->addValue('start_date', $params['start_date']);
 
     // FIXME: how to copy tax_receipt???
 
