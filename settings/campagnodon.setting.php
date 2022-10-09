@@ -173,4 +173,16 @@ $campagnodon_settings['campagnodon_clean_nb_days'] = array(
   'settings_pages' => ['campagnodon' => ['weight' => 20]],
 );
 
+$campagnodon_settings['campagnodon_allow_migrate_contribution'] = array(
+  'name' => 'campagnodon_allow_migrate_contribution',
+  'type' => 'Boolean',
+  'html_type' => 'checkbox',
+  'default' => '',
+  'title' => E::ts('Allow the use of the migrationcontribution API. Don\'t activate if you don\'t know what it is.'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'settings_pages' => ['campagnodon' => ['weight' => 90]],
+);
+
+
 return $campagnodon_settings;

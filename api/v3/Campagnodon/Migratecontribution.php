@@ -65,6 +65,11 @@ function _civicrm_api3_campagnodon_Migratecontribution_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_campagnodon_Migratecontribution($params) {
+
+  if (!Civi::settings()->get('campagnodon_allow_migrate_contribution')) {
+    throw new Exception('This API is disabled.');
+  }
+
   $parent_transaction = null;
   if ($params['parent_transaction_idx']) {
     $parent_transaction = \Civi\Api4\CampagnodonTransaction::get()
