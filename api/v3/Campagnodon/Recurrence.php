@@ -55,7 +55,23 @@ function _civicrm_api3_campagnodon_Recurrence_spec(&$spec) {
     "title" => ts("Financial ID"),
     "description" => "Financial ID",
     "type" => CRM_Utils_Type::T_STRING,
-    "api.required" => 0, // Not required here. If given, will override parent's contribution financial types
+    "api.required" => 1,
+    "api.default" => "",
+  ];
+  $spec["currency"] = [
+    "name" => "currency",
+    "title" => ts("Currency"),
+    "description" => "Currency",
+    "type" => CRM_Utils_Type::T_STRING,
+    "api.required" => 1,
+    "api.default" => "",
+  ];
+  $spec["amount"] = [
+    "name" => "amount",
+    "title" => ts("Amount"),
+    "description" => "Amount",
+    "type" => CRM_Utils_Type::T_STRING,
+    "api.required" => 1,
     "api.default" => "",
   ];
 }
@@ -131,30 +147,43 @@ function civicrm_api3_campagnodon_Recurrence($params) {
     $transaction_result = $transaction_create->execute();
     $transaction = $transaction_result->single();
 
+    // // We now copy all parents contributions
+    // $parent_contribution_links = \Civi\Api4\CampagnodonTransactionLink::get()
+    //     ->setCheckPermissions(false)
+    //     ->addWhere('campagnodon_tid', '=', $parent_transaction['id'])
+    //     ->addWhere('entity_table', '=', 'civicrm_contribution')
+    //     ->execute();
+    // foreach ($parent_contribution_links as $parent_contribution_link) {
+    //   $financial_type_field = 'financial_type_id';
+    //   $financial_type = $parent_contribution_link['financial_type_id'];
+    //   if (array_key_exists('financial_type', $params) && !empty($params['financial_type'])) {
+    //     $financial_type = $params['financial_type'];
+    //     $financial_type_field = is_numeric($financial_type) ? 'financial_type_id' : 'financial_type_id:name';
+    //   }
+    //   $link = \Civi\Api4\CampagnodonTransactionLink::create()
+    //     ->setCheckPermissions(false)
+    //     ->addValue('campagnodon_tid', $transaction['id'])
+    //     ->addValue('entity_table', 'civicrm_contribution')
+    //     ->addValue('entity_id', null)
+    //     ->addValue('total_amount', $parent_contribution_link['total_amount'])
+    //     ->addValue('currency', $parent_contribution_link['currency'])
+    //     ->addValue($financial_type_field, $financial_type)
+    //     ->execute()
+    //     ->single();
+    // }
     // We now copy all parents contributions
-    $parent_contribution_links = \Civi\Api4\CampagnodonTransactionLink::get()
-        ->setCheckPermissions(false)
-        ->addWhere('campagnodon_tid', '=', $parent_transaction['id'])
-        ->addWhere('entity_table', '=', 'civicrm_contribution')
-        ->execute();
-    foreach ($parent_contribution_links as $parent_contribution_link) {
-      $financial_type_field = 'financial_type_id';
-      $financial_type = $parent_contribution_link['financial_type_id'];
-      if (array_key_exists('financial_type', $params) && !empty($params['financial_type'])) {
-        $financial_type_field = is_numeric($financial_type) ? 'financial_type_id' : 'financial_type_id:name';
-        $financial_type = $params['financial_type'];
-      }
-      $link = \Civi\Api4\CampagnodonTransactionLink::create()
-        ->setCheckPermissions(false)
-        ->addValue('campagnodon_tid', $transaction['id'])
-        ->addValue('entity_table', 'civicrm_contribution')
-        ->addValue('entity_id', null)
-        ->addValue('total_amount', $parent_contribution_link['total_amount'])
-        ->addValue('currency', $parent_contribution_link['currency'])
-        ->addValue($financial_type_field, $financial_type)
-        ->execute()
-        ->single();
-    }
+    $financial_type = $params['financial_type'];
+    $financial_type_field = is_numeric($financial_type) ? 'financial_type_id' : 'financial_type_id:name';
+    $link = \Civi\Api4\CampagnodonTransactionLink::create()
+      ->setCheckPermissions(false)
+      ->addValue('campagnodon_tid', $transaction['id'])
+      ->addValue('entity_table', 'civicrm_contribution')
+      ->addValue('entity_id', null)
+      ->addValue('total_amount', $params['amount'])
+      ->addValue('currency', $params['currency'])
+      ->addValue($financial_type_field, $financial_type)
+      ->execute()
+      ->single();
   } catch (Throwable $e) {
     $tx->rollback();
     throw $e;

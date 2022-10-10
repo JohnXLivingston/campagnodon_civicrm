@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.2.0 (Not released yet)
+
+* Simplification de l'API de récurrence: c'est le système d'origine qui spécifie le montant, on ne cherche plus à dériver de la transaction parent.
+
 ## 1.1.0
 
 * API de Migration pour les anciennes contributions.
