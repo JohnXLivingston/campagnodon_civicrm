@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 1.2.1 (Not Released Yet)
+
+* Options pour spécifier un champs optionnel sur les contributions sur lequel mapper «tax_receipt» (Attac France utilise custom_1).
+* Migration dons récurrents: migration du champs «tax_receipt».
+
 ## 1.2.0
 
 * Simplification de l'API de récurrence: c'est le système d'origine qui spécifie le montant, on ne cherche plus à dériver de la transaction parent.

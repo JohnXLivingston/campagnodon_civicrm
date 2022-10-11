@@ -157,6 +157,8 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
 
     // Creating missing contributions if this is a final states and there are not yet created.
     if ($status !== 'pending') {
+      $tax_receipt_field = Civi::settings()->get('campagnodon_contribution_tax_receipt_field');
+
       $missing_contribution_links = \Civi\Api4\CampagnodonTransactionLink::get()
         ->setCheckPermissions(false)
         ->addWhere('campagnodon_tid', '=', $transaction['id'])
@@ -179,6 +181,9 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
         }
         if (!empty($payment_field)) {
           $contribution->addValue($payment_field, $payment_type);
+        }
+        if (!empty($tax_receipt_field)) {
+          $contribution->addValue($tax_receipt_field, $transaction['tax_receipt'] ? '1' : '0');
         }
         // FIXME: following fields?
         // 'receive_date'

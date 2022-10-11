@@ -87,9 +87,16 @@ function civicrm_api3_campagnodon_Migratecontribution($params) {
       ->single(); // fail if not found
   }
 
+  $tax_receipt_field = Civi::settings()->get('campagnodon_contribution_tax_receipt_field');
+
   $tx = new CRM_Core_Transaction();
   try {
+    $contribution_select = ['*'];
+    if (!empty($tax_receipt_field) && substr($tax_receipt_field, 0, 6) === 'custom') {
+      $contribution_select[] = 'custom.*';
+    }
     $contribution = \Civi\Api4\Contribution::get()
+      ->addSelect($contribution_select)
       ->setCheckPermissions(false)
       ->addWhere('trxn_id', '=', $params['transaction_idx'])
       ->execute()
@@ -111,7 +118,14 @@ function civicrm_api3_campagnodon_Migratecontribution($params) {
     $transaction_create->addValue('operation_type', $params['operation_type']);
     $transaction_create->addValue('start_date', $params['start_date']);
 
+
+    if (!empty($tax_receipt_field)) {
+      $tax_receipt = array_key_exists($tax_receipt_field, $contribution) && !!$contribution[$tax_receipt_field];
+      $transaction_create->addValue('tax_receipt', $tax_receipt)
+    }
     // FIXME: how to copy tax_receipt???
+    // Note: the following code is specific to Attac France.
+    // Contribution->custom_1 correspond to tax_receipt.
 
     foreach (
       array(

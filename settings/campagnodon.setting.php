@@ -173,6 +173,17 @@ $campagnodon_settings['campagnodon_clean_nb_days'] = array(
   'settings_pages' => ['campagnodon' => ['weight' => 20]],
 );
 
+$campagnodon_settings['campagnodon_contribution_tax_receipt_field'] = array(
+  'name' => 'campagnodon_contribution_tax_receipt_field',
+  'type' => 'Text',
+  'html_type' => 'text',
+  'default' => '',
+  'title' => E::ts('Tax receipt field'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'settings_pages' => ['campagnodon' => ['weight' => 30]],
+);
+
 $campagnodon_settings['campagnodon_allow_migrate_contribution'] = array(
   'name' => 'campagnodon_allow_migrate_contribution',
   'type' => 'Boolean',
