@@ -183,7 +183,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
           $contribution->addValue($payment_field, $payment_type);
         }
         if (!empty($tax_receipt_field)) {
-          $contribution->addValue($tax_receipt_field, $transaction['tax_receipt'] ? '1' : '0');
+          $contribution->addValue($tax_receipt_field, $transaction['tax_receipt'] ? '1' : '0'); // TODO: add some tests
         }
         // FIXME: following fields?
         // 'receive_date'
