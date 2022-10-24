@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.2.2 (Not Released Yet)
+
+* Changements sur l'API de migration.
+
 ## 1.2.1
 
 * Options pour spécifier un champs optionnel sur les contributions sur lequel mapper «tax_receipt» (Attac France utilise custom_1).

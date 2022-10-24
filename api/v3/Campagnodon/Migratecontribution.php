@@ -18,6 +18,14 @@ function _civicrm_api3_campagnodon_Migratecontribution_spec(&$spec) {
     "api.required" => 1,
     "api.default" => ""
   ];
+  $spec["trxn_id"] = [
+    "name" => "trxn_id",
+    "title" => ts("Transaction ID"),
+    "description" => "Transaction ID",
+    "type" => CRM_Utils_Type::T_STRING,
+    "api.required" => 1,
+    "api.default" => ""
+  ];
   $spec["parent_transaction_idx"] = [
     "name" => "parent_transaction_idx",
     "title" => ts("Parent's External identifier"),
@@ -74,12 +82,15 @@ function _civicrm_api3_campagnodon_Migratecontribution_spec(&$spec) {
  */
 function civicrm_api3_campagnodon_Migratecontribution($params) {
 
+  Civi::log()->info('Calling MigrateContribution API');
+
   if (!Civi::settings()->get('campagnodon_allow_migrate_contribution')) {
+    Civi::log()->error('API MigrateContribution is disabled');
     throw new Exception('This API is disabled.');
   }
 
   $parent_transaction = null;
-  if ($params['parent_transaction_idx']) {
+  if (!empty($params['parent_transaction_idx'])) {
     $parent_transaction = \Civi\Api4\CampagnodonTransaction::get()
       ->setCheckPermissions(false)
       ->addWhere('idx', '=', $params['parent_transaction_idx'])
@@ -96,9 +107,9 @@ function civicrm_api3_campagnodon_Migratecontribution($params) {
       $contribution_select[] = 'custom.*';
     }
     $contribution = \Civi\Api4\Contribution::get()
-      ->addSelect($contribution_select)
+      ->addSelect(...$contribution_select)
       ->setCheckPermissions(false)
-      ->addWhere('trxn_id', '=', $params['transaction_idx'])
+      ->addWhere('trxn_id', '=', $params['trxn_id'])
       ->execute()
       ->single(); // fail if not found.
     
@@ -121,7 +132,7 @@ function civicrm_api3_campagnodon_Migratecontribution($params) {
 
     if (!empty($tax_receipt_field)) {
       $tax_receipt = array_key_exists($tax_receipt_field, $contribution) && !!$contribution[$tax_receipt_field];
-      $transaction_create->addValue('tax_receipt', $tax_receipt)
+      $transaction_create->addValue('tax_receipt', $tax_receipt);
     }
     // FIXME: how to copy tax_receipt???
     // Note: the following code is specific to Attac France.
@@ -153,6 +164,7 @@ function civicrm_api3_campagnodon_Migratecontribution($params) {
       ->execute()
       ->single();
   } catch (Throwable $e) {
+    Civi::log()->error(__METHOD__.'Failed MigrateContribution call.' . $e->getMessage());
     $tx->rollback();
     throw $e;
   }
