@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 1.2.2 (Not Released Yet)
+## 1.3.0
 
 * Changements sur l'API de migration.
 
