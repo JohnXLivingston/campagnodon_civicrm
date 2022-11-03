@@ -1,0 +1,89 @@
+<?php
+
+class CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Campaign extends CRM_Civirules_Condition {
+  /**
+   * Returns a redirect url to extra data input from the user after adding a condition
+   *
+   * Return false if you do not need extra data input
+   *
+   * @param int $ruleConditionId
+   * @return bool|string
+   * @access public
+   * @abstract
+   */
+  public function getExtraDataInputUrl($ruleConditionId) {
+    return CRM_Utils_System::url('civicrm/campagnodon/civirule/form/condition/campagnodontransactioncampaign', "rule_condition_id={$ruleConditionId}");
+  }
+
+  /**
+   * Method to set the Rule Condition data
+   *
+   * @param array $ruleCondition
+   * @access public
+   */
+  public function setRuleConditionData($ruleCondition) {
+    parent::setRuleConditionData($ruleCondition);
+    $this->conditionParams = array();
+    if (!empty($this->ruleCondition['condition_params'])) {
+      $this->conditionParams = unserialize($this->ruleCondition['condition_params']);
+    }
+  }
+
+  /**
+   * Method is mandatory and checks if the condition is met
+   *
+   * @param CRM_Civirules_TriggerData_TriggerData $triggerData
+   * @return bool
+   * @access public
+   */
+  public function isConditionValid(CRM_Civirules_TriggerData_TriggerData $triggerData)
+  {
+    Civi::log()->debug(__METHOD__.' We must test the CampagnodonTransaction_Campaign condition');
+    $triggerCampagnodonTransaction = $triggerData->getEntityData('CampagnodonTransaction');
+    if (!$triggerCampagnodonTransaction) {
+      Civi::log()->error(__METHOD__.' There is no CampagnodonTransaction');
+      // Dont know if it can happen...
+      return FALSE;
+    }
+    // Nb: for a not well-understanded reason, $triggerCampagnodonTransaction['status'] is empty...
+    // So we get the transaction from the Database to check...
+    $transaction = \Civi\Api4\CampagnodonTransaction::get()
+      ->setCheckPermissions(false)
+      ->addSelect('*')
+      ->addWhere('id', '=', $triggerCampagnodonTransaction['id'])
+      ->execute()->first();
+    if (empty($transaction)) {
+      // Transaction deleted?
+      return FALSE;
+    }
+    $campaign_id = $transaction['campaign_id'];
+
+    $campaign_ids = explode(',', $this->conditionParams['campaign_id']);
+    Civi::log()->debug(__METHOD__.' here is the list of campaign_ids in the condition: '.print_r($campaign_ids, true));
+
+    $in = in_array($campaign_id, $campaign_ids);
+    Civi::log()->debug(__METHOD__.' Transation id='.$transaction['id'].', campaign_id '.$campaign_id.' is in = '.($in ? 'yes' : 'no'));
+    if (1 == $this->conditionParams['operator']) {
+      Civi::log()->debug(__METHOD__.' The operator was "not one of", inverting the result');
+      return !$in;
+    }
+    return $in;
+  }
+
+  /**
+   * This function validates whether this condition works with the selected trigger.
+   *
+   * This function could be overriden in child classes to provide additional validation
+   * whether a condition is possible in the current setup. E.g. we could have a condition
+   * which works on contribution or on contributionRecur then this function could do
+   * this kind of validation and return false/true
+   *
+   * @param CRM_Civirules_Trigger $trigger
+   * @param CRM_Civirules_BAO_Rule $rule
+   * @return bool
+   */
+  public function doesWorkWithTrigger(CRM_Civirules_Trigger $trigger, CRM_Civirules_BAO_Rule $rule) {
+    return $trigger->doesProvideEntity('CampagnodonTransaction');
+  }
+
+}

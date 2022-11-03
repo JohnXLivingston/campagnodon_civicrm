@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.4.0
+
+* Ajout d'un filtre «campagne» sur les Civirules.
+
 ## 1.3.0
 
 * Changements sur l'API de migration.

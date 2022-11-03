@@ -15,6 +15,11 @@
     "class_name": "CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_OperationType"
   },
   {
+    "name": "campagnodon_transaction_campaign",
+    "label": "Campagnodon Transaction campaign",
+    "class_name": "CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_Campaign"
+  },
+  {
     "name": "campagnodon_transaction_no_other",
     "label": "Campagnodon Transaction no other transaction for the contact",
     "class_name": "CRM_CampagnodonCivicrm_CiviRulesConditions_CampagnodonTransaction_NoOther"
