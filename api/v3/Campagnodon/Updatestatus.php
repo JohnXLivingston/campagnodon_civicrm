@@ -83,7 +83,7 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       throw new Exception('Invalid status "'.$status.'".');
     }
 
-    if ($status === 'completed') {
+    if ($status === 'completed' && $transaction['status'] != 'completed') {
       // We must first search double membership.
       // If found, we must go to a special state.
       // Note: must be done before computing $contribution_status

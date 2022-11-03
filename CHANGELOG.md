@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.4.1
+
+* Fix: quand on re-synchronise une adhésion qui est déjà completed, il ne faut pas la passer en double adhésion.
+
 ## 1.4.0
 
 * Ajout d'un filtre «campagne» sur les Civirules.
