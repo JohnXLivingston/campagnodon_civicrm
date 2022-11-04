@@ -83,17 +83,22 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       throw new Exception('Invalid status "'.$status.'".');
     }
 
-    if ($status === 'completed' && $transaction['status'] != 'completed') {
-      // We must first search double membership.
-      // If found, we must go to a special state.
-      // Note: must be done before computing $contribution_status
-      // TODO: add some unit tests.
-      if (CRM_CampagnodonCivicrm_Logic_Contact::searchDoubleMembership($transaction['contact_id'], $transaction['id'])) {
+    if ($status === 'completed') {
+      if($transaction['status'] === 'double_membership') {
+        // Already in double_membership, keeping the status.
         $status = 'double_membership';
+      } else if($transaction['status'] !== 'completed') { // don't reopen a completed transaction!
+        // We must first search double membership.
+        // If found, we must go to a special state.
+        // Note: must be done before computing $contribution_status
+        // TODO: add some unit tests.
+        if (CRM_CampagnodonCivicrm_Logic_Contact::searchDoubleMembership($transaction['contact_id'], $transaction['id'])) {
+          $status = 'double_membership';
+        }
       }
     }
 
-    Civi::log()->debug(__METHOD__.' the status to set is: '.$status.'. Current transaction status is: '.$transaction['status']);
+    Civi::log()->debug(__METHOD__.' the status to set on '.$params['transaction_idx'].' is: '.$status.'. Current transaction status is: '.$transaction['status']);
 
     $contribution_status = Civi::settings()->get('campagnodon_contribution_status_'.($status === 'init' ? 'pending' : $status));
     if (!$contribution_status) {

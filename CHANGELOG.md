@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 1.4.2
+
+* Fix: quand on re-synchronise une double adhésion, on garde le statut double adhésion.
+* Ajout de l'identifiant de la transaction dans les logs de l'API UpdateStatus.
+
 ## 1.4.1
 
 * Fix: quand on re-synchronise une adhésion qui est déjà completed, il ne faut pas la passer en double adhésion.
