@@ -46,9 +46,58 @@ class api_v3_Campagnodon_CampaignTest extends \PHPUnit\Framework\TestCase implem
    * Note how the function name begins with the word "test".
    */
   public function testCampaign() {
-    $expected = civicrm_api3('Campaign', 'get', array());
-    $result = civicrm_api3('Campagnodon', 'campaign', array());
+    civicrm_api3('Campaign', 'create', array(
+      'name' => 'A campaign',
+      'title' => 'The title',
+      'goal_revenue' => 10000
+    ));
+
+    civicrm_api3('Campaign', 'create', array(
+      'name' => 'Another campaign',
+      'title' => 'The title 2'
+    ));
+
+    $expected = civicrm_api3('Campaign', 'get', array('sequential' => 0));
+    foreach ($expected['values'] as &$c) {
+      foreach ([
+        'campaign_type_id', 'is_active',
+        'created_id', 'created_date', 'last_modified_id', 'last_modified_date'
+      ] as $field) {
+        unset($c[$field]);
+      }
+      $c['current_revenue'] = 0;
+    }
+    $result = civicrm_api3('Campagnodon', 'campaign', array('sequential' => 0));
     $this->assertEquals($expected, $result);
   }
 
+  /**
+   */
+  public function testCampaignSequential() {
+    civicrm_api3('Campaign', 'create', array(
+      'name' => 'A campaign',
+      'title' => 'The title',
+      'goal_revenue' => 10000
+    ));
+
+    civicrm_api3('Campaign', 'create', array(
+      'name' => 'Another campaign',
+      'title' => 'The title 2'
+    ));
+
+    $expected = civicrm_api3('Campaign', 'get', array('sequential' => 1));
+    foreach ($expected['values'] as &$c) {
+      foreach ([
+        'campaign_type_id', 'is_active',
+        'created_id', 'created_date', 'last_modified_id', 'last_modified_date'
+      ] as $field) {
+        unset($c[$field]);
+      }
+      $c['current_revenue'] = 0;
+    }
+    $result = civicrm_api3('Campagnodon', 'campaign', array('sequential' => 1));
+    $this->assertEquals($expected, $result);
+  }
 }
+
+// TODO: test with a current_revenue

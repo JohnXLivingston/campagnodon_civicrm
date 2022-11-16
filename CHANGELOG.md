@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 1.5.0 (Not Released Yet)
+
+* Api Campaign: ajout de current_revenue
+* Api Campaign: correctif de sécurité. On filtre les paramètres et les valeurs retournées, pour éviter des fuites (et des jointures).
+
 ## 1.4.2
 
 * Fix: quand on re-synchronise une double adhésion, on garde le statut double adhésion.
