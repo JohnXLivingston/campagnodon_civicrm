@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 1.5.0 (Not Released Yet)
+## 1.5.0
 
 * Api Campaign: ajout de current_revenue
 * Api Campaign: correctif de sécurité. On filtre les paramètres et les valeurs retournées, pour éviter des fuites (et des jointures).
