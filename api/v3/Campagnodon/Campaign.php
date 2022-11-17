@@ -59,13 +59,17 @@ function civicrm_api3_campagnodon_Campaign($params) {
       }
     }
 
-    // Computing the current revenue.
-    // FIXME: as there is no currency attached to goal_revenue, we sum regardless of the contribution currency.
-    //        This assumes that there is only one used currency.
-    // Note: contribution_status_id=1 <=> Completed
-    $where = 'campaign_id = '.((int) $r['id']);
-    $where.= ' AND contribution_status_id = 1';
-    $r['current_revenue'] = CRM_Core_DAO::singleValueQuery('SELECT sum(total_amount) FROM civicrm_contribution WHERE '.$where) ?? 0;
+    // Computing the current revenue:
+    // Only if there is a goal_revenue.
+    // This is for performance reasons, to avoid sumup all contribution each time.
+    if (!empty($r['goal_revenue'])) {
+      // FIXME: as there is no currency attached to goal_revenue, we sum regardless of the contribution currency.
+      //        This assumes that there is only one used currency.
+      // Note: contribution_status_id=1 <=> Completed
+      $where = 'campaign_id = '.((int) $r['id']);
+      $where.= ' AND contribution_status_id = 1';
+      $r['current_revenue'] = CRM_Core_DAO::singleValueQuery('SELECT sum(total_amount) FROM civicrm_contribution WHERE '.$where) ?? 0;
+    }
 
     $result[$campaign['id']] = $r;
   }

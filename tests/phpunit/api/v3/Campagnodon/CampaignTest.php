@@ -65,7 +65,9 @@ class api_v3_Campagnodon_CampaignTest extends \PHPUnit\Framework\TestCase implem
       ] as $field) {
         unset($c[$field]);
       }
-      $c['current_revenue'] = 0;
+      if (!empty($c['goal_revenue'])) {
+        $c['current_revenue'] = 0;
+      }
     }
     $result = civicrm_api3('Campagnodon', 'campaign', array('sequential' => 0));
     $this->assertEquals($expected, $result);
@@ -93,7 +95,9 @@ class api_v3_Campagnodon_CampaignTest extends \PHPUnit\Framework\TestCase implem
       ] as $field) {
         unset($c[$field]);
       }
-      $c['current_revenue'] = 0;
+      if (!empty($c['goal_revenue'])) {
+        $c['current_revenue'] = 0;
+      }
     }
     $result = civicrm_api3('Campagnodon', 'campaign', array('sequential' => 1));
     $this->assertEquals($expected, $result);
