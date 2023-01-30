@@ -580,4 +580,4 @@ msgid "Related transactions"
 msgstr "Transactions liées"
 
 msgid "Contribution Date"
-msgstr "Date à utiliser pour les contributions"
+msgstr "Date de contribution"
