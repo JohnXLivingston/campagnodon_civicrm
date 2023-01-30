@@ -33,6 +33,11 @@
     <tr>
       <td class="label">{ts}Start Date{/ts}</td>
       <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
+    </tr>
+    <tr>
+      <td class="label">{ts}Contribution Date{/ts}</td>
+      <td>{$row.contribution_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
+    </tr>
     <tr>
       <td class="label">{ts}Status{/ts}</td>
       <td>{$row.status|escape}</td>

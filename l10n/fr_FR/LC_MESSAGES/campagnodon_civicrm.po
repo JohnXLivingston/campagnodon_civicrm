@@ -578,3 +578,6 @@ msgstr "Clé Campagnodon"
 #: ./templates/CRM/CampagnodonCivicrm/Page/CampagnodonView.tpl
 msgid "Related transactions"
 msgstr "Transactions liées"
+
+msgid "Contribution Date"
+msgstr "Date à utiliser pour les contributions"

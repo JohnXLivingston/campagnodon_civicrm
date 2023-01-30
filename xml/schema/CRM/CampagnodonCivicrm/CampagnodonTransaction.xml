@@ -87,6 +87,18 @@
   </index>
 
   <field>
+    <name>contribution_date</name>
+    <type>datetime</type>
+    <required>true</required>
+    <default>NOW()</default>
+    <comment>The datetime to use as receive_date for contributions.</comment>
+  </field>
+  <index>
+    <name>contribution_date</name>
+    <fieldName>contribution_date</fieldName>
+  </index>
+
+  <field>
     <name>status</name>
     <type>varchar</type>
     <length>20</length>

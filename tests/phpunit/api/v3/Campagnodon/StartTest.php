@@ -522,6 +522,9 @@ class api_v3_Campagnodon_StartTest extends \PHPUnit\Framework\TestCase implement
     $this->assertEquals($obj['last_name'], empty($params['last_name']) ? null : $params['last_name'], 'last_name must be correct');
     $this->assertEquals($obj['phone'], empty($params['phone']) ? null : $params['phone'], 'phone must be correct');
     $this->assertEquals($obj['birth_date'], empty($params['birth_date']) ? null : $params['birth_date'], 'birth_date must be correct');
+    $this->assertNotNull($obj['start_date'], 'start_date must not be null');
+    $this->assertNotNull($obj['contribution_date'], 'contribution_date must not be null');
+    $this->assertEquals($obj['start_date'], $obj['contribution_date'], 'start_date must not be equal to contribution_date by default');
 
     $this->assertEquals($obj['tax_receipt'], !empty($params['tax_receipt']) && $params['tax_receipt'] ? true : false, 'tax_receipt must be correct');
     if (empty($params['prefix'])) {

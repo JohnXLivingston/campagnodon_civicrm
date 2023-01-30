@@ -397,4 +397,23 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD CONSTRAINT FK_civicrm_campagnodon_transaction_parent_id FOREIGN KEY (`parent_id`) REFERENCES `civicrm_campagnodon_transaction`(`id`) ON DELETE SET NULL");
     return TRUE;
   }
+
+  /**
+   * New column and index.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0018(): bool {
+    $this->ctx->log->info('Planning update 0018');
+    // To migrate the contribution_date column, first we create it with default null...
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD COLUMN IF NOT EXISTS `contribution_date` datetime DEFAULT NULL COMMENT 'The datetime to use as receive_date for contributions.'");
+    // then we upgrade all lines where contribution_date is null...
+    CRM_Core_DAO::executeQuery("update civicrm_campagnodon_transaction set contribution_date = start_date where contribution_date is null");
+    // then we set the column default value to now()
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction MODIFY COLUMN `contribution_date` datetime NOT NULL DEFAULT NOW() COMMENT 'The datetime to use as receive_date for contributions.'");
+
+    CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD INDEX IF NOT EXISTS `start_date`(start_date)");
+    return TRUE;
+  }
 }

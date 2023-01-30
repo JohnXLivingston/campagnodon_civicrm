@@ -190,8 +190,9 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
         if (!empty($tax_receipt_field)) {
           $contribution->addValue($tax_receipt_field, $transaction['tax_receipt'] ? '1' : '0'); // TODO: add some tests
         }
-        // FIXME: following fields?
-        // 'receive_date'
+        if (!empty($transaction['contribution_date'])) {
+          $contribution->addValue('receive_date', $transaction['contribution_date']);
+        }
         $contribution = $contribution->execute()->single();
 
         \Civi\Api4\CampagnodonTransactionLink::update()

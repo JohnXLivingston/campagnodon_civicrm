@@ -20,6 +20,9 @@
               {ts}Start Date{/ts}
             </th>
             <th scope="col">
+              {ts}Contribution Date{/ts}
+            </th>
+            <th scope="col">
               {ts}Status{/ts}
             </th>
             <th scope="col">
@@ -39,6 +42,7 @@
               <td>{$row.contact}</td>
               <td>{$row.idx|escape}</td>
               <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
+              <td>{$row.contribution_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
               <td>{$row.status|escape}</td>
               <td>
                 {if $row.payment_url}

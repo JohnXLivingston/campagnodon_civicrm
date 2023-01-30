@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.6.0 (Not Released Yet)
+
+* Ajout d'un champs «contribution_date» sur les transactions. Cette date sera celle utilisée pour le champs «receive_date» des contributions. Par défaut, égal à start_date.
+
 ## 1.5.0
 
 * Api Campaign: ajout de current_revenue

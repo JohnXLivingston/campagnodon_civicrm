@@ -147,6 +147,7 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
     foreach ($contributions as $cid => $contribution) {
       $this->assertEquals($contribution['contribution_status_id'], 2, 'Contribution '.$cid.' is in status 2');
       $this->assertEquals($contribution['contribution_status_id:name'], 'Pending', 'Contribution '.$cid.' is in status pending');
+      $this->assertEquals($contribution['receive_date'], $transaction['contribution_date'], 'Contribution receive date equals transaction contribution_date');
       // FIXME: CiviCRM sets a default payment instrument. Should have an «unknown» type...
       // $this->assertEquals($contribution['payment_instrument_id'], null, 'Contribution '.$cid.' has no payment_instrument');
     }
@@ -271,6 +272,8 @@ class api_v3_Campagnodon_UpdatestatusTest extends \PHPUnit\Framework\TestCase im
       } else {
         $this->assertEquals($contribution['payment_instrument_id:name'], $last_step['payment_instrument'], 'Contribution '.$cid.' financial_type is '.$last_step['payment_instrument']);
       }
+
+      $this->assertEquals($contribution['receive_date'], $transaction['contribution_date'], 'Contribution receive date equals transaction contribution_date');
 
       // Now testing that the contribution is correct!
       // Getting the first match in the params array

@@ -66,6 +66,9 @@
               {ts}Start Date{/ts}
             </th>
             <th scope="col">
+              {ts}Contribution Date{/ts}
+            </th>
+            <th scope="col">
               {ts}Status{/ts}
             </th>
             <th scope="col">
@@ -91,6 +94,7 @@
                 {if $row.recurring_status}<br>{$row.recurring_status|escape}{/if}
               </td>
               <td>{$row.start_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
+              <td>{$row.contribution_date|crmDate:"%b %d, %Y %l:%M %P"}</td>
               <td>
                 {$row.status|escape}
               </td>
