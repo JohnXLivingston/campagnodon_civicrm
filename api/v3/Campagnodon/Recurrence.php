@@ -74,6 +74,14 @@ function _civicrm_api3_campagnodon_Recurrence_spec(&$spec) {
     "api.required" => 1,
     "api.default" => "",
   ];
+  $spec["contribution_date"] = [
+    "name" => "contribution_date",
+    "title" => ts("Contribution Date"),
+    "description" => "Contribution date",
+    "type" => CRM_Utils_Type::T_DATE,
+    "api.required" => 0,
+    "api.default" => "",
+  ];
 }
 
 /**
@@ -130,7 +138,7 @@ function civicrm_api3_campagnodon_Recurrence($params) {
     
     foreach (
       array(
-        'payment_url', 'transaction_url'
+        'payment_url', 'transaction_url', 'contribution_date'
       ) as $field
     ) {
       if (array_key_exists($field, $params) && !empty($params[$field])) {
