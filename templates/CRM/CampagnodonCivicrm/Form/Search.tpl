@@ -35,6 +35,10 @@
               <td class="label">{ts}Start Date{/ts}</td>
               <td>{$form.start_date_greater_than.html} {$form.start_date_lower_than.html}</td>
             </tr>
+            <tr>
+              <td class="label">{ts}Contribution Date{/ts}</td>
+              <td>{$form.contribution_date_greater_than.html} {$form.contribution_date_lower_than.html}</td>
+            </tr>
             </tbody>
           </table>
           <div class="crm-submit-buttons">

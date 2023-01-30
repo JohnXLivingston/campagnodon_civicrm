@@ -107,6 +107,23 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       ['time' => false]
     );
 
+    $this->add(
+      'datepicker',
+      'contribution_date_greater_than',
+      E::ts('Start Date'),
+      [],
+      false,
+      ['time' => false]
+    );
+    $this->add(
+      'datepicker',
+      'contribution_date_lower_than',
+      E::ts('Start Date'),
+      [],
+      false,
+      ['time' => false]
+    );
+
     $this->addButtons(array(
       array(
         'type' => 'refresh',
@@ -202,6 +219,12 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
     }
     if (isset($this->formValues['start_date_lower_than']) && !empty($this->formValues['start_date_lower_than'])) {
       $api->addWhere('start_date', '<=', $this->formValues['start_date_lower_than'].' 23:59:59');
+    }
+    if (isset($this->formValues['contribution_date_greater_than']) && !empty($this->formValues['contribution_date_greater_than'])) {
+      $api->addWhere('contribution_date', '>=', $this->formValues['contribution_date_greater_than'].' 00:00:00');
+    }
+    if (isset($this->formValues['contribution_date_lower_than']) && !empty($this->formValues['contribution_date_lower_than'])) {
+      $api->addWhere('contribution_date', '<=', $this->formValues['contribution_date_lower_than'].' 23:59:59');
     }
 
     foreach (['contact_id', 'campaign_id'] as $entity_ref_field) {
