@@ -96,6 +96,65 @@ Ensuite, recompiler (il faut avoir gettext installé sur sa machine):
 msgfmt l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.po -o l10n/fr_FR/LC_MESSAGES/campagnodon_civicrm.mo
 ```
 
+## Scripts utilitaires
+
+Dans le dossier `utils`, on pourra trouver des scripts utilitaires.
+
+### fix_contribution_date.php
+
+Les premières versions de Campagnodon avaient des bugs sur les dates des contributions :
+
+* pour les paiements par chèque, c'est la date de saisie du chèque qui était prise en compte, alors qu'on veut la date de la transaction
+* pour les paiements récurrents en virement SEPA, on a un décalage de 15 jours environ à cause du fonctionnement de SPIP Bank.
+
+La version 1.6.0 de campagnodon-civicrm introduit donc un nouveau champs sur les transactions : contribution_date.
+Ce sera la date à utiliser pour les contributions crées.
+
+Reste à migrer les données existantes.
+
+Pour cela, il a été choisi de créer le présent script.
+Celui-ci prend en entrée du JSON de la forme :
+
+```json
+[
+  {idx:'campagnodon/00001228', date:'2023-01-01 12:32:00'}
+]
+```
+
+On pourra donc générer de tels fichiers JSON à partir de la base de donnée d'origine (SPIP), en fonction des cas.
+Ensuite, il suffira d'injecter ces données dans le script.
+
+À noter que le script comparera la date (sans l'heure) des champs civicrm_campagnodon_transaction.contribution_date et
+civicrm_contribution.receive_date. Si la date est la bonne, rien ne change. Sinon, il appliquera la date et l'heure demandées.
+
+Le script dispose d'un mode `test`, qui ne fait aucune modification, et d'un mode `run` qui effectue les modifications.
+
+Le script écrit sur la sortie standard un journal des actions effectuées (ou non).
+
+Pour l'appeler, il faut avoir l'utilitaire `cv` de Civicrm installé. Et se placer dans un sous-dossier du CiviCRM concerné,
+pour que `cv` puisse trouver la configuration.
+
+Attention: il peut tout à fait arriver que Campagnodon soit installé dans un dossier qui n'est pas dans la bonne arborescence.
+
+Voilà un example d'appel :
+
+```bash
+cd /srv/civicrm.tld/www/sites/default/;
+cat /tmp/contribution_dates.json | php /srv/civicrm.tld/www/sites/custom_ext/campagnodon_civicrm/utils.fix_contribution_date.php test;
+cat /tmp/contribution_dates.json | php /srv/civicrm.tld/www/sites/custom_ext/campagnodon_civicrm/utils.fix_contribution_date.php run | tee /tmp/contribution_dates.log;
+```
+
+Pour obtenir le JSON, on pourra effectuer ce genre de requête SQL:
+
+```mysql
+select JSON_ARRAYAGG(
+  JSON_OBJECT(
+    'idx', spip_campagnodon_transactions.transaction_distant,
+    'contribution_date', spip_campagnodon_transactions.date_transaction
+  )
+) from spip_campagnodon_transactions WHERE ....
+```
+
 ## TODO
 
 * Documentation les règles de dédoublonnage custom.
