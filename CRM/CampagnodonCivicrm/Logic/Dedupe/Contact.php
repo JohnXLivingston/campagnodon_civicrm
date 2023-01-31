@@ -130,10 +130,23 @@ class CRM_CampagnodonCivicrm_Logic_Dedupe_Contact {
       'sequential' => true
     ));
 
-    if ($contacts['count'] === 1) {
-      return $contacts['values'][0];
-    } else if ($contacts['count'] > 1 && $dedupe_mode === 'first') {
-      return $contacts['values'][0];
+    // I suspect that on same CiviCRM setup, the above api call can
+    // return deleted accounts (that was previously merged in some case).
+    // I can't reproduce on my dev setup, but just to be sure,
+    // we are filtering $contacts to remove deleted users.
+    $filtered_contacts = array();
+    foreach ($contacts['values'] as $contact) {
+      if (array_key_exists('is_deleted', $contact) && $contact['is_deleted'] === true) {
+        Civi::log()->info(__CLASS__.'::'.__METHOD__ . ' We got a deleted contact from duplicatecheck API. Ignoring it. cid='.$contact['id']);
+      } else {
+        array_push($filtered_contacts, $contact);
+      }
+    }
+
+    if (count($filtered_contacts) === 1) {
+      return $filtered_contacts[0];
+    } else if (count($filtered_contacts) > 1 && $dedupe_mode === 'first') {
+      return $filtered_contacts[0];
     }
     return null;
   }

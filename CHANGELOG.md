@@ -1,6 +1,10 @@
 
 # Changelog
 
+## ??? (Not Released Yet)
+
+* Recherche des contacts: on ignore les contacts supprimés. Cela n'est pas censé arriver, mais il semblerait que ce soit le cas sur certains environnements.
+
 ## 1.6.0
 
 * Ajout d'un champs «contribution_date» sur les transactions. Cette date sera celle utilisée pour le champs «receive_date» des contributions. Par défaut, égal à start_date.
