@@ -1,7 +1,7 @@
 
 # Changelog
 
-## ??? (Not Released Yet)
+## 1.6.1
 
 * Recherche des contacts: on ignore les contacts supprimés. Cela n'est pas censé arriver, mais il semblerait que ce soit le cas sur certains environnements.
 * Script fix_contribution_date.php pour corriger les dates des contributions.
