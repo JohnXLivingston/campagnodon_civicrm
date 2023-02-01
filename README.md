@@ -144,7 +144,7 @@ cat /tmp/contribution_dates.json | php /srv/civicrm.tld/www/sites/custom_ext/cam
 cat /tmp/contribution_dates.json | php /srv/civicrm.tld/www/sites/custom_ext/campagnodon_civicrm/utils.fix_contribution_date.php run | tee /tmp/contribution_dates.log;
 ```
 
-Pour obtenir le JSON, on pourra effectuer ce genre de requête SQL:
+Pour obtenir le JSON, on pourra effectuer ce genre de requêtes SQL:
 
 ```mysql
 select JSON_ARRAYAGG(
@@ -152,7 +152,39 @@ select JSON_ARRAYAGG(
     'idx', spip_campagnodon_transactions.transaction_distant,
     'contribution_date', spip_campagnodon_transactions.date_transaction
   )
-) from spip_campagnodon_transactions WHERE ....
+) from spip_campagnodon_transactions WHERE type_transaction = 'don';
+
+select JSON_ARRAYAGG(
+  JSON_OBJECT(
+    'idx', spip_campagnodon_transactions.transaction_distant,
+    'contribution_date', spip_campagnodon_transactions.date_transaction
+  )
+) from spip_campagnodon_transactions WHERE type_transaction = 'adhesion';
+
+select JSON_ARRAYAGG(
+  JSON_OBJECT(
+    'idx', spip_campagnodon_transactions.transaction_distant,
+    'contribution_date', spip_campagnodon_transactions.date_transaction
+  )
+) from spip_campagnodon_transactions WHERE type_transaction = 'don_mensuel';
+
+select JSON_ARRAYAGG(
+  JSON_OBJECT(
+    'idx', spip_campagnodon_transactions.transaction_distant,
+    'contribution_date', spip_transactions.date_paiement
+  )
+) from spip_campagnodon_transactions
+LEFT JOIN spip_transactions ON spip_campagnodon_transactions.id_transaction = spip_transactions.id_transaction
+WHERE spip_campagnodon_transactions.type_transaction = 'don_mensuel_echeance';
+
+select JSON_ARRAYAGG(
+  JSON_OBJECT(
+    'idx', spip_campagnodon_transactions.transaction_distant,
+    'contribution_date', spip_transactions.date_paiement
+  )
+) from spip_campagnodon_transactions
+LEFT JOIN spip_transactions ON spip_campagnodon_transactions.id_transaction = spip_transactions.id_transaction
+WHERE spip_campagnodon_transactions.type_transaction = 'don_mensuel_migre';
 ```
 
 ## TODO
