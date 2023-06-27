@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.6.2
+
+* Logs utiles en cas de rollback.
+
 ## 1.6.1
 
 * Recherche des contacts: on ignore les contacts supprimés. Cela n'est pas censé arriver, mais il semblerait que ce soit le cas sur certains environnements.

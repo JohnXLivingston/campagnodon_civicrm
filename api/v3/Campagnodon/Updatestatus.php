@@ -211,7 +211,9 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
       CRM_CampagnodonCivicrm_Logic_Contact::mergeIntoContact($transaction['id']);
     }
   } catch (Throwable $e) {
-    Civi::log()->debug(__METHOD__.' rollbacking...');
+    Civi::log()->warning(__METHOD__.' got a throwable: '.$e->getMessage());
+    Civi::log()->debug(__METHOD__.' Stack trace: '.$e->getTraceAsString());
+    Civi::log()->warning(__METHOD__.' rollbacking...');
     $tx->rollback();
     throw $e;
   }

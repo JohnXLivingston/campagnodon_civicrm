@@ -96,6 +96,9 @@ function civicrm_api3_campagnodon_Convert($params) {
     $convert_logic->convertTransactionOperationType($transaction);
 
   } catch (Throwable $e) {
+    Civi::log()->warning(__METHOD__.' got a throwable: '.$e->getMessage());
+    Civi::log()->debug(__METHOD__.' Stack trace: '.$e->getTraceAsString());
+    Civi::log()->warning(__METHOD__.' rollbacking...');
     $tx->rollback();
     throw $e;
   }
