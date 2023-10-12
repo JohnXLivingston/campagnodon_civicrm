@@ -92,6 +92,7 @@ class CRM_CampagnodonCivicrm_Logic_Dedupe_Contact {
 
     $contact = null;
     $dedupe_rule = $this->getDedupeRule();
+    Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' dedup rule will be: ' . ($dedupe_rule ?? ''));
 
     $contact = $this->_searchContact($dedupe_rule);
 
@@ -106,6 +107,7 @@ class CRM_CampagnodonCivicrm_Logic_Dedupe_Contact {
 
   protected function _searchContact($dedupe_rule) {
     if (empty($dedupe_rule) || $dedupe_rule == '0') {
+      Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' no dedup rule, returning null');
       return null;
     }
 
@@ -123,12 +125,27 @@ class CRM_CampagnodonCivicrm_Logic_Dedupe_Contact {
       $dedupe_mode = $b;
     }
 
-    $contacts = civicrm_api3('Contact', 'duplicatecheck', array(
+    Civi::log()->debug(
+      __CLASS__.'::'.__METHOD__
+      . 'rule_id: ' . ($dedupe_rule_id ?? '-')
+      . ' rule_type: ' . ($dedupe_rule_type ?? '-')
+      . ' dedup_mode: ' . $dedupe_mode
+    );
+
+    $duplicatecheck_params = array(
       'match' => $this->contact_create_params,
       'rule_type' => $dedupe_rule_type,
       'dedupe_rule_id' => $dedupe_rule_id,
-      'sequential' => true
-    ));
+      'sequential' => true,
+      'check_permissions' => false
+    );
+
+    // IMPORTANT: Don't let this log, as contains personnal info.
+    // Civi::log()->debug(__CLASS__.'::'.__METHOD__ . print_r($duplicatecheck_params, true));
+
+    $contacts = civicrm_api3('Contact', 'duplicatecheck', $duplicatecheck_params);
+
+    Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' Got ' . count($contacts['values']) . ' contacts');
 
     // I suspect that on same CiviCRM setup, the above api call can
     // return deleted accounts (that was previously merged in some case).
@@ -143,11 +160,17 @@ class CRM_CampagnodonCivicrm_Logic_Dedupe_Contact {
       }
     }
 
+    Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' Got ' . count($filtered_contacts) . ' contacts after filtering');
+
     if (count($filtered_contacts) === 1) {
+      Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' only 1 contact, taking it.');
       return $filtered_contacts[0];
     } else if (count($filtered_contacts) > 1 && $dedupe_mode === 'first') {
+      Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' more than 1 contact, dedup_mode==first, taking the first one');
       return $filtered_contacts[0];
     }
+
+    Civi::log()->debug(__CLASS__.'::'.__METHOD__ . ' returning null');
     return null;
   }
 

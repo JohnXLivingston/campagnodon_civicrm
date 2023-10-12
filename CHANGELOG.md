@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 1.6.3
+
+* Fix: la recherche de doublon n'utilisant pas le paramètre "check_permissions=FALSE", et ne trouvais donc pas les doublons dans toutes les situations.
+
 ## 1.6.2
 
 * Logs utiles en cas de rollback.
