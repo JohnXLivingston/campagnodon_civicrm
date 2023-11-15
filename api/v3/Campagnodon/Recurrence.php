@@ -50,30 +50,32 @@ function _civicrm_api3_campagnodon_Recurrence_spec(&$spec) {
     "api.required" => 0, // Not required here
     "api.default" => "",
   ];
-  $spec["financial_type"] = [
-    "name" => "financial_type",
-    "title" => ts("Financial ID"),
-    "description" => "Financial ID",
-    "type" => CRM_Utils_Type::T_STRING,
-    "api.required" => 1,
-    "api.default" => "",
-  ];
-  $spec["currency"] = [
-    "name" => "currency",
-    "title" => ts("Currency"),
-    "description" => "Currency",
-    "type" => CRM_Utils_Type::T_STRING,
-    "api.required" => 1,
-    "api.default" => "",
-  ];
-  $spec["amount"] = [
-    "name" => "amount",
-    "title" => ts("Amount"),
-    "description" => "Amount",
-    "type" => CRM_Utils_Type::T_STRING,
-    "api.required" => 1,
-    "api.default" => "",
-  ];
+  // Fields financial_type, currency, amount: before Campagnodon.SPIP v2.0.0.
+  // (we keep the retro compatibility)
+  // $spec["financial_type"] = [
+  //   "name" => "financial_type",
+  //   "title" => ts("Financial ID"),
+  //   "description" => "Financial ID",
+  //   "type" => CRM_Utils_Type::T_STRING,
+  //   "api.required" => 1,
+  //   "api.default" => "",
+  // ];
+  // $spec["currency"] = [
+  //   "name" => "currency",
+  //   "title" => ts("Currency"),
+  //   "description" => "Currency",
+  //   "type" => CRM_Utils_Type::T_STRING,
+  //   "api.required" => 1,
+  //   "api.default" => "",
+  // ];
+  // $spec["amount"] = [
+  //   "name" => "amount",
+  //   "title" => ts("Amount"),
+  //   "description" => "Amount",
+  //   "type" => CRM_Utils_Type::T_STRING,
+  //   "api.required" => 1,
+  //   "api.default" => "",
+  // ];
   $spec["contribution_date"] = [
     "name" => "contribution_date",
     "title" => ts("Contribution Date"),
@@ -98,6 +100,24 @@ function _civicrm_api3_campagnodon_Recurrence_spec(&$spec) {
  * @throws API_Exception
  */
 function civicrm_api3_campagnodon_Recurrence($params) {
+  // Campagnodon SPIP:
+  // * after v2.0.0, sends 'contributions' array
+  // * before v2.0.0, sends only one contribution, flat with the others data
+  // We are dealing with retro-compatibility here:
+  if (!array_key_exists('contributions', $params)) {
+    Civi::log()->debug(__METHOD__.' Dealing with the old API format');
+    $contributions_params = [
+      [
+        'amount' => $params['amount'],
+        'currency' => $params['currency'],
+        'financial_type' => $params['financial_type']
+      ]
+    ];
+  } else {
+    $contributions_params = $params['contributions'];
+  }
+  CRM_CampagnodonCivicrm_Logic_Transactions::checkContributionsParams($contributions_params);
+
   $transaction = \Civi\Api4\CampagnodonTransaction::get()
     ->setCheckPermissions(false)
     ->addWhere('idx', '=', $params['transaction_idx'])
@@ -179,19 +199,10 @@ function civicrm_api3_campagnodon_Recurrence($params) {
     //     ->execute()
     //     ->single();
     // }
-    // We now copy all parents contributions
-    $financial_type = $params['financial_type'];
-    $financial_type_field = is_numeric($financial_type) ? 'financial_type_id' : 'financial_type_id:name';
-    $link = \Civi\Api4\CampagnodonTransactionLink::create()
-      ->setCheckPermissions(false)
-      ->addValue('campagnodon_tid', $transaction['id'])
-      ->addValue('entity_table', 'civicrm_contribution')
-      ->addValue('entity_id', null)
-      ->addValue('total_amount', $params['amount'])
-      ->addValue('currency', $params['currency'])
-      ->addValue($financial_type_field, $financial_type)
-      ->execute()
-      ->single();
+
+    // We now create the requested contribution
+    CRM_CampagnodonCivicrm_Logic_Transactions::createContributionsFromParams($transaction, $contributions_params);
+
   } catch (Throwable $e) {
     Civi::log()->warning(__METHOD__.' got a throwable: '.$e->getMessage());
     Civi::log()->debug(__METHOD__.' Stack trace: '.$e->getTraceAsString());

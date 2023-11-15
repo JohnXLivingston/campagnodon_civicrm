@@ -88,12 +88,17 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
         // Already in double_membership, keeping the status.
         $status = 'double_membership';
       } else if($transaction['status'] !== 'completed') { // don't reopen a completed transaction!
-        // We must first search double membership.
-        // If found, we must go to a special state.
-        // Note: must be done before computing $contribution_status
-        // TODO: add some unit tests.
-        if (CRM_CampagnodonCivicrm_Logic_Contact::searchDoubleMembership($transaction['contact_id'], $transaction['id'])) {
-          $status = 'double_membership';
+        if ($params['ignore_double_membership'] == '1') {
+          // The origin system can pass this param, so we ignore double membership mechanism.
+          // Must be used for recurrent dues.
+        } else {
+          // We must first search double membership.
+          // If found, we must go to a special state.
+          // Note: must be done before computing $contribution_status
+          // TODO: add some unit tests.
+          if (CRM_CampagnodonCivicrm_Logic_Contact::searchDoubleMembership($transaction['contact_id'], $transaction['id'])) {
+            $status = 'double_membership';
+          }
         }
       }
     }
