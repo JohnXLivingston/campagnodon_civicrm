@@ -88,9 +88,22 @@ function civicrm_api3_campagnodon_Updatestatus($params) {
         // Already in double_membership, keeping the status.
         $status = 'double_membership';
       } else if($transaction['status'] !== 'completed') { // don't reopen a completed transaction!
-        if ($params['ignore_double_membership'] == '1') {
-          // The origin system can pass this param, so we ignore double membership mechanism.
-          // Must be used for recurrent dues.
+        if (!empty($transaction['parent_id'])) {
+          // This is a due date update...
+          // If parent is double membership => due also.
+          // If not, never test doublemembership, just renew the membershipt
+          // TODO: add unit test.
+          $transaction_parent = \Civi\Api4\CampagnodonTransaction::get()
+            ->setCheckPermissions(false)
+            ->addWhere('id', '=', $transaction['parent_id'])
+            ->execute()
+            ->single();
+          if ($transaction_parent['status'] === 'double_membership') {
+            Civi::log()->warning(
+              __METHOD__.': Parent transaction is in double_membership state, using same status for new transaction'
+            );
+            $status = 'double_membership';
+          }
         } else {
           // We must first search double membership.
           // If found, we must go to a special state.
