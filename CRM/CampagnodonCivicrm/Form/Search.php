@@ -15,6 +15,10 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
   public $count = 0;
   public $rows = [];
 
+  // public function getDefaultEntity() {
+  //   return 'CampagnodonTransaction';
+  // }
+
   public function preProcess() {
     parent::preProcess();
     $this->formValues = $this->getSubmitValues();
@@ -81,7 +85,11 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       'operation_type',
       E::ts('Operation Type'),
       $this->getOperationTypeOptions(),
-      false
+      false,
+      [
+        'multiple' => true,
+        'class' => 'crm-select2'
+      ]
     );
     $this->add(
       'select',
@@ -168,7 +176,8 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
 
   public function getOperationTypeOptions() {
     $options = array(
-      '' => E::ts('- select -'),
+      // Not necessary as long as the field is 'multiple':
+      // '' => E::ts('- select -'),
     );
     $query = 'SELECT DISTINCT(operation_type) AS unique_operation_type FROM civicrm_campagnodon_transaction ORDER BY unique_operation_type';
     $dao = CRM_Core_DAO::executeQuery($query);
@@ -205,7 +214,11 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
       $api->addWhere('idx', 'CONTAINS', $this->formValues['idx']);
     }
     if (isset($this->formValues['operation_type']) && !empty($this->formValues['operation_type'])) {
-      $api->addWhere('operation_type', '=', $this->formValues['operation_type']);
+      if (is_array($this->formValues['operation_type'])) {
+        $api->addWhere('operation_type', 'IN', $this->formValues['operation_type']);
+      } else {
+        $api->addWhere('operation_type', '=', $this->formValues['operation_type']);
+      }
     }
     if (isset($this->formValues['tax_receipt'])) {
       if ($this->formValues['tax_receipt'] === '1') {
