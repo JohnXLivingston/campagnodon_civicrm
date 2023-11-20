@@ -55,6 +55,10 @@ class CRM_CampagnodonCivicrm_Logic_Transactions {
           ->addValue(
             is_numeric($contribution_params['membership']) ? 'membership_type_id': 'membership_type_id:name',
             $contribution_params['membership']
+          )
+          ->addValue(
+            'keep_current_membership_if_possible',
+            !!$contribution_params['keep_current_membership_if_possible']
           );
         
         // Special case: there can be a custom opt-in option in params... FIXME: the way this is handled is not clean.

@@ -43,8 +43,17 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
    * @param $contribution_id
    * @param $membership_type_id
    * @param $contact_id
+   * @param $opt_in
+   * @param $keep_current_membership_if_possible
    */
-  public static function addMembership($transaction_link_id, $transaction_link_parent_id, $membership_type_id, $contact_id, $opt_in) {
+  public static function addMembership(
+    $transaction_link_id,
+    $transaction_link_parent_id,
+    $membership_type_id,
+    $contact_id,
+    $opt_in,
+    $keep_current_membership_if_possible
+  ) {
     // TODO: handle cases when membership already exists.
 
     $membership_type = \Civi\Api4\MembershipType::get()
@@ -102,19 +111,51 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     if ($current_membership) {
       $membership_id = $current_membership['id'];
 
-      civicrm_api3('Membership', 'create', array_merge(
-        $custom_fields,
-        array(
-          'id' => $membership_id,
-          'membership_type_id' => $membership_type_id,
-          'num_terms' => 1,
-          'skipStatusCal' => 0,
-          'campaign_id' => $contribution && array_key_exists('campaign_id', $contribution) ? $contribution['campaign_id'] : null,
-          'start_date' => $start_date,
-          'check_permissions' => 0,
-          'sequential' => true
-        )
-      ));
+      $dont_create = false;
+
+      if ($keep_current_membership_if_possible) {
+        // TODO: add some unit test.
+        Civi::log()->debug(__METHOD__.': Checking if current membership expires in less than 1 month...');
+        $end_date = $current_membership['end_date'];
+        $limit_date = date('Y-m-d', strtotime("+1 month"));
+
+        Civi::log()->debug(
+          __METHOD__.': end_date='.$end_date
+          . ', limit_date='.$limit_date
+        );
+        if ($end_date < $limit_date) {
+          Civi::log()->info(
+            __CLASS__.'::'.__METHOD__
+            . ': We must renew the membership id='
+            . $membership_id
+            . ' despite the keep_current_membership_if_possible attribute'
+          );
+        } else {
+          Civi::log()->info(
+            __CLASS__.'::'.__METHOD__
+            . ': We must add a contribution to membership id='
+            . $membership_id
+            . ' without touching the membership, because of the keep_current_membership_if_possible attribute'
+          );
+          $dont_create = true;
+        }
+      }
+
+      if (!$dont_create) {
+        civicrm_api3('Membership', 'create', array_merge(
+          $custom_fields,
+          array(
+            'id' => $membership_id,
+            'membership_type_id' => $membership_type_id,
+            'num_terms' => 1,
+            'skipStatusCal' => 0,
+            'campaign_id' => $contribution && array_key_exists('campaign_id', $contribution) ? $contribution['campaign_id'] : null,
+            'start_date' => $start_date,
+            'check_permissions' => 0,
+            'sequential' => true
+          )
+        ));
+      }
     } else {
       $membership = civicrm_api3('Membership', 'create', array_merge(
         $custom_fields,
@@ -290,7 +331,14 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
         ) {
           // FIXME: do something when payment is cancelled?
           Civi::log()->debug(__METHOD__.' Calling addMembership for link '.$lid);
-          CRM_CampagnodonCivicrm_Logic_Contact::addMembership($link['id'], $link['parent_id'], $link['membership_type_id'], $contact_id, $link['opt_in']);
+          CRM_CampagnodonCivicrm_Logic_Contact::addMembership(
+            $link['id'],
+            $link['parent_id'],
+            $link['membership_type_id'],
+            $contact_id,
+            $link['opt_in'],
+            $link['keep_current_membership_if_possible']
+          );
         }
       } else if ($link['entity_table'] === 'civicrm_tag') {
         if (CRM_CampagnodonCivicrm_Logic_Contact::_testOnComplete($link, $transaction_status)) {

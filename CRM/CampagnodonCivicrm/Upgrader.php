@@ -416,4 +416,16 @@ class CRM_CampagnodonCivicrm_Upgrader extends CRM_CampagnodonCivicrm_Upgrader_Ba
     CRM_Core_DAO::executeQuery("ALTER TABLE civicrm_campagnodon_transaction ADD INDEX IF NOT EXISTS `start_date`(start_date)");
     return TRUE;
   }
+
+  /**
+   * New column and index.
+   *
+   * @return TRUE on success
+   * @throws Exception
+   */
+  public function upgrade_0019(): bool {
+    $this->ctx->log->info('Planning update 0019');
+    CRM_Core_DAO::executeQuery('ALTER TABLE civicrm_campagnodon_transaction_link ADD COLUMN `keep_current_membership_if_possible` tinyint DEFAULT false');
+    return TRUE;
+  }
 }

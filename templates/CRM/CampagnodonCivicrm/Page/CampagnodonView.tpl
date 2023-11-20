@@ -154,6 +154,9 @@
                   {if $link.opt_in}
                     {$link.opt_in}<br>
                   {/if}
+                  {if $link.keep_current_membership_if_possible}
+                      (only renew membershipt when needed)<br>
+                  {/if}
                 {/if}
                 {if $link.cancelled}
                   <br>

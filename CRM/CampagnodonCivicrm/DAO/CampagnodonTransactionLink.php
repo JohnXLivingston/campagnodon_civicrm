@@ -149,6 +149,15 @@ class CRM_CampagnodonCivicrm_DAO_CampagnodonTransactionLink extends CRM_Core_DAO
   public $cancelled;
 
   /**
+   * Only when entity_table='membership'. If true, attach contributions to current membership. Only renew membership if it expires in less than 1 month.
+   *
+   * @var bool|string|null
+   *   (SQL type: tinyint)
+   *   Note that values will be retrieved from the database as a string.
+   */
+  public $keep_current_membership_if_possible;
+
+  /**
    * Class constructor.
    */
   public function __construct() {
@@ -398,6 +407,19 @@ class CRM_CampagnodonCivicrm_DAO_CampagnodonTransactionLink extends CRM_Core_DAO
           'size' => CRM_Utils_Type::MEDIUM,
           'where' => 'civicrm_campagnodon_transaction_link.cancelled',
           'default' => NULL,
+          'table_name' => 'civicrm_campagnodon_transaction_link',
+          'entity' => 'CampagnodonTransactionLink',
+          'bao' => 'CRM_CampagnodonCivicrm_DAO_CampagnodonTransactionLink',
+          'localizable' => 0,
+          'add' => NULL,
+        ],
+        'keep_current_membership_if_possible' => [
+          'name' => 'keep_current_membership_if_possible',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => E::ts('Keep current membership'),
+          'description' => E::ts('Only when entity_table=\'membership\'. If true, attach contributions to current membership. Only renew membership if it expires in less than 1 month.'),
+          'where' => 'civicrm_campagnodon_transaction_link.keep_current_membership_if_possible',
+          'default' => 'false',
           'table_name' => 'civicrm_campagnodon_transaction_link',
           'entity' => 'CampagnodonTransactionLink',
           'bao' => 'CRM_CampagnodonCivicrm_DAO_CampagnodonTransactionLink',
