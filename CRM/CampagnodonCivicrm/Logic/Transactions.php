@@ -60,7 +60,7 @@ class CRM_CampagnodonCivicrm_Logic_Transactions {
             'keep_current_membership_if_possible',
             !!$contribution_params['keep_current_membership_if_possible']
           );
-        
+
         // Special case: there can be a custom opt-in option in params... FIXME: the way this is handled is not clean.
         if (array_key_exists('membership_option', $contribution_params) && !empty($contribution_params['membership_option'])) {
           $membership_link_create->addValue('opt_in', $contribution_params['membership_option']);
