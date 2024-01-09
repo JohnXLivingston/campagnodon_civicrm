@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 2.0.0-RC1
+## 2.0.0
 
 * Compatibilité avec Campagnodon SPIP v2.0.0 (et les adhésions avec renouvellement).
 * Recherche de transactions: la recherche sur le type d'opération permet d'en sélectionner plusieurs.

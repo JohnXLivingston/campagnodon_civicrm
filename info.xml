@@ -16,7 +16,7 @@
   </urls>
   <releaseDate>2023-11-21</releaseDate>
   <version>2.0.0</version>
-  <develStage>beta</develStage>
+  <develStage>stable</develStage>
   <compatibility>
     <ver>5.0</ver>
   </compatibility>
