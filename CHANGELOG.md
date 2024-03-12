@@ -1,6 +1,10 @@
 
 # Changelog
 
+## ??? (Not Released Yet)
+
+* Upgrader: fix d'un warning en php 8.x.
+
 ## 2.0.0
 
 * Compatibilité avec Campagnodon SPIP v2.0.0 (et les adhésions avec renouvellement).

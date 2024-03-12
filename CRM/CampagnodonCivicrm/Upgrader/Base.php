@@ -14,6 +14,11 @@ class CRM_CampagnodonCivicrm_Upgrader_Base {
   public static $instance;
 
   /**
+   * @var \CRM_Queue_Queue
+   */
+  protected $queue;
+
+  /**
    * @var CRM_Queue_TaskContext
    */
   protected $ctx;
