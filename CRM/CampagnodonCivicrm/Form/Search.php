@@ -19,7 +19,7 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
   //   return 'CampagnodonTransaction';
   // }
 
-  public function preProcess() {
+    public function preProcess() {
     parent::preProcess();
     $this->formValues = $this->getSubmitValues();
     $this->setTitle(E::ts('Campagnodon'));
@@ -41,8 +41,8 @@ class CRM_CampagnodonCivicrm_Form_Search extends CRM_Core_Form {
     $pagerParams['buttonBottom'] = 'PagerBottomButton';
     $pagerParams['total'] = $this->count;
     $pagerParams['pageID'] = $this->pageId;
-    $this->pager = new CRM_Utils_Pager($pagerParams);
-    $this->assign('pager', $this->pager);
+    $pager = new CRM_Utils_Pager($pagerParams);
+    $this->assign('pager', $pager);
   }
 
   public function buildQuickForm() {

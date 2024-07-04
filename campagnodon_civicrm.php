@@ -109,12 +109,12 @@ function campagnodon_civicrm_civicrm_tabset($path, &$tabs, $context) {
  */
 function campagnodon_civicrm_civicrm_permission(&$permissions) {
   $permissions['access Campagnodon'] = [
-    E::ts('Access to Campagnodon'),
-    E::ts('Permission to see Campagnodon application in CiviCRM')
+      'label' => E::ts('Access to Campagnodon'),
+      'description' => E::ts('Permission to see Campagnodon application in CiviCRM')
   ];
   $permissions['Campagnodon api'] = [
-    E::ts('Use Campagnodon API'),
-    E::ts('Permission for the Campagnodon API user (external system: SPIP, ...)')
+      'label' => E::ts('Use Campagnodon API'),
+      'description' => E::ts('Permission for the Campagnodon API user (external system: SPIP, ...)')
   ];
 }
 
