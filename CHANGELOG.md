@@ -4,6 +4,7 @@
 ## ??? (Not Released Yet)
 
 * Upgrader: fix d'un warning en php 8.x.
+* Fix de warnings dans les templates.
 
 ## 2.0.0
 
