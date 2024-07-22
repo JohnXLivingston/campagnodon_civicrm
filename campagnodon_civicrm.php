@@ -25,59 +25,12 @@ function campagnodon_civicrm_civicrm_install() {
 }
 
 /**
- * Implements hook_civicrm_postInstall().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postInstall
- */
-function campagnodon_civicrm_civicrm_postInstall() {
-  _campagnodon_civicrm_civix_civicrm_postInstall();
-}
-
-/**
- * Implements hook_civicrm_uninstall().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_uninstall
- */
-function campagnodon_civicrm_civicrm_uninstall() {
-  _campagnodon_civicrm_civix_civicrm_uninstall();
-}
-
-/**
  * Implements hook_civicrm_enable().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_enable
  */
 function campagnodon_civicrm_civicrm_enable() {
   _campagnodon_civicrm_civix_civicrm_enable();
-}
-
-/**
- * Implements hook_civicrm_disable().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_disable
- */
-function campagnodon_civicrm_civicrm_disable() {
-  _campagnodon_civicrm_civix_civicrm_disable();
-}
-
-/**
- * Implements hook_civicrm_upgrade().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_upgrade
- */
-function campagnodon_civicrm_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  return _campagnodon_civicrm_civix_civicrm_upgrade($op, $queue);
-}
-
-/**
- * Implements hook_civicrm_entityTypes().
- *
- * Declare entity types provided by this module.
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
- */
-function campagnodon_civicrm_civicrm_entityTypes(&$entityTypes) {
-  _campagnodon_civicrm_civix_civicrm_entityTypes($entityTypes);
 }
 
 // --- Functions below this ship commented out. Uncomment as required. ---
@@ -156,12 +109,12 @@ function campagnodon_civicrm_civicrm_tabset($path, &$tabs, $context) {
  */
 function campagnodon_civicrm_civicrm_permission(&$permissions) {
   $permissions['access Campagnodon'] = [
-    E::ts('Access to Campagnodon'),
-    E::ts('Permission to see Campagnodon application in CiviCRM')
+      'label' => E::ts('Access to Campagnodon'),
+      'description' => E::ts('Permission to see Campagnodon application in CiviCRM')
   ];
   $permissions['Campagnodon api'] = [
-    E::ts('Use Campagnodon API'),
-    E::ts('Permission for the Campagnodon API user (external system: SPIP, ...)')
+      'label' => E::ts('Use Campagnodon API'),
+      'description' => E::ts('Permission for the Campagnodon API user (external system: SPIP, ...)')
   ];
 }
 

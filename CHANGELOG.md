@@ -1,9 +1,10 @@
 
 # Changelog
 
-## ??? (Not Released Yet)
+## 2.1.0
 
-* Upgrader: fix d'un warning en php 8.x.
+* Compatibility CiviCRM jusqu'à au moins 5.75.x, et Smarty v2/v3/v4
+* Fix de warnings PHP.
 
 ## 2.0.0
 

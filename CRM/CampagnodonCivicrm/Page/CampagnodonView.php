@@ -19,13 +19,15 @@ class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
       $row['contact'] = '<a href="'.CRM_Utils_System::url('civicrm/contact/view', ['reset' => 1, 'cid' => $row['contact_id']]).'">'.CRM_Contact_BAO_Contact::displayName($row['contact_id']).'</a>';
     }
     $row['payment_instrument'] = $row['payment_instrument_id:label'];
+    $row['campaign_title'] = '';
     if (!empty($row['campaign_id'])) {
       // TODO: lien vers la campagne.
       $row['campaign_title'] = $row['campaign_id:label'];
     }
-    if (!empty($row['prefix_id'])) {
-      $row['prefix_label'] = $row['prefix_id:label'];
-    }
+    
+    if (empty($row['prefix'])) { $row['prefix'] = ''; }
+
+    $row['country_label'] = '';
     if (!empty($row['country_id'])) {
       $row['country_label'] = $row['country_id:label'];
     }
@@ -40,6 +42,8 @@ class CRM_CampagnodonCivicrm_Page_CampagnodonView extends CRM_Core_Page {
       ->execute();
 
     foreach ($links as &$link) {
+      $link['view'] = '';
+
       if ($link['entity_table'] === 'civicrm_contribution') {
         $link['financial_type'] = $link['financial_type_id:name'];
 
