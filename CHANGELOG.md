@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.2.0
+
+* Nouveau settings "campagnodon_new_membership_rollover_day_month" optionnel, pour gérer une date de "rollover" différente pour les nouvelles adhésions. Ceci est un paramètre utilisé par Attac, et semple assez spécifique. Il n'est pas recommandé de l'utiliser dans d'autres contextes.
+
 ## 2.1.0
 
 * Compatibility CiviCRM jusqu'à au moins 5.75.x, et Smarty v2/v3/v4

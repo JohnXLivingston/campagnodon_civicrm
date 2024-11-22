@@ -44,7 +44,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
    * @param $membership_type_id
    * @param $contact_id
    * @param $opt_in
-   * @param $keep_current_membership_if_possible
+   * @param $keep_current_membership_if_possible: this is used for recurring payment: their can be 12 payments for a yearly membership. We must not change existing membership if it is still ongoing.
    */
   public static function addMembership(
     $transaction_link_id,
@@ -157,6 +157,14 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
         ));
       }
     } else {
+      if (empty($start_date) && $period_type === 'fixed') {
+        Civi::log()->debug(
+          __CLASS__.'::'.__METHOD__
+          . ': We are on a brand new fixex membership, we must compare the payment date with the rollover date'
+        );
+        $start_date = CRM_CampagnodonCivicrm_Logic_Contact::_testNewMembershipRolloverDate($receive_date);
+      }
+
       $membership = civicrm_api3('Membership', 'create', array_merge(
         $custom_fields,
         array(
@@ -469,5 +477,58 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
 
       return true;
     // TODO: add some unit tests.
+  }
+
+  /**
+   * Read the campagnodon_new_membership_rollover_day_month settings if set,
+   * to get the rollover date and month.
+   */
+  protected static function _newMembershipRollover() {
+    $v = Civi::settings()->get('campagnodon_new_membership_rollover_day_month');
+    if (empty($v)) { return null; }
+
+    if (!preg_match('/^(\d{1,2})\/(\d{1,2})$/', $v, $matches)) {
+      Civi::log()->error(__CLASS__.'::'.__METHOD__.': Invalid value for campagnodon_new_membership_rollover_day_month');
+      return null;
+    }
+
+    $o = new stdClass();
+    $o->day = $matches[1];
+    $o->month = $matches[2];
+    return $o;
+  }
+
+  protected static function _testNewMembershipRolloverDate($date) {
+    $rollover = CRM_CampagnodonCivicrm_Logic_Contact::_newMembershipRollover();
+    if (!$rollover) { return null; }
+
+    if (empty($date)) {
+      // Defaulting to today
+      $now = new DateTime();
+      $date = $now->format('Y-m-d');
+    }
+
+    $dateObject = new DateTime($date);
+
+    // we can simply compare with this (we use a new DateTime, to avoid issues when month or day as a single number):
+    $pivot = new DateTime($dateObject->format('Y') . '-' . $rollover->month . '-' . $rollover->day);
+    $pivot = $pivot->format('Y-m-d');
+    if ($date < $pivot) { // Note: $date can contain an hour, so we must test this way.
+      Civi::log()->info(
+        __CLASS__.'::'.__METHOD__
+        . ': The payment date ' . $date . ' is less than the rollover date ' . $pivot .', membership start date should not be modified'
+      );
+      return null;
+    }
+
+    $r = new DateTime();
+    $r->setDate(intval($dateObject->format('Y')) + 1, 1, 1);
+    $r = $r->format('Y-m-d');
+    Civi::log()->info(
+      __CLASS__.'::'.__METHOD__
+      . ': The payment date ' . $date . ' is greater or equal than the rollover date ' . $pivot .', '
+      . 'the membership must start the next year, we will use ' . $r . ' as start date.'
+    );
+    return $r;
   }
 }
