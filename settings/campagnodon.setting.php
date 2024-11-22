@@ -173,6 +173,18 @@ $campagnodon_settings['campagnodon_clean_nb_days'] = array(
   'settings_pages' => ['campagnodon' => ['weight' => 20]],
 );
 
+$campagnodon_settings['campagnodon_new_membership_rollover_day_month'] = array(
+  'name' => 'campagnodon_new_membership_rollover_day_month',
+  'type' => 'Text',
+  'html_type' => 'text',
+  'default' => '',
+  'title' => E::ts('New membership rollover day and month'),
+  'description' => E::ts('For a brand new membership, the "day/month" from which the membership is for next year. This only apply to fixed membership, not rolling. Example value: "15/12" (day first, then month). This differs from the membership rollover period, as it only apply to new memberships.'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'settings_pages' => ['campagnodon' => ['weight' => 25]],
+);
+
 $campagnodon_settings['campagnodon_contribution_tax_receipt_field'] = array(
   'name' => 'campagnodon_contribution_tax_receipt_field',
   'type' => 'Text',
