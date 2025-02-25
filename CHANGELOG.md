@@ -1,6 +1,10 @@
 
 # Changelog
 
+## ??? (Not Released Yet)
+
+* fix colonne manquante dans auto_install.sql
+
 ## 2.2.0
 
 * Nouveau settings "campagnodon_new_membership_rollover_day_month" optionnel, pour gérer une date de "rollover" différente pour les nouvelles adhésions. Ceci est un paramètre utilisé par Attac, et semple assez spécifique. Il n'est pas recommandé de l'utiliser dans d'autres contextes.

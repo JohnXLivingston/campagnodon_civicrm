@@ -118,6 +118,7 @@ CREATE TABLE `civicrm_campagnodon_transaction_link` (
   `membership_type_id` int unsigned NULL DEFAULT NULL COMMENT 'Only when entity_table=\'membership\'. FK to Membership Type.',
   `opt_in` varchar(25) DEFAULT NULL COMMENT 'An opt-in action to do on the contact (or membership).',
   `cancelled` varchar(20) DEFAULT NULL COMMENT 'Some links can be cancelled. This field contains a keyword to describe the reason. Example: membership already exists.',
+  `keep_current_membership_if_possible` tinyint DEFAULT false,
   PRIMARY KEY (`id`),
   INDEX `index_entity_table_entity_id`(entity_table, entity_id),
   INDEX `index_cancelled`(cancelled),
