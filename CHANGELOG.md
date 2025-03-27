@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.2.2
+
+* Fix typo.
+
 ## 2.2.1
 
 * Fix adhésions renouvelable après 1 ans (introduction du paramètre campagnodon_renewal_force_status_id).

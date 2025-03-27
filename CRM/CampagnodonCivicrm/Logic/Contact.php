@@ -157,7 +157,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
             'skipStatusCal' => 0,
             'campaign_id' => $contribution && array_key_exists('campaign_id', $contribution) ? $contribution['campaign_id'] : null,
             'start_date' => $start_date,
-            'status_id' => empty($force_status) ? NULL : $force_status_id,
+            'status_id' => empty($force_status_id) ? NULL : $force_status_id,
             'check_permissions' => 0,
             'sequential' => true
           )
