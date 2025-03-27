@@ -54,7 +54,6 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
     $opt_in,
     $keep_current_membership_if_possible
   ) {
-    // TODO: handle cases when membership already exists.
 
     $membership_type = \Civi\Api4\MembershipType::get()
       ->setCheckPermissions(false)
@@ -142,6 +141,13 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       }
 
       if (!$dont_create) {
+        // When we renew a membership after 1 year,
+        // Civicrm code can't compute the status for membership starting "in the future".
+        // Indead, with Payzen, we receive monthly/annual due 2 weeks in advance...
+        // So we introduce an optional campagnodon_renewal_force_status_id settings.
+        // If set, it will force the status to the settings value ("Current" by default).
+        $force_status_id = Civi::settings()->get('campagnodon_renewal_force_status_id');
+
         civicrm_api3('Membership', 'create', array_merge(
           $custom_fields,
           array(
@@ -151,6 +157,7 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
             'skipStatusCal' => 0,
             'campaign_id' => $contribution && array_key_exists('campaign_id', $contribution) ? $contribution['campaign_id'] : null,
             'start_date' => $start_date,
+            'status_id' => empty($force_status) ? NULL : $force_status_id,
             'check_permissions' => 0,
             'sequential' => true
           )
@@ -530,5 +537,11 @@ class CRM_CampagnodonCivicrm_Logic_Contact {
       . 'the membership must start the next year, we will use ' . $r . ' as start date.'
     );
     return $r;
+  }
+
+  public static function membershipStatus () {
+    $options = CRM_Member_PseudoConstant::membershipStatus();
+    $options['0'] = '';
+    return $options;
   }
 }

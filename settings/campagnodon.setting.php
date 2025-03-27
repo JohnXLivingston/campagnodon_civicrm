@@ -185,6 +185,20 @@ $campagnodon_settings['campagnodon_new_membership_rollover_day_month'] = array(
   'settings_pages' => ['campagnodon' => ['weight' => 25]],
 );
 
+$campagnodon_settings['campagnodon_renewal_force_status_id'] = array(
+  'name' => 'campagnodon_renewal_force_status_id',
+  'type' => 'Integer',
+  'html_type' => 'select',
+  'default' => 0,
+  'title' => E::ts('Force membership status on renewal.'),
+  'is_domain' => 1,
+  'is_contact' => 0,
+  'pseudoconstant' => [
+    'callback' => 'CRM_CampagnodonCivicrm_Logic_Contact::membershipStatus'
+  ],
+  'settings_pages' => ['campagnodon' => ['weight' => 26]],
+);
+
 $campagnodon_settings['campagnodon_contribution_tax_receipt_field'] = array(
   'name' => 'campagnodon_contribution_tax_receipt_field',
   'type' => 'Text',

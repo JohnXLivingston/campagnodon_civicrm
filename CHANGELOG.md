@@ -1,9 +1,10 @@
 
 # Changelog
 
-## ??? (Not Released Yet)
+## 2.2.1
 
-* fix colonne manquante dans auto_install.sql
+* Fix adhésions renouvelable après 1 ans (introduction du paramètre campagnodon_renewal_force_status_id).
+* Fix colonne manquante dans auto_install.sql
 
 ## 2.2.0
 
