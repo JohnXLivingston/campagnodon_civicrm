@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 2.2.3
+
+* Fix compatibility fix newer Civirules versions.
+
 ## 2.2.2
 
 * Fix typo.

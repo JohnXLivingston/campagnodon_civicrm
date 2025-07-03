@@ -94,8 +94,4 @@ class CRM_CampagnodonCivicrm_CiviRulesTriggers_CampagnodonTransactionDaysAfter e
       'CampagnodonTransaction'
     );
   }
-
-  public function setTriggerParams($triggerParams) {
-    $this->triggerParams = unserialize($triggerParams);
-  }
 }
